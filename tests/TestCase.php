@@ -5,6 +5,7 @@ namespace Spatie\LaravelPdf\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelPdf\LaravelPdfServiceProvider;
+use Spatie\LaravelPdf\PdfServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -12,25 +13,13 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\LaravelPdf\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        );
+        $this->app->view->addLocation(__DIR__.'/TestSupport/Views');
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            LaravelPdfServiceProvider::class,
+            PdfServiceProvider::class,
         ];
-    }
-
-    public function getEnvironmentSetUp($app)
-    {
-        config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_laravel-pdf_table.php.stub';
-        $migration->up();
-        */
     }
 }

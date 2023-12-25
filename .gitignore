@@ -6,6 +6,9 @@ coverage
 docs
 phpunit.xml
 phpstan.neon
+node_modules/
 testbench.yaml
 vendor
 node_modules
+tests/TestSupport/temp/
+public/storage
