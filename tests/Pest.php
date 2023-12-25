@@ -2,6 +2,7 @@
 
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
+
 use function Spatie\Snapshots\assertMatchesImageSnapshot;
 
 uses(TestCase::class)
@@ -19,7 +20,6 @@ uses(TestCase::class)
     })
     ->in(__DIR__);
 
-
 function getTestSupportPath($suffix = ''): string
 {
     return __DIR__."/TestSupport/{$suffix}";
@@ -32,7 +32,7 @@ function getTempPath($suffix = ''): string
 
 function assertMatchesPdfSnapshot(string $pdfPath): void
 {
-    $imagePath = getTempPath('test' . '.png');
+    $imagePath = getTempPath('test'.'.png');
 
     $imagick = new Imagick($pdfPath);
     $imagick->setImageFormat('png');
