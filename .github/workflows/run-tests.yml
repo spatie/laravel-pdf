@@ -55,6 +55,9 @@ jobs:
       - name: List Installed Dependencies
         run: composer show -D
 
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
       - name: Execute tests
         run: |
           npm install
