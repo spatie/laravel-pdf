@@ -1,3 +1,5 @@
+**THIS PACKAGE IS IN DEVELOPMENT, DO NOT USE IN PRODUCTION YET**
+
 # Create PDFs in Laravel apps
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-pdf.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-pdf)
@@ -5,7 +7,55 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-pdf/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/laravel-pdf/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-pdf.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-pdf)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package provides a simple way to create PDFs in Laravel apps. Under the hood it uses [Chromium](https://www.chromium.org/chromium-projects/) to generate PDFs from Blade views. You can use modern CSS features like grid and flexbox to create beautiful PDFs.
+
+Here's a quick example:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdfs.invoice', ['invoice' => $invoice])
+    ->paperFormat('a4')
+    ->save('invoice.pdf')
+```
+
+This will render the Blade view `pdfs.invoice` with the given data and save it as a PDF file.
+
+You can also return the PDF as a response from your controller:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+class DownloadInvoiceController
+{
+    public function __invoke(Invoice $invoice)
+    {
+        return Pdf::view('pdfs.invoice', ['invoice' => $invoice])
+            ->paperFormat('a4')
+            ->name('your-invoice.pdf')
+            ->download();
+    }
+}
+```
+
+You can use also test your PDFs:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+it('can render an invoice', function () {
+    Pdf::fake();
+
+    $invoice = Invoice::factory()->create();
+
+    $this->get(route('download-invoice', $invoice))
+        ->assertOk();
+        
+    Pdf::assertDownloaded(function (Pdf $pdf) use ($invoice) {
+        $pdf->assertSee($invoice->total);
+    });
+});
+```
 
 ## Support us
 
@@ -23,38 +73,11 @@ You can install the package via composer:
 composer require spatie/laravel-pdf
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-pdf-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-pdf-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-pdf-views"
-```
+Under the hood this package uses [Browsershot](https://spatie.be/docs/browsershot) to generate PDFs. You'll need to install the required dependencies for Browsershot to work. You can find the instructions [here](https://spatie.be/docs/browsershot/v2/requirements).
 
 ## Usage
 
-```php
-$laravelPdf = new Spatie\LaravelPdf();
-echo $laravelPdf->echoPhrase('Hello, Spatie!');
-```
+Coming soon...
 
 ## Testing
 
