@@ -58,6 +58,9 @@ jobs:
       - name: Install Puppeteer
         run: npm install puppeteer
 
+      - name: Fix Imagick Policy
+        run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
+
       - name: Execute tests
         run: |
           npm install
