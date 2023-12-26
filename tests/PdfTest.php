@@ -43,11 +43,11 @@ it('can return the base 64 encoded pdf', function () {
 
 it('can accept the paper format', function () {
     Pdf::view('test')
-        ->paperFormat(PaperFormat::A3)
+        ->paperFormat(PaperFormat::A5)
         ->save($this->targetPath);
 
     expect($this->targetPath)
-        ->toHaveDimensions(842, 1190)
+        ->toHaveDimensions(419, 595)
         ->toContainText('This is a test');
 });
 
