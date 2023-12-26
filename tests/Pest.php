@@ -38,8 +38,6 @@ function assertMatchesPdfSnapshot(string $pdfPath): void
     assertMatchesImageSnapshot($imagePath, 0.5);
 }
 
-
-
 expect()->extend('toHaveDimensions', function (int $width, int $height) {
     $imagePath = convertPdfToImage($this->value);
 
@@ -58,7 +56,7 @@ expect()->extend('toHaveDimensions', function (int $width, int $height) {
 
 expect()->extend('toContainText', function (string $expectedText) {
     $binPath = PHP_OS === 'Linux'
-        ?  '/usr/bin/pdftotext'
+        ? '/usr/bin/pdftotext'
         : '/opt/homebrew/bin/pdftotext';
 
     $actualText = \Spatie\PdfToText\Pdf::getText($this->value, $binPath);
