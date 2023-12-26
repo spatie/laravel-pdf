@@ -36,7 +36,8 @@
         "spatie/laravel-ray": "^1.26",
         "spatie/pdf-to-image": "^2.2",
         "spatie/pest-plugin-snapshots": "^2.1",
-        "spatie/pixelmatch-php": "^1.0"
+        "spatie/pixelmatch-php": "^1.0",
+        "ext-imagick": "*"
     },
     "autoload": {
         "psr-4": {
