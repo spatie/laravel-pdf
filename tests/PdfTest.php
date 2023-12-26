@@ -17,7 +17,7 @@ it('can create a pdf using the function', function () {
     expect($this->targetPath)->toBeFile();
 
     assertMatchesPdfSnapshot($this->targetPath);
-})->only();
+});
 
 it('can accept margins', function () {
     Pdf::view('test')->margins(200)->save($this->targetPath);
