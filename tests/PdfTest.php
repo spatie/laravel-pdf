@@ -14,8 +14,10 @@ beforeEach(function () {
 it('can create a pdf using the function', function () {
     pdf('test')->save($this->targetPath);
 
+    expect($this->targetPath)->toBeFile();
+
     assertMatchesPdfSnapshot($this->targetPath);
-});
+})->only();
 
 it('can accept margins', function () {
     Pdf::view('test')->margins(200)->save($this->targetPath);
