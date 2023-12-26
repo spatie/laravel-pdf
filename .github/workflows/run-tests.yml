@@ -56,6 +56,6 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run:
+        run: |
           npm install
           vendor/bin/pest --ci
