@@ -21,4 +21,13 @@ class Pdf extends Facade
 
         static::swap($fake);
     }
+
+    public static function default(): \Spatie\LaravelPdf\Pdf
+    {
+        $pdf = new \Spatie\LaravelPdf\Pdf();
+
+        static::swap($pdf);
+
+        return $pdf;
+    }
 }

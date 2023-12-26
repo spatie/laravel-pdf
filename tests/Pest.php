@@ -1,5 +1,6 @@
 <?php
 
+use Spatie\Image\Image;
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -32,6 +33,43 @@ function getTempPath($suffix = ''): string
 
 function assertMatchesPdfSnapshot(string $pdfPath): void
 {
+    $imagePath = convertPdfToImage($pdfPath);
+
+    assertMatchesImageSnapshot($imagePath, 0.5);
+}
+
+
+
+expect()->extend('toHaveDimensions', function (int $width, int $height) {
+    $imagePath = convertPdfToImage($this->value);
+
+    $image = Image::load($imagePath);
+
+    expect($image->getWidth())->toBe(
+        $width,
+        "Expected width {$width} but got {$image->getWidth()}",
+    );
+
+    expect($image->getHeight())->toBe(
+        $height,
+        "Expected height {$height} but got {$image->getHeight()}",
+    );
+});
+
+expect()->extend('toContainText', function (string $expectedText) {
+    $binPath = PHP_OS === 'Linux'
+        ?  '/usr/bin/pdftotext'
+        : '/opt/homebrew/bin/pdftotext';
+
+    $actualText = \Spatie\PdfToText\Pdf::getText($this->value, $binPath);
+
+    expect(str_contains($actualText, $expectedText))->toBeTrue(
+        "Expected text `{$expectedText}` not found in `{$actualText}`"
+    );
+});
+
+function convertPdfToImage(string $pdfPath): string
+{
     $imagePath = getTempPath('test'.'.png');
 
     $imagick = new Imagick($pdfPath);
@@ -39,5 +77,5 @@ function assertMatchesPdfSnapshot(string $pdfPath): void
     $imagick->setImageFormat('png');
     file_put_contents($imagePath, $imagick);
 
-    assertMatchesImageSnapshot($imagePath, 0.5);
+    return $imagePath;
 }

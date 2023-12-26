@@ -37,6 +37,16 @@ class Pdf implements Responsable
         return $this;
     }
 
+    public function landscape(): self
+    {
+        return $this->orientation(Orientation::Landscape);
+    }
+
+    public function portrait(): self
+    {
+        return $this->orientation(Orientation::Portrait);
+    }
+
     public function orientation(string|Orientation $orientation): self
     {
         if ($orientation instanceof Orientation) {
