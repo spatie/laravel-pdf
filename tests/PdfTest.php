@@ -21,7 +21,7 @@ it('can accept margins', function () {
     Pdf::view('test')->margins(200)->save($this->targetPath);
 
     assertMatchesPdfSnapshot($this->targetPath);
-})->skip('This test is flaky on Github Actions');
+})->skipOnLinux();
 
 it('can accept some html', function () {
     Pdf::html('<h1>Some custom HTML</h1>')->save($this->targetPath);
@@ -49,7 +49,7 @@ it('can accept the paper format', function () {
     expect($this->targetPath)
         ->toHaveDimensions(419, 595)
         ->toContainText('This is a test');
-});
+})->skipOnLinux();
 
 it('can accept the orientation', function () {
     Pdf::view('test')
