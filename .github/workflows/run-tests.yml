@@ -40,6 +40,9 @@ jobs:
       - name: Fix Imagick Policy
         run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
 
+      - name: Install ghostscript
+        run: sudo apt-get -y install ghostscript
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
