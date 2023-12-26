@@ -37,6 +37,9 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
           coverage: none
 
+      - name: Fix Imagick Policy
+        run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -57,9 +60,6 @@ jobs:
 
       - name: Install Puppeteer
         run: npm install puppeteer
-
-      - name: Fix Imagick Policy
-        run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
 
       - name: Execute tests
         run: |
