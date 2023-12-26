@@ -64,4 +64,4 @@ jobs:
       - name: Execute tests
         run: |
           npm install
-          vendor/bin/pest --ci
+          vendor/bin/pest
