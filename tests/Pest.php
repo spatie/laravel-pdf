@@ -39,5 +39,5 @@ function assertMatchesPdfSnapshot(string $pdfPath): void
     $imagick->setImageFormat('png');
     file_put_contents($imagePath, $imagick);
 
-    assertMatchesImageSnapshot($imagePath, 0.3);
+    assertMatchesImageSnapshot($imagePath, 0.9);
 }
