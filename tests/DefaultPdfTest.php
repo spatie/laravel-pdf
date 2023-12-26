@@ -7,7 +7,7 @@ beforeEach(function () {
     $this->targetPath = getTempPath('test.pdf');
 });
 
-it('can set defaults for pdfs', function() {
+it('can set defaults for pdfs', function () {
     Pdf::default()
         ->view('test')
         ->orientation(Orientation::Landscape);
