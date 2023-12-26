@@ -11,11 +11,17 @@ use Spatie\LaravelPdf\Enums\PaperFormat;
 class Pdf implements Responsable
 {
     public string $viewName = '';
+
     public array $data = [];
+
     public string $html = '';
+
     public string $downloadName = '';
+
     public bool $inline = false;
+
     public ?string $paperFormat = null;
+
     public ?string $orientation = null;
 
     public ?array $margins = null;
@@ -136,7 +142,7 @@ class Pdf implements Responsable
         $browsershot = Browsershot::html($this->getHtml());
 
         if ($this->margins) {
-            $browsershot->margins(... $this->margins);
+            $browsershot->margins(...$this->margins);
         }
 
         if ($this->paperFormat) {

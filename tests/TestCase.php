@@ -2,9 +2,7 @@
 
 namespace Spatie\LaravelPdf\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\LaravelPdf\LaravelPdfServiceProvider;
 use Spatie\LaravelPdf\PdfServiceProvider;
 
 class TestCase extends Orchestra
