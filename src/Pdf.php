@@ -212,7 +212,7 @@ class Pdf implements Responsable
 
         if ($this->html) {
             return $this->html;
-        };
+        }
 
         return '&nbsp';
     }

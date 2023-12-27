@@ -79,7 +79,7 @@ it('can create a pdf using the facade', function () {
     expect($this->targetPath)->toContainText('This is a test');
 });
 
-it('can create an empty pdf',function() {
+it('can create an empty pdf', function () {
     Pdf::html('')->save($this->targetPath);
 
     expect($this->targetPath)->toBeFile();
