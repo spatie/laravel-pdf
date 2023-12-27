@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 use Spatie\LaravelPdf\FakePdf;
 
 /**
- * @mixin  \Spatie\LaravelPdf\Pdf
+ * @mixin \Spatie\LaravelPdf\Pdf
  */
 class Pdf extends Facade
 {
