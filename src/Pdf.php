@@ -12,15 +12,21 @@ use Spatie\LaravelPdf\Enums\PaperFormat;
 class Pdf implements Responsable
 {
     public string $viewName = '';
+
     public array $data = [];
+
     public string $html = '';
 
     public string $headerViewName = '';
+
     public array $headerData = [];
+
     public ?string $headerHtml = null;
 
     public string $footerViewName = '';
+
     public array $footerData = [];
+
     public ?string $footerHtml = null;
 
     public string $downloadName = '';
@@ -90,7 +96,7 @@ class Pdf implements Responsable
         $this->name($downloadName);
 
         $this->addHeaders([
-            'Content-Type' =>  'application/pdf',
+            'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$this->downloadName.'"',
         ]);
 
@@ -118,12 +124,12 @@ class Pdf implements Responsable
         return $this;
     }
 
-    public function download(string $downloadName = null): self
+    public function download(?string $downloadName = null): self
     {
         $this->name($downloadName);
 
         $this->addHeaders([
-            'Content-Type' =>  'application/pdf',
+            'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="'.$this->downloadName.'"',
         ]);
 

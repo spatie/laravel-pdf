@@ -51,7 +51,7 @@ it('can accept footer html', function () {
     ]);
 });
 
-it('can render header html', function() {
+it('can render header html', function () {
     Pdf::html('Body html')
         ->headerView('header', ['title' => 'Header title'])
         ->save($this->targetPath);
@@ -62,7 +62,7 @@ it('can render header html', function() {
     ]);
 });
 
-it('can render footer html', function() {
+it('can render footer html', function () {
     Pdf::html('Body html')
         ->footerView('footer', ['title' => 'Footer title'])
         ->save($this->targetPath);

@@ -65,7 +65,7 @@ expect()->extend('toContainText', function (string|array $expectedText) {
         $expectedText = [$expectedText];
     }
 
-    foreach($expectedText as $singleText) {
+    foreach ($expectedText as $singleText) {
         expect(str_contains($actualText, $singleText))->toBeTrue(
             "Expected text `{$singleText}` not found in `{$actualText}`"
 
