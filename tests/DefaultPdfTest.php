@@ -8,13 +8,11 @@ beforeEach(function () {
 });
 
 it('can set defaults for pdfs', function () {
-    Pdf::default()
-        ->headerHtml('header html')
-        ->orientation(Orientation::Landscape);
+    Pdf::default()->orientation(Orientation::Landscape);
 
-    Pdf::save($this->targetPath);
+    Pdf::html('test')->save($this->targetPath);
 
     expect($this->targetPath)
         ->toHaveDimensions(792, 612)
-        ->toContainText('header html');
+        ->toContainText('test');
 });
