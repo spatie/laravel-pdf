@@ -79,6 +79,12 @@ it('can create a pdf using the facade', function () {
     expect($this->targetPath)->toContainText('This is a test');
 });
 
+it('can create an empty pdf',function() {
+    Pdf::html('')->save($this->targetPath);
+
+    expect($this->targetPath)->toBeFile();
+});
+
 it('can return the base 64 encoded pdf', function () {
     $base64string = Pdf::view('test')->base64();
 

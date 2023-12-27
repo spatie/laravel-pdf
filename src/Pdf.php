@@ -200,11 +200,15 @@ class Pdf implements Responsable
 
     protected function getHtml(): string
     {
-        if ($this->html) {
-            return $this->html;
+        if ($this->viewName) {
+            return view($this->viewName, $this->data)->render();
         }
 
-        return view($this->viewName, $this->data)->render();
+        if ($this->html) {
+            return $this->html;
+        };
+
+        return '&nbsp';
     }
 
     protected function getHeaderHtml(): ?string
