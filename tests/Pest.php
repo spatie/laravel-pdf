@@ -54,16 +54,23 @@ expect()->extend('toHaveDimensions', function (int $width, int $height) {
     );
 });
 
-expect()->extend('toContainText', function (string $expectedText) {
+expect()->extend('toContainText', function (string|array $expectedText) {
     $binPath = PHP_OS === 'Linux'
         ? '/usr/bin/pdftotext'
         : '/opt/homebrew/bin/pdftotext';
 
     $actualText = \Spatie\PdfToText\Pdf::getText($this->value, $binPath);
 
-    expect(str_contains($actualText, $expectedText))->toBeTrue(
-        "Expected text `{$expectedText}` not found in `{$actualText}`"
-    );
+    if (is_string($expectedText)) {
+        $expectedText = [$expectedText];
+    }
+
+    foreach($expectedText as $singleText) {
+        expect(str_contains($actualText, $singleText))->toBeTrue(
+            "Expected text `{$singleText}` not found in `{$actualText}`"
+
+        );
+    }
 });
 
 function convertPdfToImage(string $pdfPath): string

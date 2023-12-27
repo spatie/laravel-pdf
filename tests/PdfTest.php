@@ -23,10 +23,32 @@ it('can accept margins', function () {
     assertMatchesPdfSnapshot($this->targetPath);
 })->skipOnLinux();
 
-it('can accept some html', function () {
+it('can accept html', function () {
     Pdf::html('<h1>Some custom HTML</h1>')->save($this->targetPath);
 
     expect($this->targetPath)->toContainText('Some custom HTML');
+});
+
+it('can accept header html', function () {
+    Pdf::headerHtml('Header html')
+        ->html('Body html')
+        ->save($this->targetPath);
+
+    expect($this->targetPath)->toContainText([
+        'Header html',
+        'Body html',
+    ]);
+});
+
+it('can accept footer html', function () {
+    Pdf::html('Body html')
+        ->footerHtml('Footer html')
+        ->save($this->targetPath);
+
+    expect($this->targetPath)->toContainText([
+        'Body html',
+        'Footer html',
+    ]);
 });
 
 it('can create a pdf using the facade', function () {

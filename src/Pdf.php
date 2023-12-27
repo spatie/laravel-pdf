@@ -11,10 +11,16 @@ use Spatie\LaravelPdf\Enums\PaperFormat;
 class Pdf implements Responsable
 {
     public string $viewName = '';
-
     public array $data = [];
-
     public string $html = '';
+
+    public string $headerViewName = '';
+    public array $headerData = [];
+    public ?string $headerHtml = null;
+
+    public string $footerViewName = '';
+    public array $footerData = [];
+    public ?string $footerHtml = null;
 
     public string $downloadName = '';
 
@@ -33,6 +39,24 @@ class Pdf implements Responsable
         $this->viewName = $view;
 
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function headerView(string $view, array $data = []): self
+    {
+        $this->headerViewName = $view;
+
+        $this->headerData = $data;
+
+        return $this;
+    }
+
+    public function footerView(string $view, array $data = []): self
+    {
+        $this->footerViewName = $view;
+
+        $this->footerData = $data;
 
         return $this;
     }
@@ -72,6 +96,20 @@ class Pdf implements Responsable
         return $this;
     }
 
+    public function headerHtml(string $html)
+    {
+        $this->headerHtml = $html;
+
+        return $this;
+    }
+
+    public function footerHtml(string $html)
+    {
+        $this->footerHtml = $html;
+
+        return $this;
+    }
+
     public function download(string $downloadName): self
     {
         $this->name($downloadName);
@@ -98,8 +136,8 @@ class Pdf implements Responsable
         float $right = 0,
         float $bottom = 0,
         float $left = 0,
-        string $unit = 'mm')
-    {
+        string $unit = 'mm'
+    ) {
         $this->margins = compact(
             'top',
             'right',
@@ -147,9 +185,59 @@ class Pdf implements Responsable
         return view($this->viewName, $this->data)->render();
     }
 
+    protected function getHeaderHtml(): ?string
+    {
+        if ($this->headerHtml) {
+            return $this->headerHtml;
+        }
+
+        if ($this->headerViewName) {
+            return view($this->headerViewName, $this->headerData)->render();
+        }
+
+        return null;
+    }
+
+    protected function getFooterHtml(): ?string
+    {
+        if ($this->footerHtml) {
+            return $this->footerHtml;
+        }
+
+        if ($this->footerViewName) {
+            return view($this->footerViewName, $this->footerData)->render();
+        }
+
+        return null;
+    }
+
     protected function getBrowsershot(): Browsershot
     {
         $browsershot = Browsershot::html($this->getHtml());
+
+        $headerHtml = $this->getHeaderHtml();
+
+        $footerHtml = $this->getFooterHtml();
+
+        if ($headerHtml || $footerHtml) {
+            $browsershot->showBrowserHeaderAndFooter();
+
+            if (! $headerHtml) {
+                $browsershot->hideHeader();
+            }
+
+            if (! $footerHtml) {
+                $browsershot->hideFooter();
+            }
+
+            if ($headerHtml) {
+                $browsershot->headerHtml($headerHtml);
+            }
+
+            if ($footerHtml) {
+                $browsershot->footerHtml($footerHtml);
+            }
+        }
 
         if ($this->margins) {
             $browsershot->margins(...$this->margins);
