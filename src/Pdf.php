@@ -4,6 +4,7 @@ namespace Spatie\LaravelPdf;
 
 use Closure;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\PaperFormat;
@@ -24,8 +25,6 @@ class Pdf implements Responsable
 
     public string $downloadName = '';
 
-    public bool $inline = false;
-
     public ?string $paperFormat = null;
 
     public ?string $orientation = null;
@@ -33,6 +32,10 @@ class Pdf implements Responsable
     public ?array $margins = null;
 
     protected ?Closure $customizeBrowsershot = null;
+
+    protected array $responseHeaders = [
+        'Content-Type' => 'application/pdf',
+    ];
 
     public function view(string $view, array $data = []): self
     {
@@ -82,9 +85,14 @@ class Pdf implements Responsable
         return $this;
     }
 
-    public function inline(): self
+    public function inline(string $downloadName = ''): self
     {
-        $this->inline = true;
+        $this->name($downloadName);
+
+        $this->addHeaders([
+            'Content-Type' =>  'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$this->downloadName.'"',
+        ]);
 
         return $this;
     }
@@ -96,23 +104,37 @@ class Pdf implements Responsable
         return $this;
     }
 
-    public function headerHtml(string $html)
+    public function headerHtml(string $html): self
     {
         $this->headerHtml = $html;
 
         return $this;
     }
 
-    public function footerHtml(string $html)
+    public function footerHtml(string $html): self
     {
         $this->footerHtml = $html;
 
         return $this;
     }
 
-    public function download(string $downloadName): self
+    public function download(string $downloadName = null): self
     {
         $this->name($downloadName);
+
+        $this->addHeaders([
+            'Content-Type' =>  'application/pdf',
+            'Content-Disposition' => 'attachment; filename="'.$this->downloadName.'"',
+        ]);
+
+        $this->name($downloadName);
+
+        return $this;
+    }
+
+    public function headers(array $headers): self
+    {
+        $this->addHeaders($headers);
 
         return $this;
     }
@@ -137,7 +159,7 @@ class Pdf implements Responsable
         float $bottom = 0,
         float $left = 0,
         string $unit = 'mm'
-    ) {
+    ): self {
         $this->margins = compact(
             'top',
             'right',
@@ -258,9 +280,27 @@ class Pdf implements Responsable
         return $browsershot;
     }
 
-    public function toResponse($request)
+    public function toResponse($request): Response
     {
-        // TODO: Implement toResponse() method.
+        if (! $this->hasHeader('Content-Disposition')) {
+            $this->inline($this->downloadName);
+        }
+
+        $pdfContent = $this->getBrowsershot()->pdf();
+
+        return response($pdfContent, 200, $this->responseHeaders);
+    }
+
+    protected function addHeaders(array $headers): self
+    {
+        $this->responseHeaders = array_merge($this->responseHeaders, $headers);
+
+        return $this;
+    }
+
+    protected function hasHeader(string $headerName): bool
+    {
+        return array_key_exists($headerName, $this->responseHeaders);
     }
 }
 

@@ -51,6 +51,28 @@ it('can accept footer html', function () {
     ]);
 });
 
+it('can render header html', function() {
+    Pdf::html('Body html')
+        ->headerView('header', ['title' => 'Header title'])
+        ->save($this->targetPath);
+
+    expect($this->targetPath)->toContainText([
+        'This is the header HTML: Header title',
+        'Body html',
+    ]);
+});
+
+it('can render footer html', function() {
+    Pdf::html('Body html')
+        ->footerView('footer', ['title' => 'Footer title'])
+        ->save($this->targetPath);
+
+    expect($this->targetPath)->toContainText([
+        'This is the footer HTML: Footer title',
+        'Body html',
+    ]);
+});
+
 it('can create a pdf using the facade', function () {
     Pdf::view('test')->save($this->targetPath);
 
