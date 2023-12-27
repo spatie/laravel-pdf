@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use function Spatie\LaravelPdf\Support\pdf;
 
 it('can inline the pdf', function () {
@@ -25,7 +26,7 @@ it('can download the pdf', function () {
         ->assertHeader('content-disposition', 'attachment; filename="my-custom-name.pdf"');
 });
 
-it('will inline the pdf by default', function() {
+it('will inline the pdf by default', function () {
     Route::get('pdf', function () {
         return pdf('test')->name('my-custom-name.pdf');
     });
