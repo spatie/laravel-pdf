@@ -3,4 +3,38 @@ title: Responding with PDFs
 weight: 2
 ---
 
-Coming soon...
+In a controller, you can create and return a PDF by using the `pdf()` function.
+
+```php
+use function Spatie\LaravelPdf\Support\pdf;
+
+class DownloadInvoiceController
+{
+    public function __invoke()
+    {
+        return pdf()->view('pdf.invoice', [
+            'invoice' => $invoice,
+        ])->name('invoice-2023-04-10.pdf');
+    }
+}
+```
+
+By default, the PDF will be inlined in the browser. This means that the PDF will be displayed in the browser if the
+browser supports it. If the user tries to download the PDF, it will be named "invoice-2023-04-10.pdf". We recommend that
+you always name your PDFs.
+
+If you want to force the PDF to be downloaded, you can use the `download()` method.
+
+```php
+use function Spatie\LaravelPdf\Support\pdf;
+
+class DownloadInvoiceController
+{
+    public function __invoke()
+    {
+        return pdf()->view('pdf.invoice', [
+            'invoice' => $invoice,
+        ])->name('invoice-2023-04-10.pdf')->download();
+    }
+}
+```

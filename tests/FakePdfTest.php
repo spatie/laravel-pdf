@@ -58,6 +58,25 @@ it('can determine that the pdf content does not contain a certain string', funct
     Pdf::assertSee('this-string-does-not-exist');
 })->fails();
 
+it('can determine that the pdf content contains multiple strings', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertSee([
+        'This',
+        'test',
+    ]);
+});
+
+it('can determine that the pdf content does not contain multiple strings', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertSee([
+        'This',
+        'this-string-is-not-present-in-the-pdf',
+        'test',
+    ]);
+})->fails();
+
 it('can determine that a pdf was saved a a certain path', function () {
     Pdf::view('test')->save('my-custom-name.pdf');
 
@@ -75,7 +94,7 @@ it('can determine that a pdf was saved with certain properties', function () {
 
     Pdf::view('another-test')->save('my-other-custom-name.pdf');
 
-    Pdf::assertSaved('my-custom-name.pdf', function (PdfBuilder $pdf) {
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
         return $pdf->viewName === 'test';
     });
 });

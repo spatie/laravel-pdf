@@ -5,6 +5,7 @@ namespace Spatie\LaravelPdf;
 use Closure;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Assert;
+use Psy\Util\Str;
 
 class FakePdfBuilder extends PdfBuilder
 {
@@ -61,7 +62,7 @@ class FakePdfBuilder extends PdfBuilder
         }
 
         foreach ($this->savedPdfs as $savedPdf) {
-            if (! array_key_exists($key, $savedPdf['pdf']->viewData)) {
+            if (!array_key_exists($key, $savedPdf['pdf']->viewData)) {
                 continue;
             }
 
@@ -103,17 +104,29 @@ class FakePdfBuilder extends PdfBuilder
         Assert::fail('Did not save a PDF that matched the expectations');
     }
 
-    public function assertSee(string $text): void
+    public function assertSee(string|array $text): void
     {
-        foreach ($this->savedPdfs as $savedPdf) {
-            if (str_contains($savedPdf['pdf']->html, $text)) {
-                $this->markAssertionPassed();
-
-                return;
-            }
+        if (is_string($text)) {
+            $text = [$text];
         }
 
-        Assert::fail("Did not save a PDF that contains `{$text}`");
+        foreach ($this->savedPdfs as $savedPdf) {
+            foreach ($text as $singleText) {
+                if (!str_contains($savedPdf['pdf']->html, $singleText)) {
+                    break 2; // jump out of if branch and the inner foreach loop
+                }
+            }
+
+            $this->markAssertionPassed();
+
+            return;
+        }
+
+        $texts = collect($text)
+            ->wrap('`')
+            ->join(',', ', and ');
+
+        Assert::fail("Did not save a PDF that contains {$texts}");
     }
 
     public function assertRespondedWithPdf(Closure $expectations): void
