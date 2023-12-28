@@ -4,7 +4,6 @@ namespace Spatie\LaravelPdf;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\LaravelPdf\Facades\Pdf;
 
 class PdfServiceProvider extends PackageServiceProvider
 {

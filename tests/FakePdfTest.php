@@ -70,13 +70,13 @@ it('can determine that a pdf was not saved a a certain path', function () {
     Pdf::assertSaved('non-existing.pdf');
 })->fails();
 
-it('can determine that a pdf was saved with certain properties', function() {
-   Pdf::view('test')->save('my-custom-name.pdf');
+it('can determine that a pdf was saved with certain properties', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
 
-   Pdf::view('another-test')->save('my-other-custom-name.pdf');
+    Pdf::view('another-test')->save('my-other-custom-name.pdf');
 
     Pdf::assertSaved('my-custom-name.pdf', function (PdfBuilder $pdf) {
-         return $pdf->viewName === 'test';
+        return $pdf->viewName === 'test';
     });
 });
 
@@ -105,45 +105,45 @@ it('can determine that a pdf did not have certain properties in a response', fun
     });
 })->fails();
 
-it('can determine if a pdf was saved with certain properties', function() {
-    Pdf::view('test', ['foo'=> 'bar'])->save('hey.pdf');
+it('can determine if a pdf was saved with certain properties', function () {
+    Pdf::view('test', ['foo' => 'bar'])->save('hey.pdf');
 
-    Pdf::assertSaved(function(PdfBuilder $pdf) {
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
         return $pdf->viewName === 'test';
     });
 });
 
-it('can determine if a pdf was not saved with certain properties', function() {
-    Pdf::view('test', ['foo'=> 'bar'])->save('hey.pdf');
+it('can determine if a pdf was not saved with certain properties', function () {
+    Pdf::view('test', ['foo' => 'bar'])->save('hey.pdf');
 
-    Pdf::assertSaved(function(PdfBuilder $pdf) {
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
         return $pdf->viewName === 'non-existing-view';
     });
 })->fails();
 
-it('it will not combine properties of different instances', function() {
-    Pdf::view('test', ['foo'=> 'bar'])->save('first.pdf');
+it('it will not combine properties of different instances', function () {
+    Pdf::view('test', ['foo' => 'bar'])->save('first.pdf');
 
     Pdf::view('another-test')->save('second.pdf');
 
-    Pdf::assertSaved(function(PdfBuilder $pdf) {
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
         return $pdf->viewName === 'another-test'
             && array_key_exists('foo', $pdf->viewData);
     });
 })->fails();
 
-it('can verify that a pdf was saved a given path', function() {
+it('can verify that a pdf was saved a given path', function () {
     Pdf::view('test')->save('my-name.pdf');
 
-    Pdf::assertSaved(function(PdfBuilder $pdf, string $path) {
+    Pdf::assertSaved(function (PdfBuilder $pdf, string $path) {
         return $path === 'my-name.pdf';
     });
 });
 
-it('can verify that a pdf was not saved a given path', function() {
+it('can verify that a pdf was not saved a given path', function () {
     Pdf::view('test')->save('my-name.pdf');
 
-    Pdf::assertSaved(function(PdfBuilder $pdf, string $path) {
+    Pdf::assertSaved(function (PdfBuilder $pdf, string $path) {
         return $path === 'non-existing-path';
     });
 })->fails();

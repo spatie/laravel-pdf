@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Framework\AssertionFailedError;
 use Spatie\Image\Image;
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;

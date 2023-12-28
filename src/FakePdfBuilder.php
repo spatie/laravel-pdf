@@ -14,8 +14,6 @@ class FakePdfBuilder extends PdfBuilder
     /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
     protected array $savedPdfs = [];
 
-
-
     public function save(string $path): self
     {
         $this->getBrowsershot();
@@ -92,7 +90,7 @@ class FakePdfBuilder extends PdfBuilder
         }
 
         $callable = $path;
-        foreach($this->savedPdfs as $savedPdf) {
+        foreach ($this->savedPdfs as $savedPdf) {
             $result = $callable($savedPdf['pdf'], $savedPdf['path']);
 
             if ($result === true) {
@@ -102,11 +100,7 @@ class FakePdfBuilder extends PdfBuilder
             }
         }
 
-        Assert::fail("Did not save a PDF that matched the expectations");
-
-
-
-
+        Assert::fail('Did not save a PDF that matched the expectations');
 
     }
 
@@ -122,8 +116,6 @@ class FakePdfBuilder extends PdfBuilder
 
         Assert::fail("Did not save a PDF that contains `{$text}`");
     }
-
-
 
     public function assertRespondedWithPdf(Closure $expectations): void
     {
@@ -141,8 +133,6 @@ class FakePdfBuilder extends PdfBuilder
 
         Assert::fail('Did not respond with a PDF that matched the expectations');
     }
-
-
 
     protected function markAssertionPassed(): void
     {
