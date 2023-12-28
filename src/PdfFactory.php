@@ -6,13 +6,14 @@ class PdfFactory
 {
     protected static PdfBuilder|null $defaultPdfBuilder = null;
 
+    public function __construct()
+    {
+        self::$defaultPdfBuilder = new PdfBuilder();
+    }
+
     public function __call($method, $parameters): PdfBuilder
     {
-        $builder = new PdfBuilder();
-
-        if (static::$defaultPdfBuilder) {
-            $builder = clone static::$defaultPdfBuilder;
-        }
+        $builder = clone static::$defaultPdfBuilder;
 
         return ($builder)->{$method}(...$parameters);
     }
