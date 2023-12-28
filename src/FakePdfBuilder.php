@@ -103,11 +103,6 @@ class FakePdfBuilder extends PdfBuilder
         }
 
         Assert::fail("Did not save a PDF that matched the expectations");
-
-
-
-
-
     }
 
     public function assertSee(string $text): void
