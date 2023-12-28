@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 use Spatie\Image\Image;
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -83,4 +85,9 @@ function convertPdfToImage(string $pdfPath): string
     file_put_contents($imagePath, $imagick);
 
     return $imagePath;
+}
+
+function fails()
+{
+    test()->expectException(AssertionFailedError::class);
 }
