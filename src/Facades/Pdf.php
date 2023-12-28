@@ -4,7 +4,6 @@ namespace Spatie\LaravelPdf\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Spatie\LaravelPdf\FakePdfBuilder;
-use Spatie\LaravelPdf\PdfBuilder;
 use Spatie\LaravelPdf\PdfFactory;
 
 /**

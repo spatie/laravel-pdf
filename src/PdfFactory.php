@@ -4,7 +4,7 @@ namespace Spatie\LaravelPdf;
 
 class PdfFactory
 {
-    protected static PdfBuilder|null $defaultPdfBuilder = null;
+    protected static ?PdfBuilder $defaultPdfBuilder = null;
 
     public function __construct()
     {
@@ -15,7 +15,7 @@ class PdfFactory
     {
         $builder = clone static::$defaultPdfBuilder;
 
-        return ($builder)->{$method}(...$parameters);
+        return $builder->{$method}(...$parameters);
     }
 
     public function default(): PdfBuilder
