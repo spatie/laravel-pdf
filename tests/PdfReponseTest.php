@@ -35,7 +35,7 @@ it('will tack on pdf to the filename if it is missing', function (string $method
 
     $this
         ->get('pdf')
-        ->assertHeader('content-disposition', $headerMethod . '; filename="my-custom-name.pdf"');
+        ->assertHeader('content-disposition', $headerMethod.'; filename="my-custom-name.pdf"');
 })->with(['inline', 'download']);
 
 it('will inline the pdf by default', function () {
