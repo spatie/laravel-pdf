@@ -312,6 +312,24 @@ class Pdf implements Responsable
     {
         return array_key_exists($headerName, $this->responseHeaders);
     }
+
+    public function isInline(): bool
+    {
+        if (! $this->hasHeader('Content-Disposition')) {
+            return false;
+        }
+
+        return str_contains($this->responseHeaders['Content-Disposition'], 'inline');
+    }
+
+    public function isDownload(): bool
+    {
+        if (! $this->hasHeader('Content-Disposition')) {
+            return false;
+        }
+
+        return str_contains($this->responseHeaders['Content-Disposition'], 'attachment');
+    }
 }
 
 /*
