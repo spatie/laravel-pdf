@@ -147,6 +147,10 @@ class PdfBuilder implements Responsable
 
     public function name(string $downloadName): self
     {
+        if (! str_ends_with(strtolower($downloadName), '.pdf')) {
+            $downloadName .= '.pdf';
+        }
+
         $this->downloadName = $downloadName;
 
         return $this;
@@ -331,27 +335,3 @@ class PdfBuilder implements Responsable
         return str_contains($this->responseHeaders['Content-Disposition'], 'attachment');
     }
 }
-
-/*
- * return pdf('my.view', [
-   'title' => 'my title',
-]);
-
-return pdf('my.view', [
-   'title' => 'my title',
-])->inline();
-
-return pdf('my.view', [
-   'title' => 'my title',
-])->download($downloadName);
-
-
-Pdf::view('my.view', $data
-   ->margins(10,20,30,40)
-   ->orientation(Orientation::Landscape)
-   ->paper(Paper::A3) // da's eigenlijk een A5 dan
-   ->save($path);
-
-Pdf::assertSee($text);
-Pdf::assertViewIs($viewName);
- */

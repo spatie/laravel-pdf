@@ -26,6 +26,18 @@ it('can download the pdf', function () {
         ->assertHeader('content-disposition', 'attachment; filename="my-custom-name.pdf"');
 });
 
+it('will tack on pdf to the filename if it is missing', function (string $method) {
+    Route::get('pdf', function () use ($method) {
+        return pdf('test')->{$method}('my-custom-name');
+    });
+
+    $headerMethod = $method === 'inline' ? 'inline' : 'attachment';
+
+    $this
+        ->get('pdf')
+        ->assertHeader('content-disposition', $headerMethod . '; filename="my-custom-name.pdf"');
+})->with(['inline', 'download']);
+
 it('will inline the pdf by default', function () {
     Route::get('pdf', function () {
         return pdf('test')->name('my-custom-name.pdf');
