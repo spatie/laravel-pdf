@@ -10,11 +10,11 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class DownloadInvoiceController
 {
-    public function __invoke()
+    public function __invoke(Invoice $invoice)
     {
-        return pdf()->view('pdf.invoice', [
-            'invoice' => $invoice,
-        ])->name('invoice-2023-04-10.pdf');
+        return pdf()
+            ->view('pdf.invoice', compact('invoice'))
+            ->name('invoice-2023-04-10.pdf');
     }
 }
 ```
@@ -30,11 +30,12 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class DownloadInvoiceController
 {
-    public function __invoke()
+    public function __invoke(Invoice $invoice)
     {
-        return pdf()->view('pdf.invoice', [
-            'invoice' => $invoice,
-        ])->name('invoice-2023-04-10.pdf')->download();
+        return pdf()
+            ->view('pdf.invoice', compact('invoice'))
+            ->name('invoice-2023-04-10.pdf')
+            ->download();
     }
 }
 ```
