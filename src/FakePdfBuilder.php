@@ -14,6 +14,27 @@ class FakePdfBuilder extends PdfBuilder
     /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
     protected array $savedPdfs = [];
 
+
+
+    public function save(string $path): self
+    {
+        $this->getBrowsershot();
+
+        $this->savedPdfs[] = [
+            'pdf' => clone $this,
+            'path' => $path,
+        ];
+
+        return $this;
+    }
+
+    public function toResponse($request): Response
+    {
+        $this->respondedWithPdf[] = clone $this;
+
+        return new Response();
+    }
+
     public function assertViewIs(string $viewName): void
     {
         foreach ($this->savedPdfs as $savedPdf) {
@@ -56,6 +77,39 @@ class FakePdfBuilder extends PdfBuilder
         Assert::fail("Did not save a PDF that has view data `{$key}` with value `{$value}`");
     }
 
+    public function assertSaved(string|callable $path): void
+    {
+        if (is_string($path)) {
+            foreach ($this->savedPdfs as $savedPdf) {
+                if ($savedPdf['path'] === $path) {
+                    $this->markAssertionPassed();
+
+                    return;
+                }
+            }
+
+            Assert::fail("Did not save a PDF to `{$path}`");
+        }
+
+        $callable = $path;
+        foreach($this->savedPdfs as $savedPdf) {
+            $result = $callable($savedPdf['pdf'], $savedPdf['path']);
+
+            if ($result === true) {
+                $this->markAssertionPassed();
+
+                return;
+            }
+        }
+
+        Assert::fail("Did not save a PDF that matched the expectations");
+
+
+
+
+
+    }
+
     public function assertSee(string $text): void
     {
         foreach ($this->savedPdfs as $savedPdf) {
@@ -69,12 +123,7 @@ class FakePdfBuilder extends PdfBuilder
         Assert::fail("Did not save a PDF that contains `{$text}`");
     }
 
-    public function toResponse($request): Response
-    {
-        $this->respondedWithPdf[] = $this;
 
-        return new Response();
-    }
 
     public function assertRespondedWithPdf(Closure $expectations): void
     {
@@ -93,17 +142,7 @@ class FakePdfBuilder extends PdfBuilder
         Assert::fail('Did not respond with a PDF that matched the expectations');
     }
 
-    public function save(string $path): self
-    {
-        $this->getBrowsershot();
 
-        $this->savedPdfs[] = [
-            'pdf' => $this,
-            'path' => $path,
-        ];
-
-        return $this;
-    }
 
     protected function markAssertionPassed(): void
     {

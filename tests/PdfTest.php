@@ -122,3 +122,17 @@ it('can customize browsershot', function () {
         ->toHaveDimensions(792, 612)
         ->toContainText('This is a test');
 });
+
+it('will use a fresh instance after saving', function () {
+    Pdf::view('test')->landscape()->save(getTempPath('first.pdf'));
+
+    Pdf::view('test')->save(getTempPath('second.pdf'));
+
+    // first pdf is landscape
+    expect(getTempPath('first.pdf'))
+        ->toHaveDimensions(792, 612);
+
+    // second pdf is landscape
+    expect(getTempPath('second.pdf'))
+        ->toHaveDimensions(612, 792);
+});

@@ -85,8 +85,3 @@ function convertPdfToImage(string $pdfPath): string
 
     return $imagePath;
 }
-
-function fails()
-{
-    test()->expectException(AssertionFailedError::class);
-}

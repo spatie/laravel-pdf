@@ -5,6 +5,7 @@ namespace Spatie\LaravelPdf\Facades;
 use Illuminate\Support\Facades\Facade;
 use Spatie\LaravelPdf\FakePdfBuilder;
 use Spatie\LaravelPdf\PdfBuilder;
+use Spatie\LaravelPdf\PdfFactory;
 
 /**
  * @mixin \Spatie\LaravelPdf\PdfBuilder
@@ -14,7 +15,7 @@ class Pdf extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return PdfBuilder::class;
+        return PdfFactory::class;
     }
 
     public static function fake()
