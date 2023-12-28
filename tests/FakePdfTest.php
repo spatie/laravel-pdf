@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use PHPUnit\Framework\ExpectationFailedException;
 use Spatie\LaravelPdf\Facades\Pdf;
-use function \Spatie\LaravelPdf\Support\pdf;
+
+use function Spatie\LaravelPdf\Support\pdf;
 
 beforeEach(function () {
     Pdf::fake();
@@ -22,7 +22,7 @@ it('can determine the view that was not used', function () {
 })->fails();
 
 it('can determine the data that was passed to the view', function () {
-    Route::get('pdf', function() {
+    Route::get('pdf', function () {
         return pdf('test')->inline();
     });
 
@@ -30,7 +30,7 @@ it('can determine the data that was passed to the view', function () {
         ->get('pdf')
         ->assertSuccessful();
 
-    Pdf::assertRespondedWithPdf(function(\Spatie\LaravelPdf\Pdf $pdf) {
+    Pdf::assertRespondedWithPdf(function (Spatie\LaravelPdf\Pdf $pdf) {
         return $pdf->viewName === 'test'
             && $pdf->isInline();
     });
