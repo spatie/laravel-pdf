@@ -29,7 +29,7 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertViewHas(string $key, $value = null): void
     {
-        if($value === null) {
+        if ($value === null) {
             foreach ($this->savedPdfs as $savedPdf) {
                 if (array_key_exists($key, $savedPdf['pdf']->viewData)) {
                     $this->markAssertionPassed();
