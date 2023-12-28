@@ -29,7 +29,7 @@ class FakePdf extends Pdf
     {
         Assert::assertNotEmpty($this->respondedWithPdf);
 
-        foreach($this->respondedWithPdf as $pdf) {
+        foreach ($this->respondedWithPdf as $pdf) {
 
             $result = $expectations($pdf);
 
