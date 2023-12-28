@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPdf\Facades\Pdf;
 
+use Spatie\LaravelPdf\PdfBuilder;
 use function Spatie\LaravelPdf\Support\pdf;
 
 beforeEach(function () {
@@ -30,7 +31,7 @@ it('can determine the data that was passed to the view', function () {
         ->get('pdf')
         ->assertSuccessful();
 
-    Pdf::assertRespondedWithPdf(function (Spatie\LaravelPdf\Pdf $pdf) {
+    Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
         return $pdf->viewName === 'test'
             && $pdf->isInline();
     });

@@ -9,7 +9,7 @@ use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\PaperFormat;
 
-class Pdf implements Responsable
+class PdfBuilder implements Responsable
 {
     public string $viewName = '';
 

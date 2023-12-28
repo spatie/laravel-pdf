@@ -6,12 +6,12 @@ use Closure;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Assert;
 
-class FakePdf extends Pdf
+class FakePdf extends PdfBuilder
 {
-    /** @var array<int, \Spatie\LaravelPdf\Pdf> */
+    /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
     protected array $respondedWithPdf = [];
 
-    /** @var array<int, \Spatie\LaravelPdf\Pdf> */
+    /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
     protected array $savedPdfs = [];
 
     public function assertViewIs(string $viewName): void

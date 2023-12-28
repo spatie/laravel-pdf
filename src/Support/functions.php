@@ -2,9 +2,10 @@
 
 namespace Spatie\LaravelPdf\Support;
 
-use Spatie\LaravelPdf\Pdf;
+use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfBuilder;
 
-function pdf(string $viewPath, array $data = []): Pdf
+function pdf(string $viewPath, array $data = []): PdfBuilder
 {
-    return \Spatie\LaravelPdf\Facades\Pdf::view($viewPath, $data);
+    return Pdf::view($viewPath, $data);
 }
