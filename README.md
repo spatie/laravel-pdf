@@ -32,8 +32,7 @@ class DownloadInvoiceController
     {
         return Pdf::view('pdfs.invoice', ['invoice' => $invoice])
             ->paperFormat('a4')
-            ->name('your-invoice.pdf')
-            ->download();
+            ->name('your-invoice.pdf');
     }
 }
 ```
