@@ -13,7 +13,7 @@ class PdfBuilder implements Responsable
 {
     public string $viewName = '';
 
-    public array $data = [];
+    public array $viewData = [];
 
     public string $html = '';
 
@@ -47,7 +47,7 @@ class PdfBuilder implements Responsable
     {
         $this->viewName = $view;
 
-        $this->data = $data;
+        $this->viewData = $data;
 
         return $this;
     }
@@ -207,7 +207,7 @@ class PdfBuilder implements Responsable
     protected function getHtml(): string
     {
         if ($this->viewName) {
-            return view($this->viewName, $this->data)->render();
+            $this->html = view($this->viewName, $this->viewData)->render();
         }
 
         if ($this->html) {
@@ -219,12 +219,12 @@ class PdfBuilder implements Responsable
 
     protected function getHeaderHtml(): ?string
     {
-        if ($this->headerHtml) {
-            return $this->headerHtml;
+        if ($this->headerViewName) {
+            $this->headerHtml = view($this->headerViewName, $this->headerData)->render();
         }
 
-        if ($this->headerViewName) {
-            return view($this->headerViewName, $this->headerData)->render();
+        if ($this->headerHtml) {
+            return $this->headerHtml;
         }
 
         return null;
@@ -232,12 +232,12 @@ class PdfBuilder implements Responsable
 
     protected function getFooterHtml(): ?string
     {
-        if ($this->footerHtml) {
-            return $this->footerHtml;
+        if ($this->footerViewName) {
+            $this->footerHtml = view($this->footerViewName, $this->footerData)->render();
         }
 
-        if ($this->footerViewName) {
-            return view($this->footerViewName, $this->footerData)->render();
+        if ($this->footerHtml) {
+            return $this->footerHtml;
         }
 
         return null;

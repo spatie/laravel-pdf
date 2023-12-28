@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Response;
 use PHPUnit\Framework\Assert;
 
-class FakePdf extends PdfBuilder
+class FakePdfBuilder extends PdfBuilder
 {
     /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
     protected array $respondedWithPdf = [];
@@ -25,6 +25,48 @@ class FakePdf extends PdfBuilder
         }
 
         Assert::fail("Did not save a PDF that uses view `{$viewName}`");
+    }
+
+    public function assertViewHas(string $key, $value = null): void
+    {
+        if($value === null) {
+            foreach ($this->savedPdfs as $savedPdf) {
+                if (array_key_exists($key, $savedPdf['pdf']->viewData)) {
+                    $this->markAssertionPassed();
+
+                    return;
+                }
+            }
+
+            Assert::fail("Did not save a PDF that has view data `{$key}`");
+        }
+
+        foreach ($this->savedPdfs as $savedPdf) {
+            if (! array_key_exists($key, $savedPdf['pdf']->viewData)) {
+                continue;
+            }
+
+            if ($savedPdf['pdf']->viewData[$key] === $value) {
+                $this->markAssertionPassed();
+
+                return;
+            }
+        }
+
+        Assert::fail("Did not save a PDF that has view data `{$key}` with value `{$value}`");
+    }
+
+    public function assertSee(string $text): void
+    {
+        foreach ($this->savedPdfs as $savedPdf) {
+            if (str_contains($savedPdf['pdf']->html, $text)) {
+                $this->markAssertionPassed();
+
+                return;
+            }
+        }
+
+        Assert::fail("Did not save a PDF that contains `{$text}`");
     }
 
     public function toResponse($request): Response
