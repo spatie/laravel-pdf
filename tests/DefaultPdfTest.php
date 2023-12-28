@@ -21,7 +21,7 @@ it('can set defaults for pdfs', function () {
         ->toContainText('test');
 });
 
-it('will not use properties of the previous pdf when not setting a default', function() {
+it('will not use properties of the previous pdf when not setting a default', function () {
     $firstPath = getTempPath('first.pdf');
     Pdf::html('test')
         ->orientation(Orientation::Landscape)
