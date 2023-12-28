@@ -24,13 +24,4 @@ class Pdf extends Facade
 
         static::swap($fake);
     }
-
-    public static function default(): PdfBuilder
-    {
-        $pdf = new PdfBuilder();
-
-        static::swap($pdf);
-
-        return $pdf;
-    }
 }
