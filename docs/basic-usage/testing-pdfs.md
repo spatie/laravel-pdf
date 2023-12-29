@@ -106,7 +106,7 @@ Pdf::assertSee([
 
 ### assertViewHas
 
-You can use the `assertViewHas` method to assert that a PDF was generated that was passed a specific key in it's view data.
+You can use the `assertViewHas` method to assert that a PDF was generated that was passed a specific key in its view data.
 
 ```php
 Pdf::assertViewHas('invoice');
