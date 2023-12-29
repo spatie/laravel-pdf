@@ -1,5 +1,3 @@
-**THIS PACKAGE IS IN DEVELOPMENT, DO NOT USE IN PRODUCTION YET**
-
 # Create PDFs in Laravel apps
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-pdf.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-pdf)
