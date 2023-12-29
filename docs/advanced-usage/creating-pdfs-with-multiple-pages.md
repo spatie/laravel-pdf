@@ -3,7 +3,7 @@ title: Creating PDFs with multiple pages
 weight: 2
 ---
 
-This packages offers a couple of Blade directives to help you create PDFs with multiple pages.
+This package offers a couple of Blade directives to help you create PDFs with multiple pages.
 
 ## Setting a page break
 
