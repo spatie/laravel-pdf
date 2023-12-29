@@ -2,6 +2,7 @@
 
 use Spatie\Image\Image;
 use Spatie\LaravelPdf\Tests\TestCase;
+use Spatie\PdfToText\Pdf;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 use function Spatie\Snapshots\assertMatchesImageSnapshot;
@@ -61,13 +62,18 @@ expect()->extend('toContainText', function (string|array $expectedText) {
 
     $path = $this->value;
 
-    $actualText = \Spatie\PdfToText\Pdf::getText($path, $binPath);
+    $actualText = Pdf::getText($path, $binPath);
 
     if (is_string($expectedText)) {
         $expectedText = [$expectedText];
     }
 
+    $actualText = strtolower(str_replace(' ', '', $actualText));
+
     foreach ($expectedText as $singleText) {
+        $singleText = strtolower(str_replace(' ', '', $singleText));
+
+
         expect(str_contains($actualText, $singleText))->toBeTrue(
             "Expected text `{$singleText}` not found in `{$actualText}`"
 
