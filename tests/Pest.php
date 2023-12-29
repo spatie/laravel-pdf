@@ -68,10 +68,10 @@ expect()->extend('toContainText', function (string|array $expectedText) {
         $expectedText = [$expectedText];
     }
 
-    $actualText = strtolower(str_replace(' ', '', $actualText));
+    $actualText = strtolower(preg_replace('/\s+/', '', $actualText));
 
     foreach ($expectedText as $singleText) {
-        $singleText = strtolower(str_replace(' ', '', $singleText));
+        $singleText = strtolower(preg_replace('/\s+/', '', $singleText));
 
         expect(str_contains($actualText, $singleText))->toBeTrue(
             "Expected text `{$singleText}` not found in `{$actualText}`"

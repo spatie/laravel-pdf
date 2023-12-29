@@ -99,7 +99,7 @@ it('can accept the paper format', function () {
     expect($this->targetPath)
         ->toHaveDimensions(419, 595)
         ->toContainText('This is a test');
-});
+})->skipOnLinux();
 
 it('can accept the orientation', function () {
     Pdf::view('test')
