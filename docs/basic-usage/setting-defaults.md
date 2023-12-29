@@ -5,7 +5,7 @@ weight: 5
 
 You can set the default options for every PDF, by using the `default` method on the `Pdf` facade.
 
-Typically you would do this in the `boot` method of a service provider.
+Typically, you would do this in the `boot` method of a service provider.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -31,6 +31,6 @@ Pdf::html('<h1>Hello world</h1>')
 // here we override the default: this PDF will be rendered in A4 format
 
 Pdf::html('<h1>Hello world</h1>')
-    ->paperFormat(PaperFormat::A4)
+   ->paperFormat(PaperFormat::A4)
    ->save('my-a4-pdf.pdf')
 ```
