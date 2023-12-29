@@ -38,7 +38,7 @@ it('can accept header html', function () {
         'Header html',
         'Body html',
     ]);
-})->skipOnLinux();
+});
 
 it('can accept footer html', function () {
     Pdf::html('Body html')
