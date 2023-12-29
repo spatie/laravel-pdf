@@ -29,3 +29,28 @@ use Spatie\LaravelPdf\Facades\Pdf;
 
 Pdf::html('<h1>Hello world!!</h1>')->save('/some/directory/invoice.pdf');
 ```
+
+## Using Javascript
+
+The JavaScript in your HTML will be executed when the PDF is created. You could use this to have a JavaScript charting library render a chart.
+
+Here's a simple example. If you have this Blade view...
+
+```blade
+<div id="target"></div>
+
+<script>
+    document.getElementById('target').innerHTML = 'hello';
+</script>
+```
+
+... and render it with this code...
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('your-view')->save($pathToPdf);
+```
+
+... the text `hello` will be visible in the PDF.
+

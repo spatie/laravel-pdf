@@ -136,3 +136,9 @@ it('will use a fresh instance after saving', function () {
     expect(getTempPath('second.pdf'))
         ->toHaveDimensions(612, 792);
 });
+
+it('will execute javascript', function() {
+   Pdf::view('javascript')->save($this->targetPath);
+
+   expect($this->targetPath)->toContainText('hello');
+});
