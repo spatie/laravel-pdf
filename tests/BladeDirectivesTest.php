@@ -13,7 +13,7 @@ it('can set a page break', function () {
     expect($this->targetPath)->toHavePageCount(2);
 });
 
-it('can display the number of pages', function() {
+it('can display the number of pages', function () {
     Pdf::view('blade-directives.body')
         ->footerView('blade-directives.footer')
         ->save($this->targetPath);
