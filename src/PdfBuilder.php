@@ -9,6 +9,7 @@ use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
+use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
 {
@@ -43,6 +44,8 @@ class PdfBuilder implements Responsable
     protected array $responseHeaders = [
         'Content-Type' => 'application/pdf',
     ];
+
+    protected bool $useLambda = false;
 
     public function view(string $view, array $data = []): self
     {
@@ -204,6 +207,13 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function useLambda(): self
+    {
+        $this->useLambda = true;
+
+        return $this;
+    }
+
     public function save(string $path): self
     {
         $this
@@ -254,7 +264,11 @@ class PdfBuilder implements Responsable
 
     protected function getBrowsershot(): Browsershot
     {
-        $browsershot = Browsershot::html($this->getHtml());
+        $browsershotClass = $this->useLambda
+            ? BrowsershotLambda::class
+            : Browsershot::class;
+
+        $browsershot = $browsershotClass::html($this->getHtml());
 
         $headerHtml = $this->getHeaderHtml();
 
