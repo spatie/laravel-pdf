@@ -24,14 +24,14 @@ it('can accept margins', function () {
     assertMatchesPdfSnapshot($this->targetPath);
 })->skipOnLinux();
 
-it('can save a pdf to a disk', function() {
-   Storage::fake('local');
+it('can save a pdf to a disk', function () {
+    Storage::fake('local');
 
-   Pdf::view('test')
-       ->disk('local')
-       ->save('test.pdf');
+    Pdf::view('test')
+        ->disk('local')
+        ->save('test.pdf');
 
-   Storage::disk('local')->assertExists('test.pdf');
+    Storage::disk('local')->assertExists('test.pdf');
 });
 
 it('can accept html', function () {
