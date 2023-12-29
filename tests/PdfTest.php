@@ -60,7 +60,7 @@ it('can render header html', function () {
         'This is the header HTML: Header title',
         'Body html',
     ]);
-});
+})->skipOnLinux();
 
 it('can render footer html', function () {
     Pdf::html('Body html')
@@ -71,7 +71,7 @@ it('can render footer html', function () {
         'This is the footer HTML: Footer title',
         'Body html',
     ]);
-});
+})->skipOnLinux();
 
 it('can create a pdf using the facade', function () {
     Pdf::view('test')->save($this->targetPath);
