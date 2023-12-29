@@ -45,7 +45,7 @@ class PdfBuilder implements Responsable
         'Content-Type' => 'application/pdf',
     ];
 
-    protected bool $useLambda = false;
+    protected bool $generateOnLambda = false;
 
     public function view(string $view, array $data = []): self
     {
@@ -207,9 +207,9 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
-    public function useLambda(): self
+    public function generateOnLambda(): self
     {
-        $this->useLambda = true;
+        $this->generateOnLambda = true;
 
         return $this;
     }
@@ -264,7 +264,7 @@ class PdfBuilder implements Responsable
 
     protected function getBrowsershot(): Browsershot
     {
-        $browsershotClass = $this->useLambda
+        $browsershotClass = $this->generateOnLambda
             ? BrowsershotLambda::class
             : Browsershot::class;
 
