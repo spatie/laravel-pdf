@@ -52,13 +52,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\LaravelPdf\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Spatie\\LaravelPdf\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-laravel-pdf --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
