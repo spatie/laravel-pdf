@@ -1,0 +1,8 @@
+providers:
+  - Spatie\LaravelPdf\PdfServiceProvider
+  # - Workbench\App\Providers\WorkbenchServiceProvider
+
+workbench:
+  discovers:
+    web: true
+    views: true
