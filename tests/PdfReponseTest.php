@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use function Spatie\LaravelPdf\Support\pdf;
-
 it('can inline the pdf', function () {
     $this
         ->get('inline-pdf')
