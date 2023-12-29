@@ -19,7 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("pdf/{method}", function ($method) {
+Route::get('pdf/{method}', function ($method) {
     return pdf('test')->{$method}('my-custom-name');
 });
 
