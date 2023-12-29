@@ -62,7 +62,7 @@
             "@composer run prepare",
             "@php vendor/bin/testbench workbench:build --ansi"
         ],
-        "start": [
+        "serve": [
             "Composer\\Config::disableProcessTimeout",
             "@composer run build",
             "@php vendor/bin/testbench serve"
