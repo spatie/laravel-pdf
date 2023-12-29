@@ -7,7 +7,8 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Orientation;
-use Spatie\LaravelPdf\Enums\PaperFormat;
+use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\Enums\Unit;
 
 class PdfBuilder implements Responsable
 {
@@ -31,7 +32,7 @@ class PdfBuilder implements Responsable
 
     public string $downloadName = '';
 
-    public ?string $paperFormat = null;
+    public ?string $format = null;
 
     public ?string $orientation = null;
 
@@ -168,8 +169,12 @@ class PdfBuilder implements Responsable
         float $right = 0,
         float $bottom = 0,
         float $left = 0,
-        string $unit = 'mm'
+        Unit|string $unit = 'mm'
     ): self {
+        if ($unit instanceof Unit) {
+            $unit = $unit->value;
+        }
+
         $this->margins = compact(
             'top',
             'right',
@@ -181,13 +186,13 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
-    public function paperFormat(string|PaperFormat $paperFormat): self
+    public function format(string|Format $format): self
     {
-        if ($paperFormat instanceof PaperFormat) {
-            $paperFormat = $paperFormat->value;
+        if ($format instanceof Format) {
+            $format = $format->value;
         }
 
-        $this->paperFormat = $paperFormat;
+        $this->format = $format;
 
         return $this;
     }
@@ -279,8 +284,8 @@ class PdfBuilder implements Responsable
             $browsershot->margins(...$this->margins);
         }
 
-        if ($this->paperFormat) {
-            $browsershot->format($this->paperFormat);
+        if ($this->format) {
+            $browsershot->format($this->format);
         }
 
         if ($this->orientation === Orientation::Landscape->value) {

@@ -9,13 +9,13 @@ Typically you would do this in the `boot` method of a service provider.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
-use Spatie\LaravelPdf\Enums\PaperFormat;
+use Spatie\LaravelPdf\Enums\Format;
 
 // in a service provider
 
 Pdf::default()
     ->headerView('pdf.header')
-    ->paperFormat(PaperFormat::A3);
+    ->paperFormat(Format::A3);
 ```
 
 With this code, every PDF generated in your app will have the `pdf.header` view as header and will be rendered in A3 format.

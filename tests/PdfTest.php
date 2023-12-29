@@ -2,7 +2,7 @@
 
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Orientation;
-use Spatie\LaravelPdf\Enums\PaperFormat;
+use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 use function Spatie\LaravelPdf\Support\pdf;
@@ -93,7 +93,7 @@ it('can return the base 64 encoded pdf', function () {
 
 it('can accept the paper format', function () {
     Pdf::view('test')
-        ->paperFormat(PaperFormat::A5)
+        ->format(Format::A5)
         ->save($this->targetPath);
 
     expect($this->targetPath)

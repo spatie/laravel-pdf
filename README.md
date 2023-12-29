@@ -15,7 +15,7 @@ Here's a quick example:
 use Spatie\LaravelPdf\Facades\Pdf;
 
 Pdf::view('pdfs.invoice', ['invoice' => $invoice])
-    ->paperFormat('a4')
+    ->format('a4')
     ->save('invoice.pdf')
 ```
 
@@ -31,7 +31,7 @@ class DownloadInvoiceController
     public function __invoke(Invoice $invoice)
     {
         return Pdf::view('pdfs.invoice', ['invoice' => $invoice])
-            ->paperFormat('a4')
+            ->format('a4')
             ->name('your-invoice.pdf');
     }
 }

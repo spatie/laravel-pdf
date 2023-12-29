@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPdf\Enums;
 
-enum PaperFormat: string
+enum Format: string
 {
     case Letter = 'letter';
     case Legal = 'legal';
