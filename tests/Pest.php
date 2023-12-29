@@ -73,7 +73,6 @@ expect()->extend('toContainText', function (string|array $expectedText) {
     foreach ($expectedText as $singleText) {
         $singleText = strtolower(str_replace(' ', '', $singleText));
 
-
         expect(str_contains($actualText, $singleText))->toBeTrue(
             "Expected text `{$singleText}` not found in `{$actualText}`"
 
