@@ -15,7 +15,9 @@ So if you have a view like this...
 <div>
     Page 1
 </div>
+
 @pageBreak
+
 <div>
     Page 2
 </div>
