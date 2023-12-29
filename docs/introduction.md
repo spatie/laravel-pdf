@@ -3,7 +3,7 @@ title: Introduction
 weight: 1
 ---
 
-This package provides a simple way to create PDFs in Laravel apps. Under the hood it uses [Chromium](https://www.chromium.org/chromium-projects/) to generate PDFs from Blade views. You can use modern CSS features like grid and flexbox to create beautiful PDFs.
+This package provides a simple way to create PDFs in Laravel apps. Under the hood it uses [Chromium](https://www.chromium.org/chromium-projects/) (via [Browsershot](https://spatie.be/docs/browsershot)) to generate PDFs from Blade views. You can use modern CSS features like grid and flexbox, or even a framework like Tailwind, to create beautiful PDFs.
 
 Here's a quick example:
 
