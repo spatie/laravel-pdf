@@ -27,9 +27,6 @@ it('will tack on pdf to the filename if it is missing', function (string $method
 })->with(['inline', 'download']);
 
 it('will inline the pdf by default', function () {
-    Route::get('pdf', function () {
-        return pdf('test')->name('my-custom-name.pdf');
-    });
 
     $this
         ->get('pdf')

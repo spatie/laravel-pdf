@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfBuilder;
 
-use function Spatie\LaravelPdf\Support\pdf;
-
 beforeEach(function () {
     Pdf::fake();
 });
