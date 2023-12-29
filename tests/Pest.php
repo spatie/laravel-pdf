@@ -59,7 +59,9 @@ expect()->extend('toContainText', function (string|array $expectedText) {
         ? '/usr/bin/pdftotext'
         : '/opt/homebrew/bin/pdftotext';
 
-    $actualText = \Spatie\PdfToText\Pdf::getText($this->value, $binPath);
+    $path = $this->value;
+
+    $actualText = \Spatie\PdfToText\Pdf::getText($path, $binPath);
 
     if (is_string($expectedText)) {
         $expectedText = [$expectedText];
@@ -71,6 +73,12 @@ expect()->extend('toContainText', function (string|array $expectedText) {
 
         );
     }
+});
+
+expect()->extend('toHavePageCount', function(int $expectedNumberOfPages) {
+    $image = new Imagick();
+    $image->pingImage($this->value);
+    expect($image->getNumberImages())->toBe($expectedNumberOfPages);
 });
 
 function convertPdfToImage(string $pdfPath): string

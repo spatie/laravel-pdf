@@ -1,6 +1,6 @@
 ---
 title: Customizing Browsershot
-weight: 1
+weight: 2
 ---
 
 Under the hood, Laravel PDF uses [Browsershot](https://spatie.be/docs/browsershot) to generate the PDFs. While Laravel PDF provides a simple interface to generate PDFs, you can still use Browsershot directly to customize the PDFs.
