@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
@@ -22,6 +23,16 @@ it('can accept margins', function () {
 
     assertMatchesPdfSnapshot($this->targetPath);
 })->skipOnLinux();
+
+it('can save a pdf to a disk', function() {
+   Storage::fake('local');
+
+   Pdf::view('test')
+       ->disk('local')
+       ->save('test.pdf');
+
+   Storage::disk('local')->assertExists('test.pdf');
+});
 
 it('can accept html', function () {
     Pdf::html('<h1>Some custom HTML</h1>')->save($this->targetPath);

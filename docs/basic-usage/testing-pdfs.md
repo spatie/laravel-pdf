@@ -1,6 +1,6 @@
 ---
 title: Testing PDFs
-weight: 4
+weight: 5
 ---
 
 In your test, you can call the `fake()` method on the `Pdf` facade to fake the PDF generation. Because the PDF generation is faked, your tests will run much faster.

@@ -18,6 +18,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
+        "setasign/fpdi": "^2.6",
         "spatie/browsershot": "^4.0",
         "spatie/laravel-package-tools": "^1.16.1",
         "spatie/pdf-to-text": "^1.52.1",

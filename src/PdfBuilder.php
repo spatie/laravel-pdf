@@ -5,6 +5,7 @@ namespace Spatie\LaravelPdf;
 use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
@@ -46,6 +47,8 @@ class PdfBuilder implements Responsable
     ];
 
     protected bool $generateOnLambda = false;
+
+    protected ?string $diskName = null;
 
     public function view(string $view, array $data = []): self
     {
@@ -216,9 +219,29 @@ class PdfBuilder implements Responsable
 
     public function save(string $path): self
     {
+        if ($this->diskName) {
+            return $this->saveOnDisk($this->diskName, $path);
+        }
+
         $this
             ->getBrowsershot()
             ->save($path);
+
+        return $this;
+    }
+
+    public function disk(string $diskName): self
+    {
+        $this->diskName = $diskName;
+
+        return $this;
+    }
+
+    protected function saveOnDisk(string $diskName, string $path): self
+    {
+        $pdfContent = $this->getBrowsershot()->pdf();
+
+        Storage::disk($diskName)->put($path, $pdfContent);
 
         return $this;
     }
