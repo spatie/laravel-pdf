@@ -6,5 +6,4 @@ use Illuminate\Support\ServiceProvider;
 
 class WorkbenchServiceProvider extends ServiceProvider
 {
-
 }

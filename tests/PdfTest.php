@@ -1,8 +1,8 @@
 <?php
 
 use Spatie\Browsershot\Browsershot;
-use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 use function Spatie\LaravelPdf\Support\pdf;

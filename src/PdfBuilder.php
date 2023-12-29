@@ -6,8 +6,8 @@ use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Spatie\Browsershot\Browsershot;
-use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
 
 class PdfBuilder implements Responsable
