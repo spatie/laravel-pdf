@@ -137,8 +137,8 @@ it('will use a fresh instance after saving', function () {
         ->toHaveDimensions(612, 792);
 });
 
-it('will execute javascript', function() {
-   Pdf::view('javascript')->save($this->targetPath);
+it('will execute javascript', function () {
+    Pdf::view('javascript')->save($this->targetPath);
 
-   expect($this->targetPath)->toContainText('hello');
+    expect($this->targetPath)->toContainText('hello');
 });
