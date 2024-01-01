@@ -1,5 +1,5 @@
 ---
-title: Changelog
+title: Alternatives
 weight: 5
 ---
 
