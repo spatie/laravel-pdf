@@ -10,10 +10,10 @@ Here's an example where we are going to create a PDF from a Blade view.
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
 
-Pdf::view('your-view')->save('/some/directory/invoice.pdf');
+Pdf::view('pdf.invoice')->save('/some/directory/invoice.pdf');
 ```
 
-As a second parameter you can pass an array of data that will be made available in the view.
+As a second parameter you can pass an array of data that will be made available in the view. You might use that to pass an Eloquent model, such as an invoice, to the view.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
