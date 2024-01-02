@@ -3,7 +3,7 @@ title: Responding with PDFs
 weight: 2
 ---
 
-In a controller, you can create and return a PDF by using the `pdf()` function.
+In a controller, you can create and return a PDF by using the `pdf()` helper function.
 
 ```php
 use function Spatie\LaravelPdf\Support\pdf;
