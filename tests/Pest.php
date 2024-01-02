@@ -22,6 +22,8 @@ uses(TestCase::class)
     })
     ->in(__DIR__);
 
+registerSpatiePestHelpers();
+
 function getTestSupportPath($suffix = ''): string
 {
     return __DIR__."/TestSupport/{$suffix}";
