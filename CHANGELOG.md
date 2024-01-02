@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.0.0 - 2024-01-02
+
+- initial release
+
 ## 0.0.5 - 2024-01-01
 
 ### What's Changed
