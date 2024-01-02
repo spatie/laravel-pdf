@@ -68,6 +68,12 @@ All documentation is available [on our documentation site](https://spatie.be/doc
 
 ## Testing
 
+For running the testsuite, you'll need to have Puppeteer installed. Pleaser refer to the Browsershot requirements [here](https://spatie.be/docs/browsershot/v4/requirements). Usually `npm -g i puppeteer` will do the trick.
+
+Additionally, you'll need the `pdftotext` CLI which is part of the poppler-utils package. More info can be found in in the [spatie/pdf-to-text readme](https://github.com/spatie/pdf-to-text?tab=readme-ov-file#requirements). Usually `brew install poppler-utils` will suffice.
+
+Finally run the tests with:
+
 ```bash
 composer test
 ```
