@@ -46,7 +46,7 @@ class PdfBuilder implements Responsable
         'Content-Type' => 'application/pdf',
     ];
 
-    protected bool $generateOnLambda = false;
+    protected bool $onLambda = false;
 
     protected ?string $diskName = null;
 
@@ -210,9 +210,9 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
-    public function generateOnLambda(): self
+    public function onLambda(): self
     {
-        $this->generateOnLambda = true;
+        $this->onLambda = true;
 
         return $this;
     }
@@ -287,7 +287,7 @@ class PdfBuilder implements Responsable
 
     protected function getBrowsershot(): Browsershot
     {
-        $browsershotClass = $this->generateOnLambda
+        $browsershotClass = $this->onLambda
             ? BrowsershotLambda::class
             : Browsershot::class;
 

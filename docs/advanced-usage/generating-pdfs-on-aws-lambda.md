@@ -14,7 +14,7 @@ With these two packages installed, you can generate PDFs on AWS Lambda like this
 
 ```php
 Pdf::view('pdf.invoice', $data)
-    ->generateOnLambda()
+    ->onLambda()
     ->save('invoice.pdf');
 ```
 
@@ -23,5 +23,5 @@ If you want to create all PDFs in your app on Lambda, you can [set it as a defau
 ```php
 // typically, in a service provider
 
-Pdf::default()->generateOnLambda();
+Pdf::default()->onLambda();
 ```

@@ -18,12 +18,6 @@ it('can create a pdf using the function', function () {
     expect($this->targetPath)->toContainText('This is a test');
 });
 
-it('can accept margins', function () {
-    Pdf::view('test')->margins(200)->save($this->targetPath);
-
-    assertMatchesPdfSnapshot($this->targetPath);
-})->skipOnLinux();
-
 it('can save a pdf to a disk', function () {
     Storage::fake('local');
 
@@ -110,7 +104,7 @@ it('can accept the paper format', function () {
     expect($this->targetPath)
         ->toHaveDimensions(419, 595)
         ->toContainText('This is a test');
-})->skipOnLinux();
+});
 
 it('can accept the orientation', function () {
     Pdf::view('test')

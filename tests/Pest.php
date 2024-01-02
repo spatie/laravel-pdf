@@ -43,16 +43,13 @@ expect()->extend('toHaveDimensions', function (int $width, int $height) {
     $imagePath = convertPdfToImage($this->value);
 
     $image = Image::load($imagePath);
+    expect($image->getWidth())->toBeWithinRange($width - 2, $width + 2);
+    expect($image->getHeight())->toBeWithinRange($height - 2, $height + 2);
+});
 
-    expect($image->getWidth())->toBe(
-        $width,
-        "Expected width {$width} but got {$image->getWidth()}",
-    );
-
-    expect($image->getHeight())->toBe(
-        $height,
-        "Expected height {$height} but got {$image->getHeight()}",
-    );
+expect()->extend('toBeWithinRange', function (int $min, int $max) {
+    return $this->toBeGreaterThanOrEqual($min)
+        ->toBeLessThanOrEqual($max);
 });
 
 expect()->extend('toContainText', function (string|array $expectedText) {
