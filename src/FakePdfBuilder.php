@@ -8,10 +8,10 @@ use PHPUnit\Framework\Assert;
 
 class FakePdfBuilder extends PdfBuilder
 {
-    /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
+    /** @var array<int, PdfBuilder> */
     protected array $respondedWithPdf = [];
 
-    /** @var array<int, \Spatie\LaravelPdf\PdfBuilder> */
+    /** @var array<int, PdfBuilder> */
     protected array $savedPdfs = [];
 
     public function save(string $path): self
