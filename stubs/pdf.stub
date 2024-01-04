@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+use Closure;
+use Illuminate\Contracts\View\View;
+use Spatie\LaravelPdf\Pdf;
+
+class {{ class }} extends Pdf
+{
+    public function __construct()
+    {
+        //
+    }
+
+    public function render(): View|Closure|string
+    {
+        return {{ view }};
+    }
+}
