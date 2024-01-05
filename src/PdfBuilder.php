@@ -40,6 +40,10 @@ class PdfBuilder implements Responsable
 
     public ?array $margins = null;
 
+    public bool $hideHeader = false;
+
+    public bool $hideFooter = false;
+
     protected ?Closure $customizeBrowsershot = null;
 
     protected array $responseHeaders = [
@@ -192,6 +196,20 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function hideHeader(): self
+    {
+        $this->hideHeader = true;
+
+        return $this;
+    }
+
+    public function hideFooter(): self
+    {
+        $this->hideFooter = true;
+
+        return $this;
+    }
+
     public function format(string|Format $format): self
     {
         if ($format instanceof Format) {
@@ -315,6 +333,14 @@ class PdfBuilder implements Responsable
             if ($footerHtml) {
                 $browsershot->footerHtml($footerHtml);
             }
+        }
+
+        if ($this->hideHeader) {
+            $browsershot->hideHeader();
+        }
+
+        if ($this->hideFooter) {
+            $browsershot->hideFooter();
         }
 
         if ($this->margins) {
