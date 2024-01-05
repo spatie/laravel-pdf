@@ -7,7 +7,32 @@ There are various options to customize the output of the PDFs. You can change th
 
 ## Setting a header and footer
 
-Coming soon...
+You can set a header and footer on every page of the PDF. You can use the `headerView` and `footerView` methods to set the HTML for the header and footer.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->headerView('pdf.invoice.header')
+    ->footerView('pdf.invoice.footer')
+    ->save('/some/directory/invoice-april-2022.pdf');
+```
+
+You can also use the `headerHtml` and `footerHtml` methods to set the HTML for the header and footer.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->headerHtml('<div>My header</div>')
+    ->footerHtml('<div>My footer</div>')
+    ->save('/some/directory/invoice-april-2022.pdf');
+```
+
+Inside the footer, you can use the following Blade directives:
+
+- `@pageNumber`:  The current page number
+- `@totalPages`:  The total number of pages
 
 ### Page orientation
 

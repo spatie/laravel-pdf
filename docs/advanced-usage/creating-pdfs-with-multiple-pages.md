@@ -46,7 +46,7 @@ Imagine you have this footer view...
 ... and you render this view using ...
 
 ```php
-Pdf::view('view-with-multiple-pages')->footer('footer-view')->save($path);
+Pdf::view('view-with-multiple-pages')->footerView('footer-view')->save($path);
 ```
 
 ... the resulting PDF will have a footer on each page, with the page number and the total number of pages.
