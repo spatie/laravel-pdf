@@ -68,6 +68,11 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function header(string $view, array $data = []): self
+    {
+        return $this->headerView($view, $data);
+    }
+
     public function footerView(string $view, array $data = []): self
     {
         $this->footerViewName = $view;
@@ -75,6 +80,11 @@ class PdfBuilder implements Responsable
         $this->footerData = $data;
 
         return $this;
+    }
+
+    public function footer(string $view, array $data = []): self
+    {
+        return $this->footerView($view, $data);
     }
 
     public function landscape(): self
