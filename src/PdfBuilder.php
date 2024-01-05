@@ -293,6 +293,8 @@ class PdfBuilder implements Responsable
 
         $browsershot = $browsershotClass::html($this->getHtml());
 
+        $browsershot->showBackground();
+
         $headerHtml = $this->getHeaderHtml();
 
         $footerHtml = $this->getFooterHtml();
