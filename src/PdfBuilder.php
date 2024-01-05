@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\Enums\InitialPage;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
 use Wnx\SidecarBrowsershot\BrowsershotLambda;
@@ -31,6 +32,8 @@ class PdfBuilder implements Responsable
     public array $footerData = [];
 
     public ?string $footerHtml = null;
+
+    public int $initialPage = 1;
 
     public string $downloadName = '';
 
@@ -130,6 +133,14 @@ class PdfBuilder implements Responsable
 
         return $this;
     }
+
+    public function initialPageNumber(int $initialPage = 1): self
+    {
+        $this->initialPage = $initialPage;
+
+        return $this;
+    }
+
 
     public function download(?string $downloadName = null): self
     {
@@ -327,6 +338,10 @@ class PdfBuilder implements Responsable
 
         if ($this->orientation === Orientation::Landscape->value) {
             $browsershot->landscape();
+        }
+
+        if ($this->initialPage !== InitialPage::Default->value) {
+            $browsershot->initialPageNumber($this->initialPage);
         }
 
         if ($this->customizeBrowsershot) {
