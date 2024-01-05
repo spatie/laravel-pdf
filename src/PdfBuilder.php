@@ -36,6 +36,8 @@ class PdfBuilder implements Responsable
 
     public ?string $format = null;
 
+    public bool $showBrowserHeaderAndFooter = false;
+
     public ?string $orientation = null;
 
     public ?array $margins = null;
@@ -203,6 +205,13 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function showBrowserHeaderAndFooter(): self
+    {
+        $this->showBrowserHeaderAndFooter = true;
+
+        return $this;
+    }
+
     public function withBrowsershot(callable $callback): self
     {
         $this->customizeBrowsershot = $callback;
@@ -315,6 +324,10 @@ class PdfBuilder implements Responsable
             if ($footerHtml) {
                 $browsershot->footerHtml($footerHtml);
             }
+        }
+
+        if ($this->showBrowserHeaderAndFooter) {
+            $browsershot->showBrowserHeaderAndFooter();
         }
 
         if ($this->margins) {
