@@ -18,10 +18,8 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
-        "setasign/fpdi": "^2.6",
         "spatie/browsershot": "^4.0",
         "spatie/laravel-package-tools": "^1.16.1",
-        "spatie/pdf-to-text": "^1.52.1",
         "spatie/temporary-directory": "^2.2.1"
     },
     "require-dev": {
@@ -39,15 +37,15 @@
         "spatie/image": "^3.3.2",
         "spatie/laravel-ray": "^1.33",
         "spatie/pdf-to-image": "^2.2",
+        "spatie/pdf-to-text": "^1.52.1",
         "spatie/pest-expectations": "^1.5",
         "spatie/pest-plugin-snapshots": "^2.1",
         "spatie/pixelmatch-php": "^1.0",
-        "wnx/sidecar-browsershot": "dev-main"
+        "wnx/sidecar-browsershot": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\LaravelPdf\\": "src/",
-            "Spatie\\LaravelPdf\\Database\\Factories\\": "database/factories/"
+            "Spatie\\LaravelPdf\\": "src/"
         },
         "files": [
             "src/Support/functions.php"

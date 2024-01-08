@@ -10,7 +10,7 @@ test('the `pdf` function returns the pdf builder instance', function () {
     expect(pdf())->toBeInstanceOf(PdfBuilder::class);
 });
 
-test('the `pdf` function respect fakes', function () {
+test('the `pdf` function respects fakes', function () {
     Pdf::fake();
 
     expect(pdf())->toBeInstanceOf(FakePdfBuilder::class);
