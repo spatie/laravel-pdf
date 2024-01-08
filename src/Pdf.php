@@ -13,7 +13,7 @@ use Spatie\LaravelPdf\Enums\Orientation;
 
 abstract class Pdf extends Component implements Responsable, Htmlable
 {
-    protected ?Builder $builder = null;
+    protected ?PdfBuilder $builder = null;
 
     public function getPdfBuilder(): PdfBuilder
     {
@@ -98,5 +98,14 @@ abstract class Pdf extends Component implements Responsable, Htmlable
     public function toResponse($request)
     {
         return $this->getPdfBuilder()->toResponse($request);
+    }
+
+    public static function test(...$args): TestablePdf
+    {
+        Builder::fake();
+
+        $pdf = new static(...$args);
+
+        return new TestablePdf($pdf->getPdfBuilder());
     }
 }
