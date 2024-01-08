@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.0.1 - 2024-01-08
+
+### What's Changed
+
+* Added showBackground() by default into getBrowsershot() function.  by @bawbanksy in https://github.com/spatie/laravel-pdf/pull/24
+* Fix nitpicks by @freekmurze
+
+### New Contributors
+
+* @bawbanksy made their first contribution in https://github.com/spatie/laravel-pdf/pull/24
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.0.0...1.0.1
+
 ## 1.0.0 - 2024-01-02
 
 - initial release
