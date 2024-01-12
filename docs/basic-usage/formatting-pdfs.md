@@ -86,6 +86,19 @@ A5: 5.83in  x  8.27in
 A6: 4.13in  x  5.83in
 ```
 
+### Paper size
+
+If you don't want to use standardized formats, you can also change this by calling the `paperSize` method instead.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\Enums\Format;
+
+Pdf::view('pdf.receipt', ['order' => $order])
+    ->paperSize(57, 500, 'mm')
+    ->save('/some/directory/receipt-4912941.pdf');
+```
+
 ### Page margins
 
 Margins can be set using the `margins` method. The unit of the margins is millimeters by default.
