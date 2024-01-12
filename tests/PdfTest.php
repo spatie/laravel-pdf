@@ -106,6 +106,16 @@ it('can accept the paper format', function () {
         ->toContainText('This is a test');
 });
 
+it('can accept the page size', function () {
+    Pdf::view('test')
+        ->paperSize(200, 400, 'mm')
+        ->save($this->targetPath);
+
+    expect($this->targetPath)
+        ->toHaveDimensions(567, 1134)
+        ->toContainText('This is a test');
+});
+
 it('can accept the orientation', function () {
     Pdf::view('test')
         ->orientation(Orientation::Landscape)
