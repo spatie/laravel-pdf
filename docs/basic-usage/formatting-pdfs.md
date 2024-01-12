@@ -88,7 +88,7 @@ A6: 4.13in  x  5.83in
 
 ### Paper size
 
-If you don't want to use standardized formats, you can also change this by calling the `paperSize` method instead.
+If you don't want to use standardized formats, you can also use the `paperSize` method instead.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
