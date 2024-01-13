@@ -92,11 +92,10 @@ If you don't want to use standardized formats, you can also change this by calli
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
-use Spatie\LaravelPdf\Enums\Format;
 
 Pdf::view('pdf.receipt', ['order' => $order])
     ->paperSize(57, 500, 'mm')
-    ->save('/some/directory/receipt-4912941.pdf');
+    ->save('/some/directory/receipt-12345.pdf');
 ```
 
 ### Page margins
