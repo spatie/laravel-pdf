@@ -203,6 +203,15 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function paperSize(float $width, float $height, string $unit = 'mm'): self
+    {
+        $this->withBrowsershot(function (Browsershot $browsershot) use ($width, $height, $unit) {
+            $browsershot->paperSize($width, $height, $unit);
+        });
+
+        return $this;
+    }
+
     public function withBrowsershot(callable $callback): self
     {
         $this->customizeBrowsershot = $callback;
