@@ -36,6 +36,8 @@ class PdfBuilder implements Responsable
 
     public ?string $format = null;
 
+    public ?array $paperSize = null;
+
     public ?string $orientation = null;
 
     public ?array $margins = null;
@@ -209,9 +211,11 @@ class PdfBuilder implements Responsable
             $unit = $unit->value;
         }
 
-        $this->withBrowsershot(function (Browsershot $browsershot) use ($width, $height, $unit) {
-            $browsershot->paperSize($width, $height, $unit);
-        });
+        $this->paperSize = compact(
+            'width',
+            'height',
+            'unit',
+        );
 
         return $this;
     }
@@ -338,6 +342,10 @@ class PdfBuilder implements Responsable
 
         if ($this->format) {
             $browsershot->format($this->format);
+        }
+
+        if ($this->paperSize) {
+            $browsershot->paperSize(...$this->paperSize);
         }
 
         if ($this->orientation === Orientation::Landscape->value) {
