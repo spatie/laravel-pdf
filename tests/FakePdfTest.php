@@ -112,7 +112,7 @@ it('can determine properties of the pdf that was returned in a response', functi
     });
 });
 
-it('can determine that a PDF contained a certain piece of text', function() {
+it('can determine that a PDF contained a certain piece of text', function () {
     Route::get('pdf', function () {
         return pdf('test')->inline();
     });
@@ -125,7 +125,7 @@ it('can determine that a PDF contained a certain piece of text', function() {
     });
 });
 
-it('can determine that a PDF did not contain a certain piece of text', function() {
+it('can determine that a PDF did not contain a certain piece of text', function () {
     Route::get('pdf', function () {
         return pdf('test')->inline();
     });
