@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use PHPUnit\Framework\Assert;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
@@ -106,7 +107,7 @@ class PdfBuilder implements Responsable
 
         $this->addHeaders([
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="'.$this->downloadName.'"',
+            'Content-Disposition' => 'inline; filename="' . $this->downloadName . '"',
         ]);
 
         return $this;
@@ -139,7 +140,7 @@ class PdfBuilder implements Responsable
 
         $this->addHeaders([
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="'.$this->downloadName.'"',
+            'Content-Disposition' => 'attachment; filename="' . $this->downloadName . '"',
         ]);
 
         $this->name($downloadName);
@@ -156,7 +157,7 @@ class PdfBuilder implements Responsable
 
     public function name(string $downloadName): self
     {
-        if (! str_ends_with(strtolower($downloadName), '.pdf')) {
+        if (!str_ends_with(strtolower($downloadName), '.pdf')) {
             $downloadName .= '.pdf';
         }
 
@@ -178,7 +179,8 @@ class PdfBuilder implements Responsable
         float $bottom = 0,
         float $left = 0,
         Unit|string $unit = 'mm'
-    ): self {
+    ): self
+    {
         if ($unit instanceof Unit) {
             $unit = $unit->value;
         }
@@ -302,6 +304,15 @@ class PdfBuilder implements Responsable
         return null;
     }
 
+    protected function getAllHtml(): string
+    {
+        return implode(PHP_EOL, [
+            $this->getHeaderHtml(),
+            $this->getHtml(),
+            $this->getFooterHtml(),
+        ]);
+    }
+
     protected function getBrowsershot(): Browsershot
     {
         $browsershotClass = $this->onLambda
@@ -319,11 +330,11 @@ class PdfBuilder implements Responsable
         if ($headerHtml || $footerHtml) {
             $browsershot->showBrowserHeaderAndFooter();
 
-            if (! $headerHtml) {
+            if (!$headerHtml) {
                 $browsershot->hideHeader();
             }
 
-            if (! $footerHtml) {
+            if (!$footerHtml) {
                 $browsershot->hideFooter();
             }
 
@@ -361,7 +372,7 @@ class PdfBuilder implements Responsable
 
     public function toResponse($request): Response
     {
-        if (! $this->hasHeader('Content-Disposition')) {
+        if (!$this->hasHeader('Content-Disposition')) {
             $this->inline($this->downloadName);
         }
 
@@ -384,7 +395,7 @@ class PdfBuilder implements Responsable
 
     public function isInline(): bool
     {
-        if (! $this->hasHeader('Content-Disposition')) {
+        if (!$this->hasHeader('Content-Disposition')) {
             return false;
         }
 
@@ -393,10 +404,27 @@ class PdfBuilder implements Responsable
 
     public function isDownload(): bool
     {
-        if (! $this->hasHeader('Content-Disposition')) {
+        if (!$this->hasHeader('Content-Disposition')) {
             return false;
         }
 
         return str_contains($this->responseHeaders['Content-Disposition'], 'attachment');
+    }
+
+    public function contains(string|array $text): bool
+    {
+        if (is_string($text)) {
+            $text = [$text];
+        }
+
+        $html = $this->getAllHtml();
+
+        foreach ($text as $singleText) {
+            if (str_contains($html, $singleText)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

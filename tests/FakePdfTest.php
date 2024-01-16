@@ -112,6 +112,31 @@ it('can determine properties of the pdf that was returned in a response', functi
     });
 });
 
+it('can determine that a PDF contained a certain piece of text', function() {
+    Route::get('pdf', function () {
+        return pdf('test')->inline();
+    });
+
+    $this->get('pdf')->assertSuccessful();
+
+    Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
+        return $pdf
+            ->contains('test');
+    });
+});
+
+it('can determine that a PDF did not contain a certain piece of text', function() {
+    Route::get('pdf', function () {
+        return pdf('test')->inline();
+    });
+
+    $this->get('pdf')->assertSuccessful();
+
+    Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
+        return $pdf->contains('this string does not exist in the PDF');
+    });
+})->fails();
+
 it('can determine that a pdf did not have certain properties in a response', function () {
     Route::get('pdf', function () {
         return pdf('test')->inline();

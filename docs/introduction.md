@@ -46,8 +46,8 @@ it('can render an invoice', function () {
     $this->get(route('download-invoice', $invoice))
         ->assertOk();
         
-    Pdf::assertDownloaded(function (Pdf $pdf) use ($invoice) {
-        $pdf->assertSee($invoice->total);
+    Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
+        return $pdf->contains('test');
     });
 });
 ```
