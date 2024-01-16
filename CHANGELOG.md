@@ -2,6 +2,24 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.1.1 - 2024-01-16
+
+- fix required PHP version
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.1.0...1.1.1
+
+## 1.1.0 - 2024-01-14
+
+### What's Changed
+
+* Add ->paperSize()-method by @jeffreyvanhees in https://github.com/spatie/laravel-pdf/pull/33
+
+### New Contributors
+
+* @jeffreyvanhees made their first contribution in https://github.com/spatie/laravel-pdf/pull/33
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.0.1...1.1.0
+
 ## 1.0.1 - 2024-01-08
 
 ### What's Changed
