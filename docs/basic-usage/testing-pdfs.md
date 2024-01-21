@@ -68,7 +68,7 @@ it('can download an invoice', function () {
     Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
         return $pdf->downloadName === 'invoice-for-april-2022.pdf'
             && $pdf->isDownload()
-            && str_contains($pdf->html, 'Your total for April is $10.00'));
+            && str_contains($pdf->html, 'Your total for April is $10.00');
     });
 });
 ```
