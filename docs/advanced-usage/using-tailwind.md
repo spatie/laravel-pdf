@@ -3,6 +3,8 @@ title: Using Tailwind
 weight: 4
 ---
 
+You can use Tailwind to style your PDFs. This is a great way to create PDFs that look great. Let's create a beautiful PDF invoice using Tailwind.
+
 In your project, you need to save a Blade view with content like this. In this view, we use the CDN version of Tailwind (in your project you can use an asset built with Vite) and got an invoice layout from one of the many Tailwind template sites.
 
 ```html
