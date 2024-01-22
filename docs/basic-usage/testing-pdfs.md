@@ -25,7 +25,7 @@ use Spatie\LaravelPdf\PdfBuilder;
 
 Pdf::assertSaved(function (PdfBuilder $pdf) {
     return $pdf->downloadName === 'invoice.pdf'
-        && str_contains($pdf->html, 'Your total for April is $10.00'));
+        && str_contains($pdf->html, 'Your total for April is $10.00');
 });
 ```
 

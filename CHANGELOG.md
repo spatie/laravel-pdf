@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.1.2 - 2024-01-16
+
+- fix download assertion docs
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.1.0...1.1.2
+
 ## 1.1.1 - 2024-01-16
 
 - fix required PHP version

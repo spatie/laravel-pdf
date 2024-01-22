@@ -34,7 +34,7 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
-### Page orientation
+## Page orientation
 
 By default, all PDFs are created in portrait mode. You can change this by calling the `landscape` method.
 
@@ -57,7 +57,7 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
-### Paper format
+## Paper format
 
 By default, all PDFs are created in A4 format. You can change this by calling the `paperFormat` method.
 
@@ -86,7 +86,7 @@ A5: 5.83in  x  8.27in
 A6: 4.13in  x  5.83in
 ```
 
-### Paper size
+## Paper size
 
 If you don't want to use standardized formats, you can also use the `paperSize` method instead.
 
@@ -98,7 +98,7 @@ Pdf::view('pdf.receipt', ['order' => $order])
     ->save('/some/directory/receipt-12345.pdf');
 ```
 
-### Page margins
+## Page margins
 
 Margins can be set using the `margins` method. The unit of the margins is millimeters by default.
 
