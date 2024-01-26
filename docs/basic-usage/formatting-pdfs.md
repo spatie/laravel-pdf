@@ -29,6 +29,20 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
+The header and footer do not use the CSS set in the main view. In your header and footer HTML, you should add any CSS you need. Here's an example footer view:
+
+```html
+<style>
+footer {
+    font-size: 12px;
+}
+</style>
+
+<footer>
+  This is the footer
+</div>
+```
+
 Inside the footer, you can use the following Blade directives:
 
 - `@pageNumber`:  The current page number
