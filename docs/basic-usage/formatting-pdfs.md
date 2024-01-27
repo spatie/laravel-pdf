@@ -136,7 +136,37 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
+## Background Color
 
+By default, the resulting PDF will not show the background of the html page.
+
+You can set a background programmatically using:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('test')
+    ->withBrowsershot(function (Browsershot $browsershot) {
+        $browsershot->showBackground();
+    })
+    ->save($this->targetPath);
+```
+
+Or you can set a transparent background using:
+
+```php
+Pdf::view('test')
+    ->withBrowsershot(function (Browsershot $browsershot) {
+        $browsershot->transparentBackground();
+    })
+    ->save($this->targetPath);
+```
+
+Optionally you can add a directive to always render a pdf using your css background colors in `exact` and `economy` print colors.
+
+- `@printColor`:  Enable colors mode to print/render pdf (by default it sets exact background color mode).
+
+- `@printColor('economy')`: Enables a cost-cutting colors mode to print/render pdf.
 
 
 

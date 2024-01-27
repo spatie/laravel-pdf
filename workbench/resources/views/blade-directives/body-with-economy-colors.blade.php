@@ -1,4 +1,4 @@
-@printColor
+@printColor('economy')
 <div>
     First page
 </div>
