@@ -136,7 +136,7 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
-## Background Color
+## Background color
 
 By default, the resulting PDF will not show the background of the html page.
 
