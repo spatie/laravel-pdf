@@ -8,7 +8,7 @@ Generating PDFs locally can be resource intensive. If you're having to generate 
 In order to generate PDFs on AWS Lambda, you must install these two packages in your app.
 
 - [hammerstone/sidecar](https://hammerstone.dev/sidecar/docs/main/overview): this allows you to  execute AWS Lambda functions from your Laravel application
-- [wnx/sidecar-browsershot](https://github.com/wnx/sidecar-browsershot): this package contains a version of Browsershot that can run on AWS Lambda via Sidecar
+- [wnx/sidecar-browsershot](https://github.com/stefanzweifel/sidecar-browsershot): this package contains a version of Browsershot that can run on AWS Lambda via Sidecar
 
 With these two packages installed, you can generate PDFs on AWS Lambda like this:
 
