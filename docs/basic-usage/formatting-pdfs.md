@@ -136,8 +136,28 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
+## Background color
 
+By default, the resulting PDF will not show the background of the html page.
 
+You can set a background using css :
 
+```html
+<style>
+    html {
+        -webkit-print-color-adjust: exact;
+    }
+</style>
+```
 
+Alternatively you can set `print-color-adjust` as `economy` it would generate the pdf document in economy mode.
 
+Or you can set a transparent background using browsershot:
+
+```php
+Pdf::view('test')
+    ->withBrowsershot(function (Browsershot $browsershot) {
+        $browsershot->transparentBackground();
+    })
+    ->save($this->targetPath);
+```
