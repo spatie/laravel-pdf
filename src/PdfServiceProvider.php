@@ -26,9 +26,5 @@ class PdfServiceProvider extends PackageServiceProvider
         Blade::directive('totalPages', function () {
             return "<?php echo '<span class=\"totalPages\"></span>'; ?>";
         });
-
-        Blade::directive('printColor', function ($mode = 'exact') {
-            return "<?php echo '<style>html {-webkit-print-color-adjust: $mode;}</style>'; ?>";
-        });
     }
 }

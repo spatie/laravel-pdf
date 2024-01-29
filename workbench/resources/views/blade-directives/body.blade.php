@@ -1,4 +1,3 @@
-@printColor
 <div>
     First page
 </div>

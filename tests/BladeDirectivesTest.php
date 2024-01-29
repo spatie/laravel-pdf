@@ -20,15 +20,3 @@ it('can display the number of pages', function () {
 
     expect($this->targetPath)->toContainText('page 1 of 2');
 });
-
-it('can display the print color adjust css directive', function () {
-    Pdf::view('blade-directives.body')
-        ->save($this->targetPath);
-
-    expect($this->targetPath)->toContainText('-webkit-print-color-adjust: exact;');
-
-    Pdf::view('blade-directives.body-with-economy-colors')
-        ->save($this->targetPath);
-
-    expect($this->targetPath)->toContainText('-webkit-print-color-adjust: economy;');
-});
