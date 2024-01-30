@@ -10,6 +10,8 @@ use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
+use Spatie\LaravelPdf\Exceptions\DetectedOverflowingMargins;
+use Spatie\LaravelPdf\Exceptions\ValidationException;
 use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
@@ -313,6 +315,8 @@ class PdfBuilder implements Responsable
 
     protected function getBrowsershot(): Browsershot
     {
+        $this->validate();
+
         $browsershotClass = $this->onLambda
             ? BrowsershotLambda::class
             : Browsershot::class;
@@ -366,6 +370,75 @@ class PdfBuilder implements Responsable
         }
 
         return $browsershot;
+    }
+
+    protected function validate(): void
+    {
+        $this->validateFormat();
+
+        $this->validateUnits();
+
+        $this->preventOverflowingMargins();
+    }
+
+    protected function validateFormat(): void
+    {
+        if ($this->format && ! Format::tryFrom($this->format)) {
+            throw ValidationException::invalidFormat($this->format);
+        }
+    }
+
+    protected function validateUnits(): void
+    {
+        if($this->margins && ! Unit::tryFrom($this->margins['unit'])) {
+            throw ValidationException::invalidUnit('margins', $this->margins['unit']);
+        }
+
+        if($this->paperSize && ! Unit::tryFrom($this->paperSize['unit'])) {
+            throw ValidationException::invalidUnit('paperSize', $this->paperSize['unit']);
+        }
+    }
+
+    protected function preventOverflowingMargins(): void
+    {
+        $unit = Unit::from($this->margins['unit']);
+
+        $xMargin = $this->margins['left'] + $this->margins['right'];
+        $yMargin = $this->margins['top'] + $this->margins['bottom'];
+
+        if ($unit->toMillimeter($xMargin) > $this->getPaperWidth()) {
+            throw DetectedOverflowingMargins::marginIsGreaterThanWidth();
+        }
+
+        if ($unit->toMillimeter($yMargin) > $this->getPaperHeight()) {
+            throw DetectedOverflowingMargins::marginIsGreaterThanHeight();
+        }
+    }
+
+    protected function getPaperWidth(): float
+    {
+        if ($this->format) {
+            return Format::from($this->format)->width();
+        }
+
+        if ($this->paperSize) {
+            return Unit::from($this->paperSize['unit'])->toMillimeter($this->paperSize['width']);
+        }
+
+        return Format::A4->width();
+    }
+
+    protected function getPaperHeight(): float
+    {
+        if ($this->format) {
+            return Format::from($this->format)->height();
+        }
+
+        if ($this->paperSize) {
+            return Unit::from($this->paperSize['unit'])->toMillimeter($this->paperSize['height']);
+        }
+
+        return Format::A4->height();
     }
 
     public function toResponse($request): Response
