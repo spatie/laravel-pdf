@@ -401,6 +401,10 @@ class PdfBuilder implements Responsable
 
     protected function preventOverflowingMargins(): void
     {
+        if (! $this->margins) {
+            return;
+        }
+
         $unit = Unit::from($this->margins['unit']);
 
         $xMargin = $this->margins['left'] + $this->margins['right'];
