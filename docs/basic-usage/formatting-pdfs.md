@@ -40,7 +40,7 @@ footer {
 
 <footer>
   This is the footer
-</div>
+</footer>
 ```
 
 Inside the footer, you can use the following Blade directives:
