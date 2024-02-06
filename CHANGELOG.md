@@ -2,6 +2,31 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.1.3 - 2024-02-06
+
+### What's Changed
+
+* Update testing-pdfs.md by @RVP04 in https://github.com/spatie/laravel-pdf/pull/47
+* Fix heading hierarchy in `formatting-pdfs.md` by @austincarpenter in https://github.com/spatie/laravel-pdf/pull/52
+* Update testing-pdfs.md by @RVP04 in https://github.com/spatie/laravel-pdf/pull/49
+* Fix issue about puppeteer by @NeftaliYagua in https://github.com/spatie/laravel-pdf/pull/61
+* chore(docs): fix link to sidecar-browsershot package by @greatislander in https://github.com/spatie/laravel-pdf/pull/62
+* Add printColor directive by @ArielMejiaDev in https://github.com/spatie/laravel-pdf/pull/60
+* Modify break statement in FakePdfBuilder. by @Lintume in https://github.com/spatie/laravel-pdf/pull/77
+* typo fix footer end tag by @rakibhoossain in https://github.com/spatie/laravel-pdf/pull/76
+
+### New Contributors
+
+* @RVP04 made their first contribution in https://github.com/spatie/laravel-pdf/pull/47
+* @austincarpenter made their first contribution in https://github.com/spatie/laravel-pdf/pull/52
+* @NeftaliYagua made their first contribution in https://github.com/spatie/laravel-pdf/pull/61
+* @greatislander made their first contribution in https://github.com/spatie/laravel-pdf/pull/62
+* @ArielMejiaDev made their first contribution in https://github.com/spatie/laravel-pdf/pull/60
+* @Lintume made their first contribution in https://github.com/spatie/laravel-pdf/pull/77
+* @rakibhoossain made their first contribution in https://github.com/spatie/laravel-pdf/pull/76
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.1.2...1.1.3
+
 ## 1.1.2 - 2024-01-16
 
 - fix download assertion docs
