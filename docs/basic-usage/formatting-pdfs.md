@@ -48,6 +48,39 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
+### Display images in Headers and Footers
+
+You can add an image using `PdfImageAsset` helper class
+
+
+It supports image address absolute path
+
+```php
+public function __invoke(): PdfBuilder
+{
+    return pdf('pdf.invoice', [
+        'invoiceNumber' => '1234',
+        'customerName' => 'Grumpy Cat',
+    ])->footerView('components.footer', [
+        'image' => PdfImageAsset::make('https://avatars.githubusercontent.com/u/7535935?s=200&v=4')
+    ]);
+}
+```
+
+It also, supports image address relative path
+
+```php
+public function __invoke(): PdfBuilder
+{
+    return pdf('pdf.invoice', [
+        'invoiceNumber' => '1234',
+        'customerName' => 'Grumpy Cat',
+    ])->headerView('components.header', [
+        'image' => PdfImageAsset::make(public_path('assets/spatie-logo.png')),
+    ]);
+}
+```
+
 ## Page orientation
 
 By default, all PDFs are created in portrait mode. You can change this by calling the `landscape` method.
