@@ -52,7 +52,7 @@ Inside the footer, you can use the following Blade directives:
 
 You can add an image using the blade directive `@inlidedImage`
 
-It supports absolute and relative paths
+It supports absolute and relative paths inside your app `public` directory
 
 ```php
 @inlidedImage($url)
