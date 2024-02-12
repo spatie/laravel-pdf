@@ -33,15 +33,17 @@ class PdfServiceProvider extends PackageServiceProvider
         Blade::directive('inlinedImage', function ($url) {
             $url = Str::of($url)->trim("'")->trim('"')->value();
 
-            if (!Str::of($url)->isUrl()) {
-                $imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(public_path($url)));
+            if (! Str::of($url)->isUrl()) {
+                $imageContent = 'data:image/png;base64,'.base64_encode(file_get_contents(public_path($url)));
+
                 return "<?php echo '<img src=\"$imageContent\">'; ?>";
             }
 
             $response = Http::get($url);
 
             if ($response->successful()) {
-                $imageContent = 'data:image/png;base64,' . base64_encode($response->body());
+                $imageContent = 'data:image/png;base64,'.base64_encode($response->body());
+
                 return "<?php echo '<img src=\"$imageContent\">'; ?>";
             }
 
