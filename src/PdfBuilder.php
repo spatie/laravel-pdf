@@ -100,6 +100,11 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function output(): string
+    {
+        return $this->getBrowsershot()->pdf();
+    }
+
     public function inline(string $downloadName = ''): self
     {
         $this->name($downloadName);
