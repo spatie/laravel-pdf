@@ -112,7 +112,7 @@ class FakePdfBuilder extends PdfBuilder
         foreach ($this->savedPdfs as $savedPdf) {
             foreach ($text as $singleText) {
                 if (! str_contains($savedPdf['pdf']->html, $singleText)) {
-                    break; // jump out of the inner foreach loop
+                    break 2; // jump out of the inner foreach loop
                 }
             }
 
