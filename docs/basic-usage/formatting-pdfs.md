@@ -48,6 +48,16 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
+### Display Images in Headers and Footers
+
+You can add an image using the blade directive `@inlinedImage`
+
+It supports absolute and relative paths inside your app `public` directory
+
+```php
+@inlinedImage($url)
+```
+
 ## Page orientation
 
 By default, all PDFs are created in portrait mode. You can change this by calling the `landscape` method.
