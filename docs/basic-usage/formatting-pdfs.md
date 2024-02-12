@@ -50,12 +50,12 @@ Inside the footer, you can use the following Blade directives:
 
 ### Display Images in Headers and Footers
 
-You can add an image using the blade directive `@inlidedImage`
+You can add an image using the blade directive `@inlinedImage`
 
 It supports absolute and relative paths inside your app `public` directory
 
 ```php
-@inlidedImage($url)
+@inlinedImage($url)
 ```
 
 ## Page orientation

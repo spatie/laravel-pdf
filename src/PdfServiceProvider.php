@@ -30,7 +30,7 @@ class PdfServiceProvider extends PackageServiceProvider
             return "<?php echo '<span class=\"totalPages\"></span>'; ?>";
         });
 
-        Blade::directive('inlidedImage', function ($url) {
+        Blade::directive('inlinedImage', function ($url) {
             $url = Str::of($url)->trim("'")->trim('"')->value();
 
             if (!Str::of($url)->isUrl()) {

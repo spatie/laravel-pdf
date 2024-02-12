@@ -23,7 +23,7 @@
     <div>
         <h1>Header</h1>
         <figure>
-            @inlidedImage('https://avatars.githubusercontent.com/u/7535935?s=200&v=4')
+            @inlinedImage('https://avatars.githubusercontent.com/u/7535935?s=200&v=4')
         </figure>
     </div>
 </div>
