@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.2.0 - 2024-02-12
+
+### What's Changed
+
+* add InlinedImage Blade directive by @ArielMejiaDev in https://github.com/spatie/laravel-pdf/pull/79
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.1.3...1.2.0
+
 ## 1.1.3 - 2024-02-06
 
 ### What's Changed
