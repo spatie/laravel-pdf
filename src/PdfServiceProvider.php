@@ -3,8 +3,6 @@
 namespace Spatie\LaravelPdf;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use RuntimeException;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -31,23 +29,17 @@ class PdfServiceProvider extends PackageServiceProvider
         });
 
         Blade::directive('inlinedImage', function ($url) {
-            $url = Str::of($url)->trim("'")->trim('"')->value();
-
-            if (! Str::of($url)->isUrl()) {
-                $imageContent = 'data:image/png;base64,'.base64_encode(file_get_contents(public_path($url)));
-
-                return "<?php echo '<img src=\"$imageContent\">'; ?>";
+            try {
+                return "<?php echo '<img src=\"'. 'data:image/png;base64,'.base64_encode(file_get_contents(asset($url))) .'\">'; ?>";
+            } catch (\Exception $exception) {
+                try {
+                    return "<?php echo '<img src=\"' . 'data:image/png;base64,'.base64_encode(
+                        Http::get($url)->throwUnlessStatus(200)->body()
+                    ) . '\">'; ?>";
+                } catch (\Exception $exception) {
+                    throw new RuntimeException('Failed to fetch the image', $exception->getCode(), $exception);
+                }
             }
-
-            $response = Http::get($url);
-
-            if ($response->successful()) {
-                $imageContent = 'data:image/png;base64,'.base64_encode($response->body());
-
-                return "<?php echo '<img src=\"$imageContent\">'; ?>";
-            }
-
-            throw new RuntimeException('Failed to fetch the image');
         });
 
     }
