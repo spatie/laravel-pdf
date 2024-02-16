@@ -33,17 +33,16 @@ class PdfServiceProvider extends PackageServiceProvider
 
                 if (! \Illuminate\Support\Str::of(\$url)->isUrl()) {
                     try {
-                        \$path = public_path(\$url);
-                        \$imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(\$path));
+                        \$imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(\$url));
                         echo '<img src=\"' . \$imageContent . '\">';
                     } catch(\Exception \$exception) {
-                        throw new \RuntimeException('Image not found: ' . \$exception->getMessage());
+                        throw new \Illuminate\View\ViewException('Image not found: ' . \$exception->getMessage());
                     }
                 } else {
                     \$response = \Illuminate\Support\Facades\Http::get(\$url);
 
                     if (! \$response->successful()) {
-                        throw new \RuntimeException('Failed to fetch the image: ' . \$response->toException());
+                        throw new \Illuminate\View\ViewException('Failed to fetch the image: ' . \$response->toException());
                     }
 
                     \$imageContent = 'data:image/png;base64,' . base64_encode(\$response->body());
