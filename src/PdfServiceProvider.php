@@ -3,7 +3,6 @@
 namespace Spatie\LaravelPdf;
 
 use Illuminate\Support\Facades\Blade;
-use RuntimeException;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -33,8 +32,8 @@ class PdfServiceProvider extends PackageServiceProvider
                 \$url = \Illuminate\Support\Str::of($url)->trim(\"'\")->trim('\"')->value();
 
                 if (! \Illuminate\Support\Str::of(\$url)->isUrl()) {
-                    \$path = public_path(\$url);
                     try {
+                        \$path = public_path(\$url);
                         \$imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(\$path));
                         echo '<img src=\"' . \$imageContent . '\">';
                     } catch(\Exception \$exception) {
@@ -48,7 +47,7 @@ class PdfServiceProvider extends PackageServiceProvider
                     }
 
                     \$imageContent = 'data:image/png;base64,' . base64_encode(\$response->body());
-                    echo '<img src=\"' . \$imageContent . '\" style=\"display:inline;\">';
+                    echo '<img src=\"' . \$imageContent . '\">';
                 }
             ?>";
         });
