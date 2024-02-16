@@ -29,17 +29,28 @@ class PdfServiceProvider extends PackageServiceProvider
         });
 
         Blade::directive('inlinedImage', function ($url) {
-            try {
-                return "<?php echo '<img src=\"'. 'data:image/png;base64,'.base64_encode(file_get_contents(asset($url))) .'\">'; ?>";
-            } catch (\Exception $exception) {
-                try {
-                    return "<?php echo '<img src=\"' . 'data:image/png;base64,'.base64_encode(
-                        Http::get($url)->throwUnlessStatus(200)->body()
-                    ) . '\">'; ?>";
-                } catch (\Exception $exception) {
-                    throw new RuntimeException('Failed to fetch the image', $exception->getCode(), $exception);
+            return "<?php
+                \$url = \Illuminate\Support\Str::of($url)->trim(\"'\")->trim('\"')->value();
+
+                if (! \Illuminate\Support\Str::of(\$url)->isUrl()) {
+                    \$path = public_path(\$url);
+                    try {
+                        \$imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(\$path));
+                        echo '<img src=\"' . \$imageContent . '\">';
+                    } catch(\Exception \$exception) {
+                        throw new \RuntimeException('Image not found: ' . \$exception->getMessage());
+                    }
+                } else {
+                    \$response = \Illuminate\Support\Facades\Http::get(\$url);
+
+                    if (! \$response->successful()) {
+                        throw new \RuntimeException('Failed to fetch the image: ' . \$response->toException());
+                    }
+
+                    \$imageContent = 'data:image/png;base64,' . base64_encode(\$response->body());
+                    echo '<img src=\"' . \$imageContent . '\" style=\"display:inline;\">';
                 }
-            }
+            ?>";
         });
 
     }
