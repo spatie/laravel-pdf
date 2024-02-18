@@ -421,7 +421,7 @@ class PdfBuilder implements Responsable
         }
 
         if ($yMargin->isGreaterThan($this->getPaperHeight())) {
-            throw DetectedOverflowingMargins::marginIsGreaterThanWidth();
+            throw DetectedOverflowingMargins::marginIsGreaterThanHeight();
         }
     }
 
