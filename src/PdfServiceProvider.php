@@ -10,7 +10,7 @@ class PdfServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
-        $package->name('laravel-pdf');
+        $package->name('laravel-pdf')->hasConfigFile();
     }
 
     public function bootingPackage()

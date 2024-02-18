@@ -2,6 +2,8 @@
 
 namespace Spatie\LaravelPdf\Enums;
 
+use Spatie\LaravelPdf\Values\Length;
+
 enum Format: string
 {
     case Letter = 'letter';
@@ -16,35 +18,15 @@ enum Format: string
     case A5 = 'a5';
     case A6 = 'a6';
 
-    public function width(): float {
-        return match ($this) {
-            Format::Letter => 215.9,
-            Format::Legal => 215.19,
-            Format::Tabloid => 279,
-            Format::Ledger => 432,
-            Format::A0 => 841,
-            Format::A1 => 594,
-            Format::A2 => 420,
-            Format::A3 => 297,
-            Format::A4 => 210,
-            Format::A5 => 148,
-            Format::A6 => 105,
-        };
+    public function width(): Length {
+        [$value, $unit] = config("pdf.paperSizes.{$this->value}.width");
+
+        return Length::make($value, $unit);
     }
 
-    public function height(): float {
-        return match ($this) {
-            Format::Letter => 215.9,
-            Format::Legal => 355.6,
-            Format::Tabloid => 432,
-            Format::Ledger => 279,
-            Format::A0 => 1189,
-            Format::A1 => 841,
-            Format::A2 => 594,
-            Format::A3 => 420,
-            Format::A4 => 297,
-            Format::A5 => 210,
-            Format::A6 => 148,
-        };
+    public function height(): Length {
+        [$value, $unit] = config("pdf.paperSizes.{$this->value}.height");
+
+        return Length::make($value, $unit);
     }
 }

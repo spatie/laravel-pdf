@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
+use Spatie\LaravelPdf\Exceptions\DetectedOverflowingMargins;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 use function Spatie\LaravelPdf\Support\pdf;
@@ -136,6 +137,18 @@ it('can customize browsershot', function () {
     expect($this->targetPath)
         ->toHaveDimensions(792, 612)
         ->toContainText('This is a test');
+});
+
+it('validates overflowing x-margin', function () {
+    $this->expectException(DetectedOverflowingMargins::class);
+
+    Pdf::view('test')
+        ->withBrowsershot(function (Browsershot $browsershot) {
+            $browsershot->landscape();
+        })
+        ->format('a4')
+        ->margins(20, 20, 20, 20, 'cm')
+        ->save($this->targetPath);
 });
 
 it('will use a fresh instance after saving', function () {

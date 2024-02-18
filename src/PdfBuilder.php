@@ -12,6 +12,7 @@ use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
 use Spatie\LaravelPdf\Exceptions\DetectedOverflowingMargins;
 use Spatie\LaravelPdf\Exceptions\ValidationException;
+use Spatie\LaravelPdf\Values\Length;
 use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
@@ -405,41 +406,50 @@ class PdfBuilder implements Responsable
             return;
         }
 
-        $unit = Unit::from($this->margins['unit']);
+        $xMargin = Length::make(
+            value: $this->margins['left'] + $this->margins['right'],
+            unit: $this->margins['unit']
+        );
 
-        $xMargin = $this->margins['left'] + $this->margins['right'];
-        $yMargin = $this->margins['top'] + $this->margins['bottom'];
+        $yMargin = Length::make(
+            value: $this->margins['top'] + $this->margins['right'],
+            unit: $this->margins['unit']
+        );
 
-        if ($unit->toMillimeter($xMargin) > $this->getPaperWidth()) {
+        if ($xMargin->isGreaterThan($this->getPaperWidth())) {
             throw DetectedOverflowingMargins::marginIsGreaterThanWidth();
         }
 
-        if ($unit->toMillimeter($yMargin) > $this->getPaperHeight()) {
-            throw DetectedOverflowingMargins::marginIsGreaterThanHeight();
+        if ($yMargin->isGreaterThan($this->getPaperHeight())) {
+            throw DetectedOverflowingMargins::marginIsGreaterThanWidth();
         }
     }
 
-    protected function getPaperWidth(): float
+    protected function getPaperWidth(): Length
     {
         if ($this->format) {
-            return Format::from($this->format)->width();
+            return $this->orientation === Orientation::Portrait
+                ? Format::from($this->format)->width()
+                : Format::from($this->format)->height();
         }
 
         if ($this->paperSize) {
-            return Unit::from($this->paperSize['unit'])->toMillimeter($this->paperSize['width']);
+            return Length::make($this->paperSize['width'], $this->paperSize['unit']);
         }
 
         return Format::A4->width();
     }
 
-    protected function getPaperHeight(): float
+    protected function getPaperHeight(): Length
     {
         if ($this->format) {
-            return Format::from($this->format)->height();
+            return $this->orientation === Orientation::Portrait
+                ? Format::from($this->format)->height()
+                : Format::from($this->format)->width();
         }
 
         if ($this->paperSize) {
-            return Unit::from($this->paperSize['unit'])->toMillimeter($this->paperSize['height']);
+            return Length::make($this->paperSize['height'], $this->paperSize['unit']);
         }
 
         return Format::A4->height();
