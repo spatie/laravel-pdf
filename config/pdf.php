@@ -40,23 +40,23 @@ return [
         ],
 
         'letter' => [
-            'width' => [8.5, 'inch'],
-            'height' => [11, 'inch']
+            'width' => [8.5, 'in'],
+            'height' => [11, 'in']
         ],
 
         'legal' => [
-            'width' => [8.5, 'inch'],
-            'height' => [14, 'inch']
+            'width' => [8.5, 'in'],
+            'height' => [14, 'in']
         ],
 
         'tabloid' => [
-            'width' => [280, 'inch'],
-            'height' => [400, 'inch']
+            'width' => [280, 'in'],
+            'height' => [400, 'in']
         ],
 
         'ledger' => [
-            'width' => [17, 'inch'],
-            'height' => [11, 'inch']
+            'width' => [17, 'in'],
+            'height' => [11, 'in']
         ],
 
     ],
