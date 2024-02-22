@@ -52,10 +52,15 @@ Inside the footer, you can use the following Blade directives:
 
 You can add an image using the blade directive `@inlinedImage`
 
-It supports absolute and relative paths inside your app `public` directory
+It supports absolute and relative paths
 
 ```php
-@inlinedImage($url)
+// using relative path
+@php $logo = public_path('assets/logo.png'); @endphp
+@inlinedImage($logo)
+
+// using absolute path
+@inlinedImage('https://some-url/assets/some-logo.png')
 ```
 
 ## Page orientation

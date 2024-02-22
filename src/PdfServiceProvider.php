@@ -3,9 +3,6 @@
 namespace Spatie\LaravelPdf;
 
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use RuntimeException;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -31,23 +28,27 @@ class PdfServiceProvider extends PackageServiceProvider
         });
 
         Blade::directive('inlinedImage', function ($url) {
-            $url = Str::of($url)->trim("'")->trim('"')->value();
+            return "<?php
+                \$url = \Illuminate\Support\Str::of($url)->trim(\"'\")->trim('\"')->value();
 
-            if (! Str::of($url)->isUrl()) {
-                $imageContent = 'data:image/png;base64,'.base64_encode(file_get_contents(public_path($url)));
+                if (! \Illuminate\Support\Str::of(\$url)->isUrl()) {
+                    try {
+                        \$imageContent = 'data:image/png;base64,' . base64_encode(file_get_contents(\$url));
+                        echo '<img src=\"' . \$imageContent . '\">';
+                    } catch(\Exception \$exception) {
+                        throw new \Illuminate\View\ViewException('Image not found: ' . \$exception->getMessage());
+                    }
+                } else {
+                    \$response = \Illuminate\Support\Facades\Http::get(\$url);
 
-                return "<?php echo '<img src=\"$imageContent\">'; ?>";
-            }
+                    if (! \$response->successful()) {
+                        throw new \Illuminate\View\ViewException('Failed to fetch the image: ' . \$response->toException());
+                    }
 
-            $response = Http::get($url);
-
-            if ($response->successful()) {
-                $imageContent = 'data:image/png;base64,'.base64_encode($response->body());
-
-                return "<?php echo '<img src=\"$imageContent\">'; ?>";
-            }
-
-            throw new RuntimeException('Failed to fetch the image');
+                    \$imageContent = 'data:image/png;base64,' . base64_encode(\$response->body());
+                    echo '<img src=\"' . \$imageContent . '\">';
+                }
+            ?>";
         });
 
     }
