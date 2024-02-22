@@ -64,7 +64,7 @@ it('can throw view exception with image relative path', function () {
 
     Pdf::view('blade-directives.body')
         ->headerView('blade-directives.image-header-using-a-variable', [
-            'logo' => "./not-found.png",
+            'logo' => './not-found.png',
         ])
         ->save($this->targetPath);
 })->throws(\Illuminate\View\ViewException::class, 'Image not found:');
