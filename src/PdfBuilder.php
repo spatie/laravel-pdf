@@ -42,6 +42,8 @@ class PdfBuilder implements Responsable
 
     public ?array $margins = null;
 
+    protected string $visibility = 'private';
+
     protected ?Closure $customizeBrowsershot = null;
 
     protected array $responseHeaders = [
@@ -247,9 +249,10 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
-    public function disk(string $diskName): self
+    public function disk(string $diskName, string $visibility = 'private'): self
     {
         $this->diskName = $diskName;
+        $this->visibility = $visibility;
 
         return $this;
     }
@@ -257,8 +260,9 @@ class PdfBuilder implements Responsable
     protected function saveOnDisk(string $diskName, string $path): self
     {
         $pdfContent = $this->getBrowsershot()->pdf();
+        $visibility = $this->visibility;
 
-        Storage::disk($diskName)->put($path, $pdfContent);
+        Storage::disk($diskName)->put($path, $pdfContent, $visibility);
 
         return $this;
     }
