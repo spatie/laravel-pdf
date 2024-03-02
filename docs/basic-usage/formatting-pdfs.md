@@ -88,7 +88,7 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
 
 ## Paper format
 
-By default, all PDFs are created in A4 format. You can change this by calling the `paperFormat` method.
+By default, all PDFs are created in A4 format. You can change this by calling the `format` method.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -99,7 +99,7 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
-There are the available formats of the `PaperFormat` enum:
+There are the available formats of the `Format` enum:
 
 ```php
 Letter: 8.5in  x  11in
