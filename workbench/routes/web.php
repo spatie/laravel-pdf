@@ -19,3 +19,7 @@ Route::get('inline-pdf', function () {
 Route::get('download-pdf', function () {
     return pdf('test')->download('my-custom-name.pdf');
 });
+
+Route::get('download-nameless-pdf', function () {
+    return pdf('test')->download();
+});

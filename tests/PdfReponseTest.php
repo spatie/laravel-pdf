@@ -7,11 +7,18 @@ it('can inline the pdf', function () {
         ->assertHeader('content-disposition', 'inline; filename="my-custom-name.pdf"');
 });
 
-it('can download the pdf', function () {
+it('can download the pdf with a name', function () {
     $this
         ->get('download-pdf')
         ->assertHeader('content-type', 'application/pdf')
         ->assertHeader('content-disposition', 'attachment; filename="my-custom-name.pdf"');
+});
+
+it('can download the pdf without a name', function () {
+    $this
+        ->get('download-nameless-pdf')
+        ->assertHeader('content-type', 'application/pdf')
+        ->assertHeader('content-disposition', 'attachment; filename="download.pdf"');
 });
 
 it('will tack on pdf to the filename if it is missing', function (string $method) {

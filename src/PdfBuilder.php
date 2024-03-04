@@ -137,14 +137,12 @@ class PdfBuilder implements Responsable
 
     public function download(?string $downloadName = null): self
     {
-        $this->name($downloadName);
+        $this->name($downloadName ?? 'download');
 
         $this->addHeaders([
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="'.$this->downloadName.'"',
         ]);
-
-        $this->name($downloadName);
 
         return $this;
     }
