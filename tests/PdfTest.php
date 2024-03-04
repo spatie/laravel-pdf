@@ -147,7 +147,7 @@ it('will use a fresh instance after saving', function () {
     expect(getTempPath('first.pdf'))
         ->toHaveDimensions(792, 612);
 
-    // second pdf is landscape
+    // second pdf is portrait
     expect(getTempPath('second.pdf'))
         ->toHaveDimensions(612, 792);
 });
