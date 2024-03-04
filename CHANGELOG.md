@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.4.0 - 2024-03-04
+
+### What's Changed
+
+* fix method and class names in paper format docs by @vintagesucks in https://github.com/spatie/laravel-pdf/pull/94
+* fix default paper format in docs by @vintagesucks in https://github.com/spatie/laravel-pdf/pull/96
+
+### New Contributors
+
+* @vintagesucks made their first contribution in https://github.com/spatie/laravel-pdf/pull/94
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.3.0...1.4.0
+
 ## 1.3.0 - 2024-03-01
 
 ### What's Changed
