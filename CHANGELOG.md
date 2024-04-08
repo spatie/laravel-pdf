@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.0 - 2024-04-08
+
+### What's Changed
+
+* PDFBuilder now honours pdf name set by either name() or download() methods during download by @albertStaalburger in https://github.com/spatie/laravel-pdf/pull/114
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.0.0 by @dependabot in https://github.com/spatie/laravel-pdf/pull/109
+
+### New Contributors
+
+* @albertStaalburger made their first contribution in https://github.com/spatie/laravel-pdf/pull/114
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.4.0...1.5.0
+
 ## 1.4.0 - 2024-03-04
 
 ### What's Changed
