@@ -87,7 +87,7 @@ In your project, you need to save a Blade view with content like this. In this v
 </html>
 ```
 
-In your app, you can add a controller like this. The above view is saved in `resources/views/pdf/invoce`.
+In your app, you can add a controller like this. The above view is saved in `resources/views/pdf/invoice`.
 
 ```php
 namespace App\Http\Controllers;
