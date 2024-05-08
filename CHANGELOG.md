@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.1 - 2024-05-08
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.3.1 to 2.4 by @dependabot in https://github.com/spatie/laravel-pdf/pull/123
+* Fix typo in view path by @PrestaEdit in https://github.com/spatie/laravel-pdf/pull/128
+* Bump dependabot/fetch-metadata from 2.0.0 to 2.1.0 by @dependabot in https://github.com/spatie/laravel-pdf/pull/131
+* Fix setting the name via download() by @stevethomas in https://github.com/spatie/laravel-pdf/pull/139
+
+### New Contributors
+
+* @PrestaEdit made their first contribution in https://github.com/spatie/laravel-pdf/pull/128
+* @stevethomas made their first contribution in https://github.com/spatie/laravel-pdf/pull/139
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.0...1.5.1
+
 ## 1.5.0 - 2024-04-08
 
 ### What's Changed
