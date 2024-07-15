@@ -313,7 +313,7 @@ class PdfBuilder implements Responsable
         ]);
     }
 
-    protected function getBrowsershot(): Browsershot
+    public function getBrowsershot(): Browsershot
     {
         $browsershotClass = $this->onLambda
             ? BrowsershotLambda::class
