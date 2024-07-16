@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.2 - 2024-07-16
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/spatie/laravel-pdf/pull/158
+* Make getBrowsershot public by @dbpolito in https://github.com/spatie/laravel-pdf/pull/161
+
+### New Contributors
+
+* @dbpolito made their first contribution in https://github.com/spatie/laravel-pdf/pull/161
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.1...1.5.2
+
 ## 1.5.1 - 2024-05-08
 
 ### What's Changed
