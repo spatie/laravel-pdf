@@ -77,6 +77,47 @@ it('can determine that the pdf content does not contain multiple strings', funct
     ]);
 })->fails();
 
+it('can determine that the pdf content does not contain a unexpected string', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertDontSee('this-string-does-not-exist');
+});
+
+it('can determine that the pdf content contains a expected string', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertDontSee('test');
+})->fails();
+
+it('can determine that the pdf content does not contain multiple unexpected strings', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertDontSee([
+        'this-string-is-not-present-in-the-pdf',
+        'this-string-is-not-present-in-the-pdf-as-well',
+        'this-string-is-not-present-in-the-pdf-either',
+    ]);
+});
+
+it('can determine that the pdf content contains multiple expected strings', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertDontSee([
+        'This',
+        'test',
+    ]);
+})->fails();
+
+it('can determine that the pdf content contain an unexpected string between expected strings', function () {
+    Pdf::view('test')->save('my-custom-name.pdf');
+
+    Pdf::assertDontSee([
+        'this',
+        'this-string-is-not-present-in-the-pdf',
+        'test',
+    ]);
+})->fails();
+
 it('can determine that a pdf was saved a a certain path', function () {
     Pdf::view('test')->save('my-custom-name.pdf');
 
