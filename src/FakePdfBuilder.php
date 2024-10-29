@@ -106,22 +106,22 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertSee(string|array $text): void
     {
-        $values = Arr::wrap($text);
+        $strings = Arr::wrap($text);
 
-        foreach ($values as $value) {
+        foreach ($strings as $string) {
             foreach ($this->savedPdfs as $savedPdf) {
-                Assert::assertStringContainsString((string) $value, $savedPdf['pdf']->html);
+                Assert::assertStringContainsString((string) $string, $savedPdf['pdf']->html);
             }
         }
     }
 
     public function assertDontSee(string|array $text): void
     {
-        $values = Arr::wrap($text);
+        $strings = Arr::wrap($text);
 
-        foreach ($values as $value) {
+        foreach ($strings as $string) {
             foreach ($this->savedPdfs as $savedPdf) {
-                Assert::assertStringNotContainsString((string) $value, $savedPdf['pdf']->html);
+                Assert::assertStringNotContainsString((string) $string, $savedPdf['pdf']->html);
             }
         }
     }
