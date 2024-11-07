@@ -38,6 +38,8 @@ class PdfBuilder implements Responsable
 
     public ?array $paperSize = null;
 
+    public ?float $scale = null;
+
     public ?string $orientation = null;
 
     public ?array $margins = null;
@@ -220,6 +222,13 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function scale(float $scale): self
+    {
+        $this->scale = $scale;
+
+        return $this;
+    }
+
     public function withBrowsershot(callable $callback): self
     {
         $this->customizeBrowsershot = $callback;
@@ -357,6 +366,10 @@ class PdfBuilder implements Responsable
 
         if ($this->paperSize) {
             $browsershot->paperSize(...$this->paperSize);
+        }
+
+        if ($this->scale) {
+            $browsershot->scale($this->scale);
         }
 
         if ($this->orientation === Orientation::Landscape->value) {
