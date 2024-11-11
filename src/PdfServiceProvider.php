@@ -15,6 +15,14 @@ class PdfServiceProvider extends PackageServiceProvider
 
     public function bootingPackage()
     {
+        $this->app->singleton(QrCodeBuilder::class, function () {
+            return new QrCodeBuilder();
+        });
+
+        $this->app->singleton(BarcodeBuilder::class, function () {
+            return new BarcodeBuilder();
+        });
+
         Blade::directive('pageBreak', function () {
             return "<?php echo '<div style=\"page-break-after: always;\"></div>'; ?>";
         });
