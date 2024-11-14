@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPdf;
 
-use Milon\Barcode\DNS2D;
+use Spatie\LaravelPdf\DNS2D;
 
 class QrCodeBuilder
 {

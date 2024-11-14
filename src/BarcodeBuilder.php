@@ -2,7 +2,7 @@
 
 namespace Spatie\LaravelPdf;
 
-use Milon\Barcode\DNS1D;
+use Spatie\LaravelPdf\DNS1D;
 
 class BarcodeBuilder
 {
