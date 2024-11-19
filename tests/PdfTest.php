@@ -157,3 +157,22 @@ it('will execute javascript', function () {
 
     expect($this->targetPath)->toContainText('hello');
 });
+
+it('can save as png in local and disk', function () {
+    Storage::fake('local');
+
+    $firstPath = getTempPath('first.png');
+    Pdf::view('test')
+        ->save($firstPath);
+
+    expect(mime_content_type($firstPath))
+        ->toBe('image/png');
+
+    Pdf::view('test')
+        ->disk('local')
+        ->save('second.png');
+
+    expect(Storage::disk('local')
+        ->mimeType('second.png'))
+        ->toBe('image/png');
+});
