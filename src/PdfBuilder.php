@@ -10,6 +10,7 @@ use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
@@ -257,10 +258,19 @@ class PdfBuilder implements Responsable
 
     protected function saveOnDisk(string $diskName, string $path): self
     {
-        $pdfContent = $this->getBrowsershot()->pdf();
-        $visibility = $this->visibility;
+        $fileName = pathinfo($path, PATHINFO_BASENAME);
 
-        Storage::disk($diskName)->put($path, $pdfContent, $visibility);
+        $temporaryDirectory = (new TemporaryDirectory)->create();
+    
+        $this->getBrowsershot()->save($temporaryDirectory->path($fileName));
+    
+        $content = file_get_contents($temporaryDirectory->path($fileName));
+    
+        $temporaryDirectory->delete();
+    
+        $visibility = $this->visibility;
+    
+        Storage::disk($diskName)->put($path, $content, $visibility);
 
         return $this;
     }
