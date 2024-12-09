@@ -1,0 +1,35 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "viewName",
+            "condition": [
+                {
+                    "classFqn": ["Spatie\\LaravelPdf\\PdfBuilder", "Spatie\\LaravelPdf\\Facades\\Pdf", "Pdf"],
+                    "methodNames": ["view", "headerView", "footerView"],
+                    "parameters": [1],
+                    "parameterNames": ["view"]
+                },
+                {
+                    "functionFqn": ["Spatie\\LaravelPdf\\Support\\pdf"],
+                    "parameters": [1],
+                    "parameterNames": ["viewName"]
+                }
+            ]
+        },
+        {
+            "complete": "configKey",
+            "condition": [
+                {
+                    "classFqn": ["Spatie\\LaravelPdf\\PdfBuilder", "Spatie\\LaravelPdf\\Facades\\Pdf", "Pdf"],
+                    "methodNames": ["disk", "saveOnDisk"],
+                    "parameters": [1],
+                    "parameterNames": ["diskName"]
+                }
+            ],
+            "options": {
+                "prefix": "filesystems.disks"
+            }
+        }
+    ]
+}
