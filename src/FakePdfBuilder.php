@@ -30,7 +30,7 @@ class FakePdfBuilder extends PdfBuilder
     {
         $this->respondedWithPdf[] = clone $this;
 
-        return new Response();
+        return new Response;
     }
 
     public function assertViewIs(string $viewName): void

@@ -261,15 +261,15 @@ class PdfBuilder implements Responsable
         $fileName = pathinfo($path, PATHINFO_BASENAME);
 
         $temporaryDirectory = (new TemporaryDirectory)->create();
-    
+
         $this->getBrowsershot()->save($temporaryDirectory->path($fileName));
-    
+
         $content = file_get_contents($temporaryDirectory->path($fileName));
-    
+
         $temporaryDirectory->delete();
-    
+
         $visibility = $this->visibility;
-    
+
         Storage::disk($diskName)->put($path, $content, $visibility);
 
         return $this;

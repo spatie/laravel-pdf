@@ -19,7 +19,7 @@ class Pdf extends Facade
 
     public static function fake()
     {
-        $fake = new FakePdfBuilder();
+        $fake = new FakePdfBuilder;
 
         static::swap($fake);
     }

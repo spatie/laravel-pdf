@@ -80,7 +80,7 @@ expect()->extend('toContainText', function (string|array $expectedText) {
 });
 
 expect()->extend('toHavePageCount', function (int $expectedNumberOfPages) {
-    $image = new Imagick();
+    $image = new Imagick;
     $image->pingImage($this->value);
 
     expect($image->getNumberImages())->toBe($expectedNumberOfPages);
