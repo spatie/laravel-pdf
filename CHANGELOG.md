@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.4 - 2025-01-06
+
+### What's Changed
+
+* improve @InlinedImage to detect mime type by @Seb33300 in https://github.com/spatie/laravel-pdf/pull/180
+
+### New Contributors
+
+* @Seb33300 made their first contribution in https://github.com/spatie/laravel-pdf/pull/180
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.3...1.5.4
+
 ## 1.5.3 - 2024-12-16
 
 ### What's Changed
