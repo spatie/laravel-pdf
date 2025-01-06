@@ -60,6 +60,14 @@ it('can display an image using a variable with an relative path', function () {
     expect(true)->toBeTrue();
 });
 
+it('can detect inlined image type', function () {
+    $html = view('blade-directives.image-header-using-a-variable', [
+        'logo' => \Orchestra\Testbench\workbench_path('public/assets/logo.svg'),
+    ])->render();
+
+    expect(str_contains($html, 'data:image/svg+xml;base64,'))->toBeTrue();
+});
+
 it('can throw view exception with image relative path', function () {
 
     Pdf::view('blade-directives.body')
