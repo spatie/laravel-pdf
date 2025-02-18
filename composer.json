@@ -26,7 +26,7 @@
         "ext-imagick": "*",
         "larastan/larastan": "^2.7.0",
         "laravel/pint": "^1.13.7",
-        "nunomaduro/collision": "^7.10",
+        "nunomaduro/collision": "^7.10|^8.6",
         "orchestra/testbench": "^8.0|^9.0|^10.0",
         "pestphp/pest": "^2.30",
         "pestphp/pest-plugin-arch": "^2.5",
