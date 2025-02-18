@@ -3,6 +3,10 @@
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Facades\Pdf;
 
+beforeEach(function () {
+    $this->targetPath = getTempPath('test.pdf');
+});
+
 it('can set defaults for pdfs', function () {
     Pdf::default()->orientation(Orientation::Landscape);
 
