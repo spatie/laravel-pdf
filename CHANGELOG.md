@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.5 - 2025-02-20
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/laravel-pdf/pull/218
+* Bump aglipanci/laravel-pint-action from 2.4 to 2.5 by @dependabot in https://github.com/spatie/laravel-pdf/pull/223
+* Laravel 12.x Compatibility by @laravel-shift in https://github.com/spatie/laravel-pdf/pull/228
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/laravel-pdf/pull/228
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.4...1.5.5
+
 ## 1.5.4 - 2025-01-06
 
 ### What's Changed
