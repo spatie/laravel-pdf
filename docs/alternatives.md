@@ -9,7 +9,7 @@ If you don't like the trade-off mentioned above, here are some alternatives to g
 
 - [laravel-dompdf](https://github.com/barryvdh/laravel-dompdf) - A DOMPDF Wrapper for Laravel
 - [wkhtmltopdf](http://wkhtmltopdf.org/) - A command line tool to render HTML into PDF and various image formats using the QT Webkit rendering engine. This is the engine used behind the scenes in Snappy.
-- [mPDF](http://www.mpdf1.com/mpdf/index.php) - A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support.
+- [mPDF](https://mpdf.github.io/) - A PHP class to generate PDF files from HTML with Unicode/UTF-8 and CJK support.
 - [FPDF](http://www.fpdf.org/) - A PHP class for generating PDF files on-the-fly.
 
 
