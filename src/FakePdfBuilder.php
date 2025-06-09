@@ -106,6 +106,8 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertSee(string|array $text): void
     {
+        Assert::assertNotEmpty($this->savedPdfs);
+
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
@@ -117,6 +119,8 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertDontSee(string|array $text): void
     {
+        Assert::assertNotEmpty($this->savedPdfs);
+
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
