@@ -22,9 +22,10 @@ it('can set defaults for pdfs', function () {
 });
 
 it('defaults to the letter format', function () {
-    Pdf::view('test')->save($this->targetPath);
+    $targetPath = getTempPath('test.pdf');
+    Pdf::view('test')->save($targetPath);
 
-    expect($this->targetPath)->toHaveDimensions(612, 792);
+    expect($targetPath)->toHaveDimensions(612, 792);
 });
 
 it('will not use properties of the previous pdf when not setting a default', function () {
