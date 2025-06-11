@@ -106,6 +106,8 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertSee(string|array $text): void
     {
+        Assert::assertNotEmpty($this->savedPdfs, 'No PDF was generated and saved');
+
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
@@ -117,6 +119,8 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertDontSee(string|array $text): void
     {
+        Assert::assertNotEmpty($this->savedPdfs, 'No PDF was generated and saved');
+
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
@@ -128,7 +132,7 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertRespondedWithPdf(Closure $expectations): void
     {
-        Assert::assertNotEmpty($this->respondedWithPdf);
+        Assert::assertNotEmpty($this->respondedWithPdf, 'No PDF was generated and returned as a response');
 
         foreach ($this->respondedWithPdf as $pdf) {
             $result = $expectations($pdf);
