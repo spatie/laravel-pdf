@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.5.6 - 2025-06-11
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0 by @dependabot in https://github.com/spatie/laravel-pdf/pull/244
+* Update alternatives.md by @mininoz in https://github.com/spatie/laravel-pdf/pull/251
+* Fix failing tests by @sertxudev in https://github.com/spatie/laravel-pdf/pull/256
+* Ensure PDF is saved before asserting its content by @sertxudev in https://github.com/spatie/laravel-pdf/pull/258
+
+### New Contributors
+
+* @mininoz made their first contribution in https://github.com/spatie/laravel-pdf/pull/251
+* @sertxudev made their first contribution in https://github.com/spatie/laravel-pdf/pull/256
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.5...1.5.6
+
 ## 1.5.5 - 2025-02-20
 
 ### What's Changed
