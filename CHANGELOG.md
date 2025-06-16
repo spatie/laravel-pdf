@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.6.0 - 2025-06-16
+
+### What's Changed
+
+* feat: Add Macroable trait to PdfBuilder class by @A909M in https://github.com/spatie/laravel-pdf/pull/261
+
+### New Contributors
+
+* @A909M made their first contribution in https://github.com/spatie/laravel-pdf/pull/261
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.5.6...1.6.0
+
 ## 1.5.6 - 2025-06-11
 
 ### What's Changed
