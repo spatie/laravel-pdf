@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Traits\Macroable;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
@@ -15,6 +16,8 @@ use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
 {
+    use Macroable;
+
     public string $viewName = '';
 
     public array $viewData = [];
