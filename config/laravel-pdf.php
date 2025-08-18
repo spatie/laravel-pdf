@@ -2,26 +2,15 @@
 
 return [
     /*
-    |--------------------------------------------------------------------------
-    | Browsershot Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you can configure default Browsershot settings that will be applied
-    | to all PDF generation. These settings can still be overridden using the
-    | withBrowsershot() method on individual PDF instances.
-    |
-    */
-
+     * Here you can configure default Browsershot settings that will be applied
+     * to all PDF generation. These settings can still be overridden using the
+     * withBrowsershot() method on individual PDF instances.
+     */
     'browsershot' => [
         /*
-        |--------------------------------------------------------------------------
-        | Binary Paths
-        |--------------------------------------------------------------------------
-        |
-        | Configure the paths to Node.js, npm, Chrome, and other binaries.
-        | Leave null to use system defaults or Browsershot's auto-detection.
-        |
-        */
+         * Configure the paths to Node.js, npm, Chrome, and other binaries.
+         * Leave null to use system defaults or Browsershot's auto-detection.
+         */
         'node_binary' => env('LARAVEL_PDF_NODE_BINARY'),
         'npm_binary' => env('LARAVEL_PDF_NPM_BINARY'),
         'include_path' => env('LARAVEL_PDF_INCLUDE_PATH'),
@@ -31,13 +20,8 @@ return [
         'temp_path' => env('LARAVEL_PDF_TEMP_PATH'),
 
         /*
-        |--------------------------------------------------------------------------
-        | Additional Options
-        |--------------------------------------------------------------------------
-        |
-        | Other Browsershot configuration options.
-        |
-        */
+         * Other Browsershot configuration options.
+         */
         'write_options_to_file' => env('LARAVEL_PDF_WRITE_OPTIONS_TO_FILE', false),
     ],
 ];
