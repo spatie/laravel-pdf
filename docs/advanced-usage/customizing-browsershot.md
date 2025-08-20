@@ -27,3 +27,43 @@ Pdf::view('test')
 ```
 
 The `withBrowsershot()` closure runs after configuration defaults are applied, allowing you to override or extend the default settings on a per-PDF basis.
+
+## Advanced Browsershot Configuration
+
+You can also use the `withBrowsershot` method to set options on the Browsershot instance. For example, you can disable web security and allow file access from files.
+
+These flags are commonly needed when your PDF templates reference local assets (CSS, images, fonts) or when you need to bypass CORS restrictions during PDF generation. Without these flags, Chrome might block access to local resources, causing missing styles or images in your PDFs.
+
+This global configuration means all PDFs generated in your app will use these Browsershot settings, rather than having to configure them individually for each PDF.
+
+The two Chrome flags being set are:
+
+- `--disable-web-security`: Disables Chrome's same-origin policy and other web security features
+- `--allow-file-access-from-files`: Allows local files to access other local files (normally blocked for security)
+
+```php
+use Spatie\LaravelPdf\PdfFactory;
+
+class AppServiceProvider extends ServiceProvider
+{
+    //...
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        app()->bind(PdfFactory::class, function ($service, $app) {
+            return (new PdfFactory())->withBrowsershot(
+                function ($browserShot) {
+                    $browserShot->setOption(
+                        'args', [
+                            '--disable-web-security',
+                            '--allow-file-access-from-files',
+                        ],
+                    );
+                }
+            );
+        });
+    }
+}
+```
