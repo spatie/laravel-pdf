@@ -387,8 +387,6 @@ class PdfBuilder implements Responsable
 
     protected function applyConfigurationDefaults(Browsershot $browsershot): void
     {
-        $config = config('laravel-pdf.browsershot', []);
-
         // Apply binary paths
         if ($nodeBinary = config('laravel-pdf.browsershot.node_binary')) {
             $browsershot->setNodeBinary($nodeBinary);
@@ -419,7 +417,7 @@ class PdfBuilder implements Responsable
         }
 
         // Apply additional options
-        if ($config['write_options_to_file'] ?? false) {
+        if (config('laravel-pdf.browsershot.write_options_to_file')) {
             $browsershot->writeOptionsToFile();
         }
     }
