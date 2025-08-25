@@ -2,6 +2,22 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.7.0 - 2025-08-25
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 2.5 to 2.6 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/267
+* Bump stefanzweifel/git-auto-commit-action from 5 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/262
+* docs: add example using withBrowsershot to disable web security and allow local file access. by @nick322 in https://github.com/spatie/laravel-pdf/pull/268
+* feat: add configuration support for browsershot binary paths by @A909M in https://github.com/spatie/laravel-pdf/pull/270
+* Bump actions/checkout from 4 to 5 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/271
+
+### New Contributors
+
+* @nick322 made their first contribution in https://github.com/spatie/laravel-pdf/pull/268
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.6.0...1.7.0
+
 ## 1.6.0 - 2025-06-16
 
 ### What's Changed
