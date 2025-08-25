@@ -5,13 +5,19 @@ weight: 2
 
 Under the hood, Laravel PDF uses [Browsershot](https://spatie.be/docs/browsershot) to generate the PDFs. While Laravel PDF provides a simple interface to generate PDFs, you can still use Browsershot directly to customize the PDFs.
 
+## Configuration-Based Customization
 
-You can customize the Browsershot instance by calling the `withBrowsershot` method. This method accepts a closure that receives the Browsershot instance as its only argument. You can use this instance to customize the PDFs.
+For settings that apply to all PDFs in your application, use the [configuration file](/docs/advanced-usage/configuration) to set defaults. This is especially useful for binary paths, Chrome arguments, and language settings.
 
-Here's an example of how you can call Browsershot's `scale` method.
+## Per-PDF Customization
+
+You can customize the Browsershot instance for individual PDFs by calling the `withBrowsershot` method. This method accepts a closure that receives the Browsershot instance as its only argument.
+
+Here's an example of how you can call Browsershot's `scale` method:
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\Browsershot\Browsershot;
 
 Pdf::view('test')
     ->withBrowsershot(function (Browsershot $browsershot) {
@@ -19,6 +25,10 @@ Pdf::view('test')
     })
     ->save($this->targetPath);
 ```
+
+The `withBrowsershot()` closure runs after configuration defaults are applied, allowing you to override or extend the default settings on a per-PDF basis.
+
+## Advanced Browsershot Configuration
 
 You can also use the `withBrowsershot` method to set options on the Browsershot instance. For example, you can disable web security and allow file access from files.
 
@@ -28,16 +38,14 @@ This global configuration means all PDFs generated in your app will use these Br
 
 The two Chrome flags being set are:
 
---disable-web-security: Disables Chrome's same-origin policy and other web security features
-
---allow-file-access-from-files: Allows local files to access other local files (normally blocked for security)
+- `--disable-web-security`: Disables Chrome's same-origin policy and other web security features
+- `--allow-file-access-from-files`: Allows local files to access other local files (normally blocked for security)
 
 ```php
 use Spatie\LaravelPdf\PdfFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
-
     //...
     /**
      * Bootstrap any application services.
@@ -57,4 +65,5 @@ class AppServiceProvider extends ServiceProvider
             );
         });
     }
+}
 ```
