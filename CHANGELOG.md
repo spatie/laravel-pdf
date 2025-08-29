@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.7.1 - 2025-08-29
+
+### What's Changed
+
+* fix: merges the config file. by @joekaram in https://github.com/spatie/laravel-pdf/pull/272
+
+### New Contributors
+
+* @joekaram made their first contribution in https://github.com/spatie/laravel-pdf/pull/272
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.7.0...1.7.1
+
 ## 1.7.0 - 2025-08-25
 
 ### What's Changed
