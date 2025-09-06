@@ -10,7 +10,7 @@ Laravel PDF supports configuration-based customization of Browsershot settings, 
 To publish the configuration file, run:
 
 ```bash
-php artisan vendor:publish --tag=laravel-pdf-config
+php artisan vendor:publish --tag=pdf-config
 ```
 
 This will create a `config/laravel-pdf.php` file in your application.
