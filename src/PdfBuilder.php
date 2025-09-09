@@ -420,6 +420,10 @@ class PdfBuilder implements Responsable
         if (config('laravel-pdf.browsershot.write_options_to_file')) {
             $browsershot->writeOptionsToFile();
         }
+
+        if (config('laravel-pdf.browsershot.no_sandbox')) {
+            $browsershot->noSandbox();
+        }
     }
 
     public function toResponse($request): Response
