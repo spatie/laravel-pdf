@@ -2,6 +2,23 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.8.0 - 2025-09-12
+
+### What's Changed
+
+* Update config publish tag in configuration.md by @acip in https://github.com/spatie/laravel-pdf/pull/273
+* Update issue template by @AlexVanderbist in https://github.com/spatie/laravel-pdf/pull/274
+* feat: add global 'no sandbox' option by @EvanSchleret in https://github.com/spatie/laravel-pdf/pull/276
+* Bump actions/setup-node from 4 to 5 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/275
+
+### New Contributors
+
+* @acip made their first contribution in https://github.com/spatie/laravel-pdf/pull/273
+* @AlexVanderbist made their first contribution in https://github.com/spatie/laravel-pdf/pull/274
+* @EvanSchleret made their first contribution in https://github.com/spatie/laravel-pdf/pull/276
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.7.1...1.8.0
+
 ## 1.7.1 - 2025-08-29
 
 ### What's Changed
