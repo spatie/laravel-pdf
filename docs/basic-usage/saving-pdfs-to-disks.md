@@ -16,3 +16,14 @@ Pdf::view('invoice')
    ->disk('s3')
    ->save('invoice-april-2022.pdf');
 ```
+
+Setting visibility
+
+	•	disk('public') → visibility = private (files created with permissions like 600)
+	•	disk('public', 'public') → visibility = public (files created with permissions like 644)
+
+ ```php
+Pdf::view('invoice')
+   ->disk('public', 'public') // 👈 second parameter sets visibility
+   ->save('invoices/invoice-april-2022.pdf');
+```
