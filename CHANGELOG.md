@@ -2,6 +2,26 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 1.9.0 - 2026-01-31
+
+### What's Changed
+
+* Fix typo in alternatives.md regarding Chromium by @lienriviere in https://github.com/spatie/laravel-pdf/pull/277
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/293
+* Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/290
+* Bump actions/setup-node from 5 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/284
+* Bump stefanzweifel/git-auto-commit-action from 6 to 7 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/283
+* Add PHP 8.4 to test matrix, add PR trigger by @freekbot in https://github.com/spatie/laravel-pdf/pull/296
+* Fix defaults not being preserved in queue:work by @freekmurze in https://github.com/spatie/laravel-pdf/pull/298
+
+### New Contributors
+
+* @lienriviere made their first contribution in https://github.com/spatie/laravel-pdf/pull/277
+* @freekbot made their first contribution in https://github.com/spatie/laravel-pdf/pull/296
+* @freekmurze made their first contribution in https://github.com/spatie/laravel-pdf/pull/298
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.8.0...1.9.0
+
 ## 1.8.0 - 2025-09-12
 
 ### What's Changed
