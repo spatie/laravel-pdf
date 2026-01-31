@@ -4,11 +4,6 @@ use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfFactory;
 
-beforeEach(function () {
-    // Reset defaults between tests to ensure isolation
-    PdfFactory::resetDefaultBuilder();
-});
-
 it('can set defaults for pdfs', function () {
     Pdf::default()->orientation(Orientation::Landscape);
 
