@@ -1,6 +1,7 @@
 <?php
 
 use Spatie\Image\Image;
+use Spatie\LaravelPdf\PdfFactory;
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\PdfToText\Pdf;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -13,6 +14,8 @@ uses(TestCase::class)
     })
     ->beforeEach(function () {
         ray()->newScreen($this->name());
+
+        PdfFactory::resetDefaultBuilder();
 
         $this
             ->tempDir = (new TemporaryDirectory(getTestSupportPath()))
