@@ -6,16 +6,19 @@ use Closure;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Dumpable;
 use Illuminate\Support\Traits\Macroable;
-use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
 {
+    use Conditionable;
+    use Dumpable;
     use Macroable;
 
     public string $viewName = '';
@@ -57,6 +60,41 @@ class PdfBuilder implements Responsable
     protected bool $onLambda = false;
 
     protected ?string $diskName = null;
+
+    protected ?PdfDriver $driver = null;
+
+    protected ?string $driverName = null;
+
+    public function setDriver(PdfDriver $driver): self
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
+    public function driver(string $driverName): self
+    {
+        $this->driverName = $driverName;
+
+        $this->driver = null;
+
+        return $this;
+    }
+
+    protected function getDriver(): PdfDriver
+    {
+        if ($this->driver) {
+            $driver = $this->driver;
+        } elseif ($this->driverName) {
+            $driver = app("laravel-pdf.driver.{$this->driverName}");
+        } else {
+            $driver = app(PdfDriver::class);
+        }
+
+        $this->configureBrowsershotDriver($driver);
+
+        return $driver;
+    }
 
     public function view(string $view, array $data = []): self
     {
@@ -171,9 +209,14 @@ class PdfBuilder implements Responsable
 
     public function base64(): string
     {
-        return $this
-            ->getBrowsershot()
-            ->base64pdf();
+        return base64_encode(
+            $this->getDriver()->generatePdf(
+                $this->getHtml(),
+                $this->getHeaderHtml(),
+                $this->getFooterHtml(),
+                $this->buildOptions(),
+            )
+        );
     }
 
     public function margins(
@@ -244,9 +287,13 @@ class PdfBuilder implements Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        $this
-            ->getBrowsershot()
-            ->save($path);
+        $this->getDriver()->savePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+            $path,
+        );
 
         return $this;
     }
@@ -265,7 +312,13 @@ class PdfBuilder implements Responsable
 
         $temporaryDirectory = (new TemporaryDirectory)->create();
 
-        $this->getBrowsershot()->save($temporaryDirectory->path($fileName));
+        $this->getDriver()->savePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+            $temporaryDirectory->path($fileName),
+        );
 
         $content = file_get_contents($temporaryDirectory->path($fileName));
 
@@ -278,7 +331,7 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
-    protected function getHtml(): string
+    public function getHtml(): string
     {
         if ($this->viewName) {
             $this->html = view($this->viewName, $this->viewData)->render();
@@ -291,7 +344,7 @@ class PdfBuilder implements Responsable
         return '&nbsp';
     }
 
-    protected function getHeaderHtml(): ?string
+    public function getHeaderHtml(): ?string
     {
         if ($this->headerViewName) {
             $this->headerHtml = view($this->headerViewName, $this->headerData)->render();
@@ -304,7 +357,7 @@ class PdfBuilder implements Responsable
         return null;
     }
 
-    protected function getFooterHtml(): ?string
+    public function getFooterHtml(): ?string
     {
         if ($this->footerViewName) {
             $this->footerHtml = view($this->footerViewName, $this->footerData)->render();
@@ -326,104 +379,26 @@ class PdfBuilder implements Responsable
         ]);
     }
 
-    public function getBrowsershot(): Browsershot
+    protected function buildOptions(): PdfOptions
     {
-        $browsershotClass = $this->onLambda
-            ? BrowsershotLambda::class
-            : Browsershot::class;
+        $options = new PdfOptions;
 
-        $browsershot = $browsershotClass::html($this->getHtml());
+        $options->format = $this->format;
+        $options->paperSize = $this->paperSize;
+        $options->margins = $this->margins;
+        $options->orientation = $this->orientation;
 
-        $browsershot->showBackground();
-
-        $headerHtml = $this->getHeaderHtml();
-
-        $footerHtml = $this->getFooterHtml();
-
-        if ($headerHtml || $footerHtml) {
-            $browsershot->showBrowserHeaderAndFooter();
-
-            if (! $headerHtml) {
-                $browsershot->hideHeader();
-            }
-
-            if (! $footerHtml) {
-                $browsershot->hideFooter();
-            }
-
-            if ($headerHtml) {
-                $browsershot->headerHtml($headerHtml);
-            }
-
-            if ($footerHtml) {
-                $browsershot->footerHtml($footerHtml);
-            }
-        }
-
-        if ($this->margins) {
-            $browsershot->margins(...$this->margins);
-        }
-
-        if ($this->format) {
-            $browsershot->format($this->format);
-        }
-
-        if ($this->paperSize) {
-            $browsershot->paperSize(...$this->paperSize);
-        }
-
-        if ($this->orientation === Orientation::Landscape->value) {
-            $browsershot->landscape();
-        }
-
-        $this->applyConfigurationDefaults($browsershot);
-
-        if ($this->customizeBrowsershot) {
-            ($this->customizeBrowsershot)($browsershot);
-        }
-
-        return $browsershot;
+        return $options;
     }
 
-    protected function applyConfigurationDefaults(Browsershot $browsershot): void
+    protected function configureBrowsershotDriver(PdfDriver $driver): void
     {
-        // Apply binary paths
-        if ($nodeBinary = config('laravel-pdf.browsershot.node_binary')) {
-            $browsershot->setNodeBinary($nodeBinary);
+        if (! $driver instanceof Drivers\BrowsershotDriver) {
+            return;
         }
 
-        if ($npmBinary = config('laravel-pdf.browsershot.npm_binary')) {
-            $browsershot->setNpmBinary($npmBinary);
-        }
-
-        if ($includePath = config('laravel-pdf.browsershot.include_path')) {
-            $browsershot->setIncludePath($includePath);
-        }
-
-        if ($chromePath = config('laravel-pdf.browsershot.chrome_path')) {
-            $browsershot->setChromePath($chromePath);
-        }
-
-        if ($nodeModulesPath = config('laravel-pdf.browsershot.node_modules_path')) {
-            $browsershot->setNodeModulePath($nodeModulesPath);
-        }
-
-        if ($binPath = config('laravel-pdf.browsershot.bin_path')) {
-            $browsershot->setBinPath($binPath);
-        }
-
-        if ($tempPath = config('laravel-pdf.browsershot.temp_path')) {
-            $browsershot->setCustomTempPath($tempPath);
-        }
-
-        // Apply additional options
-        if (config('laravel-pdf.browsershot.write_options_to_file')) {
-            $browsershot->writeOptionsToFile();
-        }
-
-        if (config('laravel-pdf.browsershot.no_sandbox')) {
-            $browsershot->noSandbox();
-        }
+        $driver->onLambda($this->onLambda);
+        $driver->customizeBrowsershot($this->customizeBrowsershot);
     }
 
     public function toResponse($request): Response
@@ -432,7 +407,12 @@ class PdfBuilder implements Responsable
             $this->inline($this->downloadName);
         }
 
-        $pdfContent = $this->getBrowsershot()->pdf();
+        $pdfContent = $this->getDriver()->generatePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+        );
 
         return response($pdfContent, 200, $this->responseHeaders);
     }

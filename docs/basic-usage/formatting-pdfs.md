@@ -151,6 +151,46 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice-april-2022.pdf');
 ```
 
+## Conditional formatting
+
+You can conditionally apply formatting options using the `when` and `unless` methods. This is useful when you want to change the PDF output based on some condition without breaking the method chain.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->format('a4')
+    ->when($invoice->isLandscape(), fn ($pdf) => $pdf->landscape())
+    ->when($invoice->hasLetterhead(), function ($pdf) use ($invoice) {
+        $pdf->headerView('pdf.letterhead', ['company' => $invoice->company]);
+    })
+    ->save('/some/directory/invoice.pdf');
+```
+
+The `unless` method works the opposite way:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.report', ['report' => $report])
+    ->unless($report->isCompact(), fn ($pdf) => $pdf->margins(20, 15, 20, 15))
+    ->save('/some/directory/report.pdf');
+```
+
+## Debugging
+
+You can call `dump` or `dd` on the builder to inspect its current state:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->format('a4')
+    ->landscape()
+    ->dump() // dumps the builder state and continues
+    ->save('/some/directory/invoice.pdf');
+```
+
 ## Background color
 
 By default, the resulting PDF will not show the background of the html page.

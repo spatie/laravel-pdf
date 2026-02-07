@@ -64,6 +64,10 @@ it('can render an invoice', function () {
 });
 ```
 
+## Laravel Boost
+
+This package ships with a [Laravel Boost](https://laravel.com/docs/12.x/boost) skill. After installing the package, run `php artisan boost:install` to register the skill. This will help AI agents in your project generate correct PDF code.
+
 ## Support us
 
 [<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-pdf.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-pdf)

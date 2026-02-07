@@ -2,9 +2,16 @@
 
 return [
     /*
-     * Here you can configure default Browsershot settings that will be applied
-     * to all PDF generation. These settings can still be overridden using the
-     * withBrowsershot() method on individual PDF instances.
+     * The default driver to use for PDF generation.
+     * Supported: "browsershot", "cloudflare"
+     */
+    'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
+
+    /*
+     * Browsershot driver configuration.
+     *
+     * Requires the spatie/browsershot package:
+     * composer require spatie/browsershot
      */
     'browsershot' => [
         /*
@@ -24,5 +31,16 @@ return [
          */
         'write_options_to_file' => env('LARAVEL_PDF_WRITE_OPTIONS_TO_FILE', false),
         'no_sandbox' => env('LARAVEL_PDF_NO_SANDBOX', false),
+    ],
+
+    /*
+     * Cloudflare Browser Rendering driver configuration.
+     *
+     * Requires a Cloudflare account with the Browser Rendering API enabled.
+     * https://developers.cloudflare.com/browser-rendering/
+     */
+    'cloudflare' => [
+        'api_token' => env('CLOUDFLARE_API_TOKEN'),
+        'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
     ],
 ];

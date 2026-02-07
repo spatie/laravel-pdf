@@ -18,7 +18,7 @@ Pdf::view('pdf.invoice', $data)
     ->save('invoice.pdf');
 ```
 
-If you want to create all PDFs in your app on Lambda, you can [set it as a default](https://spatie.be/docs/laravel-pdf/v1/basic-usage/setting-defaults) like this:
+If you want to create all PDFs in your app on Lambda, you can [set it as a default](https://spatie.be/docs/laravel-pdf/v2/basic-usage/setting-defaults) like this:
 
 ```php
 // typically, in a service provider

@@ -18,9 +18,11 @@
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^10.0|^11.0|^12.0",
-        "spatie/browsershot": "^4.0|^5.0",
         "spatie/laravel-package-tools": "^1.16.1",
         "spatie/temporary-directory": "^2.2.1"
+    },
+    "suggest": {
+        "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)"
     },
     "require-dev": {
         "ext-imagick": "*",
