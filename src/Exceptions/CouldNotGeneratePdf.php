@@ -27,4 +27,11 @@ class CouldNotGeneratePdf extends Exception
         return new self("Cloudflare PDF generation failed: {$body}");
     }
 
+    public static function dompdfNotInstalled(): self
+    {
+        return new self(
+            'The dompdf/dompdf package is required to use the DOMPDF driver. '
+            .'Install it with: composer require dompdf/dompdf'
+        );
+    }
 }

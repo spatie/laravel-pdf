@@ -15,7 +15,7 @@ namespace App\Pdf\Drivers;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\PdfOptions;
 
-class WkHtmlToPdfDriver implements PdfDriver
+class GotenbergDriver implements PdfDriver
 {
     public function __construct(protected array $config = [])
     {
@@ -56,15 +56,15 @@ Register your driver as a singleton in a service provider:
 ```php
 namespace App\Providers;
 
-use App\Pdf\Drivers\WkHtmlToPdfDriver;
+use App\Pdf\Drivers\GotenbergDriver;
 use Illuminate\Support\ServiceProvider;
 
 class PdfServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton('laravel-pdf.driver.wkhtmltopdf', function () {
-            return new WkHtmlToPdfDriver(config('laravel-pdf.wkhtmltopdf', []));
+        $this->app->singleton('laravel-pdf.driver.gotenberg', function () {
+            return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
         });
     }
 }
@@ -78,17 +78,17 @@ Once registered, you can use the driver on a per-PDF basis:
 use Spatie\LaravelPdf\Facades\Pdf;
 
 Pdf::view('pdfs.invoice', ['invoice' => $invoice])
-    ->driver('wkhtmltopdf')
+    ->driver('gotenberg')
     ->save('invoice.pdf');
 ```
 
 To make it the default driver, bind it to the `PdfDriver` interface in your service provider:
 
 ```php
-use App\Pdf\Drivers\WkHtmlToPdfDriver;
+use App\Pdf\Drivers\GotenbergDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 
 $this->app->singleton(PdfDriver::class, function () {
-    return new WkHtmlToPdfDriver(config('laravel-pdf.wkhtmltopdf', []));
+    return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
 });
 ```

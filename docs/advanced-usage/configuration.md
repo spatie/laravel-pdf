@@ -23,7 +23,7 @@ The `driver` option determines which PDF generation backend to use:
 'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 ```
 
-Supported values: `browsershot`, `cloudflare`.
+Supported values: `browsershot`, `cloudflare`, `dompdf`.
 
 ## Browsershot Configuration
 
@@ -54,6 +54,20 @@ Configure the Cloudflare Browser Rendering API credentials:
 ],
 ```
 
+## DOMPDF Configuration
+
+Configure the DOMPDF driver options:
+
+```php
+'dompdf' => [
+    'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
+    'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
+],
+```
+
+- **is_remote_enabled**: Set to `true` to allow DOMPDF to fetch external resources (images, CSS) via URLs.
+- **chroot**: The base path for local file access. Defaults to DOMPDF's built-in setting.
+
 ## Environment Variables
 
 You can use environment variables to configure PDF generation:
@@ -76,6 +90,10 @@ LARAVEL_PDF_NO_SANDBOX=true
 # Cloudflare settings
 CLOUDFLARE_API_TOKEN=your-api-token
 CLOUDFLARE_ACCOUNT_ID=your-account-id
+
+# DOMPDF settings
+LARAVEL_PDF_DOMPDF_REMOTE_ENABLED=false
+LARAVEL_PDF_DOMPDF_CHROOT=/path/to/chroot
 
 ```
 

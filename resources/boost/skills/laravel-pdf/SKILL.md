@@ -1,6 +1,6 @@
 ---
 name: laravel-pdf
-description: Generate PDFs from Blade views or HTML using spatie/laravel-pdf. Covers creating, formatting, saving, downloading, and testing PDFs with the Browsershot or Cloudflare driver.
+description: Generate PDFs from Blade views or HTML using spatie/laravel-pdf. Covers creating, formatting, saving, downloading, and testing PDFs with the Browsershot, Cloudflare, or DOMPDF driver.
 ---
 
 # Laravel PDF
@@ -147,7 +147,7 @@ Pdf::default()
 
 ## Drivers
 
-The package supports two drivers: `browsershot` (default) and `cloudflare`.
+The package supports three drivers: `browsershot` (default), `cloudflare`, and `dompdf`.
 
 Set the driver via `LARAVEL_PDF_DRIVER` env variable or in `config/laravel-pdf.php`.
 
@@ -181,15 +181,29 @@ CLOUDFLARE_API_TOKEN=your-api-token
 CLOUDFLARE_ACCOUNT_ID=your-account-id
 ```
 
+The Cloudflare driver does not support `withBrowsershot()`, `onLambda()`, or PNG output.
+
+### DOMPDF driver
+
+Pure PHP PDF generation. No external binaries required.
+
+```bash
+composer require dompdf/dompdf
+```
+
+```env
+LARAVEL_PDF_DRIVER=dompdf
+```
+
+DOMPDF supports CSS 2.1 and some CSS 3, but not flexbox or grid. Headers/footers are prepended/appended to the body (not repeated on every page). The `withBrowsershot()` and `onLambda()` methods have no effect.
+
 Switch driver per PDF:
 
 ```php
 Pdf::view('pdf.invoice', $data)
-    ->driver('cloudflare')
+    ->driver('dompdf')
     ->save('invoice.pdf');
 ```
-
-The Cloudflare driver does not support `withBrowsershot()`, `onLambda()`, or PNG output.
 
 ## Testing
 

@@ -22,10 +22,12 @@
         "spatie/temporary-directory": "^2.2.1"
     },
     "suggest": {
+        "dompdf/dompdf": "Required for the DOMPDF driver (^3.0)",
         "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)"
     },
     "require-dev": {
         "ext-imagick": "*",
+        "dompdf/dompdf": "^3.0",
         "larastan/larastan": "^2.7.0|^3.0",
         "laravel/pint": "^1.13.7",
         "nunomaduro/collision": "^7.10|^8.0",

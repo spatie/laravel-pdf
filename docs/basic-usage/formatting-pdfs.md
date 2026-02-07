@@ -48,6 +48,8 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
+> **Note:** `@pageNumber` and `@totalPages` only work with the Browsershot and Cloudflare drivers. The DOMPDF driver does not support these directives.
+
 ### Display Images in Headers and Footers
 
 You can add an image using the blade directive `@inlinedImage`

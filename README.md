@@ -15,7 +15,7 @@
     
 </div>
 
-This package provides a simple way to create PDFs in Laravel apps. Under the hood it uses [Chromium](https://www.chromium.org/chromium-projects/) to generate PDFs from Blade views. You can use modern CSS features like grid and flexbox to create beautiful PDFs.
+This package provides a simple way to create PDFs in Laravel apps. It supports multiple drivers: [Browsershot](https://spatie.be/docs/browsershot) (Chromium), [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/), and [DOMPDF](https://github.com/dompdf/dompdf) (pure PHP). You can use modern CSS features like grid and flexbox with the Chromium-based drivers, or choose DOMPDF for a zero-dependency setup.
 
 Here's a quick example:
 

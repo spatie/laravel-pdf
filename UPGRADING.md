@@ -14,7 +14,7 @@ If you skip this step, you'll get a `CouldNotGeneratePdf` exception when generat
 
 ## Update the config file
 
-If you published the config file, add the new `driver` key and the `cloudflare` section:
+If you published the config file, add the new `driver` key and the `cloudflare` and `dompdf` sections:
 
 ```php
 return [
@@ -27,6 +27,11 @@ return [
     'cloudflare' => [
         'api_token' => env('CLOUDFLARE_API_TOKEN'),
         'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+    ],
+
+    'dompdf' => [
+        'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
+        'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
     ],
 ];
 ```

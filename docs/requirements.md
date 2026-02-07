@@ -7,6 +7,14 @@ The laravel-pdf package requires **PHP 8.2+** and **Laravel 10+**.
 
 The additional requirements depend on which driver you use:
 
+## DOMPDF driver
+
+The DOMPDF driver uses [dompdf/dompdf](https://github.com/dompdf/dompdf) for pure PHP PDF generation. No external binaries are required. Just install the package:
+
+```bash
+composer require dompdf/dompdf
+```
+
 ## Browsershot driver (default)
 
 The Browsershot driver uses [Browsershot](https://spatie.be/docs/browsershot) under the hood to generate PDFs. You can find the necessary requirements [here](https://spatie.be/docs/browsershot/v4/requirements). This includes Node.js and a Chrome/Chromium binary.

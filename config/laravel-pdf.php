@@ -3,7 +3,7 @@
 return [
     /*
      * The default driver to use for PDF generation.
-     * Supported: "browsershot", "cloudflare"
+     * Supported: "browsershot", "cloudflare", "dompdf"
      */
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
@@ -42,5 +42,26 @@ return [
     'cloudflare' => [
         'api_token' => env('CLOUDFLARE_API_TOKEN'),
         'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+    ],
+
+    /*
+     * DOMPDF driver configuration.
+     *
+     * Pure PHP PDF generation — no external binaries required.
+     * Requires the dompdf/dompdf package:
+     * composer require dompdf/dompdf
+     */
+    'dompdf' => [
+        /*
+         * Allow DOMPDF to fetch external resources (images, CSS).
+         * Set to true if your HTML references remote URLs.
+         */
+        'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
+
+        /*
+         * The base path for local file access.
+         * Defaults to DOMPDF's built-in chroot setting when null.
+         */
+        'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
     ],
 ];

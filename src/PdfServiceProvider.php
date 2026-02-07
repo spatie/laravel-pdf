@@ -7,6 +7,7 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPdf\Drivers\BrowsershotDriver;
 use Spatie\LaravelPdf\Drivers\CloudflareDriver;
+use Spatie\LaravelPdf\Drivers\DomPdfDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Exceptions\InvalidDriver;
 
@@ -29,12 +30,17 @@ class PdfServiceProvider extends PackageServiceProvider
             return new CloudflareDriver(config('laravel-pdf.cloudflare', []));
         });
 
+        $this->app->singleton('laravel-pdf.driver.dompdf', function () {
+            return new DomPdfDriver(config('laravel-pdf.dompdf', []));
+        });
+
         $this->app->singleton(PdfDriver::class, function () {
             $driverName = config('laravel-pdf.driver', 'browsershot');
 
             return match ($driverName) {
                 'browsershot' => app('laravel-pdf.driver.browsershot'),
                 'cloudflare' => app('laravel-pdf.driver.cloudflare'),
+                'dompdf' => app('laravel-pdf.driver.dompdf'),
                 default => throw InvalidDriver::unknown($driverName),
             };
         });

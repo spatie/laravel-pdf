@@ -5,8 +5,8 @@ use Spatie\LaravelPdf\Drivers\CloudflareDriver;
 use Spatie\LaravelPdf\PdfOptions;
 
 beforeEach(function () {
-    if (file_exists(__DIR__.'/../.env')) {
-        $dotenv = Dotenv::createImmutable(__DIR__.'/..');
+    if (file_exists(__DIR__.'/../../.env')) {
+        $dotenv = Dotenv::createImmutable(__DIR__.'/../..');
         $dotenv->safeLoad();
     }
 
