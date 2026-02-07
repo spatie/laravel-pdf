@@ -39,6 +39,17 @@ class DownloadInvoiceController
 }
 ```
 
+You can also queue PDF generation for background processing:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdfs.invoice', ['invoice' => $invoice])
+    ->format('a4')
+    ->saveQueued('invoice.pdf')
+    ->then(fn (string $path, ?string $diskName) => Mail::to($user)->send(new InvoiceMail($path)));
+```
+
 You can use also test your PDFs:
 
 ```php

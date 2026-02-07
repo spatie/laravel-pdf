@@ -195,6 +195,70 @@ it('can switch to dompdf driver at runtime', function () {
     expect(file_get_contents($path))->toStartWith('%PDF');
 });
 
+it('generates a pdf with metadata', function () {
+    $driver = new DomPdfDriver;
+
+    $result = $driver->generatePdf('<h1>Hello</h1>', null, null, new PdfOptions);
+
+    $metadata = new \Spatie\LaravelPdf\PdfMetadata(
+        title: 'Invoice #123',
+        author: 'Acme Corp',
+        subject: 'Monthly Invoice',
+        keywords: 'invoice, acme',
+    );
+
+    $result = \Spatie\LaravelPdf\PdfMetadataWriter::write($result, $metadata);
+
+    expect($result)
+        ->toStartWith('%PDF')
+        ->toContain('/Title (Invoice #123)')
+        ->toContain('/Author (Acme Corp)')
+        ->toContain('/Subject (Monthly Invoice)')
+        ->toContain('/Keywords (invoice, acme)');
+});
+
+it('saves a pdf with metadata via the facade', function () {
+    Config::set('laravel-pdf.driver', 'dompdf');
+    Config::set('laravel-pdf.dompdf', []);
+
+    app()->forgetInstance(PdfDriver::class);
+    app()->forgetInstance('laravel-pdf.driver.dompdf');
+
+    $path = getTempPath('dompdf-metadata-facade.pdf');
+
+    Pdf::html('<h1>Hello</h1>')
+        ->meta(title: 'Facade Title', author: 'Test Author')
+        ->save($path);
+
+    expect(file_exists($path))->toBeTrue();
+
+    $content = file_get_contents($path);
+    expect($content)
+        ->toStartWith('%PDF')
+        ->toContain('/Title (Facade Title)')
+        ->toContain('/Author (Test Author)');
+});
+
+it('saves a pdf with metadata and creation date via the facade', function () {
+    Config::set('laravel-pdf.driver', 'dompdf');
+    Config::set('laravel-pdf.dompdf', []);
+
+    app()->forgetInstance(PdfDriver::class);
+    app()->forgetInstance('laravel-pdf.driver.dompdf');
+
+    $path = getTempPath('dompdf-metadata-date.pdf');
+    $date = new DateTimeImmutable('2026-01-15 10:30:00', new DateTimeZone('UTC'));
+
+    Pdf::html('<h1>Dated PDF</h1>')
+        ->meta(title: 'Dated Document', creationDate: $date)
+        ->save($path);
+
+    $content = file_get_contents($path);
+    expect($content)
+        ->toContain('/Title (Dated Document)')
+        ->toContain("/CreationDate (D:20260115103000+00'00')");
+});
+
 it('uses dompdf as default driver when configured', function () {
     Config::set('laravel-pdf.driver', 'dompdf');
     Config::set('laravel-pdf.dompdf', []);

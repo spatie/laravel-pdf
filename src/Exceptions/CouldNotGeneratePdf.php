@@ -34,4 +34,12 @@ class CouldNotGeneratePdf extends Exception
             .'Install it with: composer require dompdf/dompdf'
         );
     }
+
+    public static function cannotQueueWithBrowsershotClosure(): self
+    {
+        return new self(
+            'Cannot use saveQueued() with withBrowsershot(). '
+            .'Closures passed to withBrowsershot() cannot be serialized for the queue.'
+        );
+    }
 }

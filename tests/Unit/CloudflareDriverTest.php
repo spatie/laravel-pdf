@@ -129,6 +129,85 @@ it('sends paper size to cloudflare', function () {
     });
 });
 
+it('sends scale option to cloudflare', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->scale = 0.5;
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return $request['pdfOptions']['scale'] === 0.5;
+    });
+});
+
+it('sends page ranges option to cloudflare', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->pageRanges = '1-3, 5';
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return $request['pdfOptions']['pageRanges'] === '1-3, 5';
+    });
+});
+
+it('sends tagged option to cloudflare', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->tagged = true;
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return $request['pdfOptions']['tagged'] === true;
+    });
+});
+
+it('does not send scale or page ranges when not set', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, new PdfOptions);
+
+    Http::assertSent(function ($request) {
+        return ! isset($request['pdfOptions']['scale'])
+            && ! isset($request['pdfOptions']['pageRanges'])
+            && ! isset($request['pdfOptions']['tagged']);
+    });
+});
+
 it('sends header and footer templates to cloudflare', function () {
     Http::fake([
         'api.cloudflare.com/*' => Http::response('fake-pdf', 200),

@@ -205,6 +205,43 @@ Pdf::view('pdf.invoice', $data)
     ->save('invoice.pdf');
 ```
 
+## Queued PDF generation
+
+Dispatch PDF generation to a background queue:
+
+```php
+Pdf::view('pdf.invoice', $data)
+    ->saveQueued('invoice.pdf')
+    ->then(fn (string $path, ?string $diskName) => Mail::to($user)->send(new InvoiceMail($path)))
+    ->catch(fn (Throwable $e) => Log::error($e->getMessage()));
+```
+
+The `then` callback receives the path and the disk name (`null` for local saves).
+
+Configure queue and connection:
+
+```php
+Pdf::view('pdf.invoice', $data)
+    ->saveQueued('invoice.pdf', connection: 'redis', queue: 'pdfs');
+
+// Or chain methods:
+Pdf::view('pdf.invoice', $data)
+    ->saveQueued('invoice.pdf')
+    ->onQueue('pdfs')
+    ->onConnection('redis')
+    ->delay(now()->addMinutes(5));
+```
+
+With disk:
+
+```php
+Pdf::view('pdf.invoice', $data)
+    ->disk('s3')
+    ->saveQueued('invoices/invoice.pdf');
+```
+
+Note: `saveQueued()` cannot be used with `withBrowsershot()`.
+
 ## Testing
 
 Fake PDF generation in tests:
@@ -233,6 +270,14 @@ Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
     return $pdf->isDownload()
         && $pdf->downloadName === 'invoice.pdf';
 });
+```
+
+Assert queued PDFs:
+
+```php
+Pdf::assertQueued('invoice.pdf');
+Pdf::assertQueued(fn (PdfBuilder $pdf, string $path) => $path === 'invoice.pdf');
+Pdf::assertNotQueued();
 ```
 
 Simple assertions:

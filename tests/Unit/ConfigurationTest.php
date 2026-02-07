@@ -100,6 +100,39 @@ it('applies multiple configuration options simultaneously', function () {
     expect(invade($browsershot)->writeOptionsToFile)->toBeTrue();
 });
 
+it('applies scale option to browsershot', function () {
+    $driver = new BrowsershotDriver;
+
+    $options = new PdfOptions;
+    $options->scale = 0.75;
+
+    $browsershot = invade($driver)->buildBrowsershot('test', null, null, $options);
+
+    expect(invade($browsershot)->scale)->toBe(0.75);
+});
+
+it('applies page ranges option to browsershot', function () {
+    $driver = new BrowsershotDriver;
+
+    $options = new PdfOptions;
+    $options->pageRanges = '1-3, 5';
+
+    $browsershot = invade($driver)->buildBrowsershot('test', null, null, $options);
+
+    expect(getBrowsershotOption($browsershot, 'pageRanges'))->toBe('1-3, 5');
+});
+
+it('applies tagged pdf option to browsershot', function () {
+    $driver = new BrowsershotDriver;
+
+    $options = new PdfOptions;
+    $options->tagged = true;
+
+    $browsershot = invade($driver)->buildBrowsershot('test', null, null, $options);
+
+    expect(invade($browsershot)->taggedPdf)->toBeTrue();
+});
+
 function getBrowsershotOption(object $browsershot, string $key): mixed
 {
     $options = invade($browsershot)->additionalOptions;

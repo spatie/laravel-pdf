@@ -73,6 +73,20 @@ it('can download an invoice', function () {
 });
 ```
 
+### Asserting metadata
+
+You can assert that a PDF was generated with specific metadata by inspecting the `metadata` property on the `PdfBuilder` instance.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfBuilder;
+
+Pdf::assertSaved(function (PdfBuilder $pdf) {
+    return $pdf->metadata->title === 'Invoice #123'
+        && $pdf->metadata->author === 'Acme Corp';
+});
+```
+
 ## Simple assertion methods
 
 Beside the methods listed above, there are a few simple assertion methods that can be used to assert that a PDF was generated. They are meant to test code that generated a single PDF. The assertions will pass if any of the generated PDFs match the assertion.
@@ -124,4 +138,36 @@ You can use the `assertSaved` method to assert that a PDF was saved to the speci
 
 ```php
 Pdf::assertSaved(storage_path('invoices/invoice.pdf'));
+```
+
+## Queued PDF assertions
+
+### assertQueued
+
+You can use the `assertQueued` method to assert that a PDF was queued for generation. You can pass a string path or a callable.
+
+```php
+Pdf::assertQueued('invoice.pdf');
+```
+
+With a callable for more detailed assertions:
+
+```php
+use Spatie\LaravelPdf\PdfBuilder;
+
+Pdf::assertQueued(function (PdfBuilder $pdf, string $path) {
+    return $path === 'invoice.pdf' && $pdf->contains('Total');
+});
+```
+
+### assertNotQueued
+
+You can use the `assertNotQueued` method to assert that no PDFs were queued, or that a specific path was not queued.
+
+```php
+// Assert nothing was queued
+Pdf::assertNotQueued();
+
+// Assert a specific path was not queued
+Pdf::assertNotQueued('other.pdf');
 ```

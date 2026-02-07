@@ -1,6 +1,6 @@
 ---
 title: Using Tailwind
-weight: 4
+weight: 2
 ---
 
 You can use Tailwind to style your PDFs. This is a great way to create PDFs that look great. Let's create a beautiful PDF invoice using Tailwind.

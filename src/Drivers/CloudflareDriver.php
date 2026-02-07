@@ -79,6 +79,18 @@ class CloudflareDriver implements PdfDriver
             $pdfOptions['landscape'] = true;
         }
 
+        if ($options->scale !== null) {
+            $pdfOptions['scale'] = $options->scale;
+        }
+
+        if ($options->pageRanges !== null) {
+            $pdfOptions['pageRanges'] = $options->pageRanges;
+        }
+
+        if ($options->tagged) {
+            $pdfOptions['tagged'] = true;
+        }
+
         if ($headerHtml || $footerHtml) {
             $pdfOptions['displayHeaderFooter'] = true;
 

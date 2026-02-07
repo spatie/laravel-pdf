@@ -11,4 +11,10 @@ class PdfOptions
     public ?array $margins = null;
 
     public ?string $orientation = null;
+
+    public ?float $scale = null;
+
+    public ?string $pageRanges = null;
+
+    public bool $tagged = false;
 }

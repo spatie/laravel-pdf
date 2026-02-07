@@ -1,6 +1,6 @@
 ---
 title: Using the Cloudflare driver
-weight: 4
+weight: 3
 ---
 
 The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs. Unlike the Browsershot driver, it does not require Node.js or a Chrome binary on your server. Instead, it makes a simple HTTP call to Cloudflare's API, which renders your HTML and returns a PDF.

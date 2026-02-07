@@ -1,6 +1,6 @@
 ---
 title: Custom drivers
-weight: 5
+weight: 6
 ---
 
 You can create your own PDF generation driver by implementing the `PdfDriver` interface. This allows you to integrate any PDF generation service or library.

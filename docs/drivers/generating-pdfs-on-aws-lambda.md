@@ -1,6 +1,6 @@
 ---
 title: Generating PDFs on AWS Lambda
-weight: 3
+weight: 5
 ---
 
 Generating PDFs locally can be resource intensive. If you're having to generate a lot of PDFs, or having troubles to install the necessary dependencies on your server, you may want to consider using AWS Lambda to generate your PDFs.

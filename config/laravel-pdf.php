@@ -8,6 +8,13 @@ return [
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
     /*
+     * The job class used for queued PDF generation.
+     * You can replace this with your own class that extends GeneratePdfJob
+     * to customize things like $tries, $timeout, $backoff, or default queue.
+     */
+    'job' => Spatie\LaravelPdf\Jobs\GeneratePdfJob::class,
+
+    /*
      * Browsershot driver configuration.
      *
      * Requires the spatie/browsershot package:

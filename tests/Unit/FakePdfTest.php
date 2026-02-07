@@ -232,3 +232,59 @@ it('can verify that a pdf was not saved a given path', function () {
         return $path === 'non-existing-path';
     });
 })->fails();
+
+it('can determine that metadata was set on a saved pdf', function () {
+    Pdf::view('test')
+        ->meta(title: 'Invoice #123', author: 'Acme Corp')
+        ->save('invoice.pdf');
+
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
+        return $pdf->metadata->title === 'Invoice #123'
+            && $pdf->metadata->author === 'Acme Corp';
+    });
+});
+
+it('can determine that scale was set on a saved pdf', function () {
+    Pdf::view('test')
+        ->scale(0.75)
+        ->save('scaled.pdf');
+
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
+        return $pdf->scale === 0.75;
+    });
+});
+
+it('can determine that page ranges were set on a saved pdf', function () {
+    Pdf::view('test')
+        ->pageRanges('1-3, 5')
+        ->save('partial.pdf');
+
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
+        return $pdf->pageRanges === '1-3, 5';
+    });
+});
+
+it('can determine that tagged was set on a saved pdf', function () {
+    Pdf::view('test')
+        ->tagged()
+        ->save('tagged.pdf');
+
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
+        return $pdf->tagged === true;
+    });
+});
+
+it('can determine that metadata was set on a pdf response', function () {
+    Route::get('pdf', function () {
+        return pdf('test')
+            ->meta(title: 'Response PDF', subject: 'Testing')
+            ->inline();
+    });
+
+    $this->get('pdf')->assertSuccessful();
+
+    Pdf::assertRespondedWithPdf(function (PdfBuilder $pdf) {
+        return $pdf->metadata->title === 'Response PDF'
+            && $pdf->metadata->subject === 'Testing';
+    });
+});

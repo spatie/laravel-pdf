@@ -100,6 +100,18 @@ class BrowsershotDriver implements PdfDriver
             $browsershot->landscape();
         }
 
+        if ($options->scale !== null) {
+            $browsershot->scale($options->scale);
+        }
+
+        if ($options->pageRanges !== null) {
+            $browsershot->pages($options->pageRanges);
+        }
+
+        if ($options->tagged) {
+            $browsershot->taggedPdf();
+        }
+
         $this->applyConfigurationDefaults($browsershot);
 
         if ($this->customizeBrowsershot) {
