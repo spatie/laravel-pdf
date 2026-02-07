@@ -17,7 +17,7 @@ class FakePdfBuilder extends PdfBuilder
 
     public function save(string $path): self
     {
-        $this->getBrowsershot();
+        $this->getHtml();
 
         $this->savedPdfs[] = [
             'pdf' => clone $this,

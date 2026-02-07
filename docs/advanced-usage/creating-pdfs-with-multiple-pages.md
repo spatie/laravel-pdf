@@ -50,3 +50,5 @@ Pdf::view('view-with-multiple-pages')->footerView('footer-view')->save($path);
 ```
 
 ... the resulting PDF will have a footer on each page, with the page number and the total number of pages.
+
+> **Note:** `@pageNumber` and `@totalPages` only work with the Browsershot and Cloudflare drivers. The DOMPDF driver does not support these directives.

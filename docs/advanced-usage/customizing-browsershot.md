@@ -3,7 +3,7 @@ title: Customizing Browsershot
 weight: 2
 ---
 
-Under the hood, Laravel PDF uses [Browsershot](https://spatie.be/docs/browsershot) to generate the PDFs. While Laravel PDF provides a simple interface to generate PDFs, you can still use Browsershot directly to customize the PDFs.
+When using the Browsershot driver, you can customize the underlying [Browsershot](https://spatie.be/docs/browsershot) instance. This is only applicable when using the `browsershot` driver.
 
 ## Configuration-Based Customization
 
@@ -34,36 +34,20 @@ You can also use the `withBrowsershot` method to set options on the Browsershot 
 
 These flags are commonly needed when your PDF templates reference local assets (CSS, images, fonts) or when you need to bypass CORS restrictions during PDF generation. Without these flags, Chrome might block access to local resources, causing missing styles or images in your PDFs.
 
-This global configuration means all PDFs generated in your app will use these Browsershot settings, rather than having to configure them individually for each PDF.
-
 The two Chrome flags being set are:
 
 - `--disable-web-security`: Disables Chrome's same-origin policy and other web security features
 - `--allow-file-access-from-files`: Allows local files to access other local files (normally blocked for security)
 
-```php
-use Spatie\LaravelPdf\PdfFactory;
+You can set these as defaults for all PDFs:
 
-class AppServiceProvider extends ServiceProvider
-{
-    //...
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        app()->bind(PdfFactory::class, function ($service, $app) {
-            return (new PdfFactory())->withBrowsershot(
-                function ($browserShot) {
-                    $browserShot->setOption(
-                        'args', [
-                            '--disable-web-security',
-                            '--allow-file-access-from-files',
-                        ],
-                    );
-                }
-            );
-        });
-    }
-}
+```php
+// typically, in a service provider
+
+Pdf::default()->withBrowsershot(function (Browsershot $browsershot) {
+    $browsershot->setOption('args', [
+        '--disable-web-security',
+        '--allow-file-access-from-files',
+    ]);
+});
 ```
