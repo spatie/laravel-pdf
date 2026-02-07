@@ -26,5 +26,4 @@ class CouldNotGeneratePdf extends Exception
     {
         return new self("Cloudflare PDF generation failed: {$body}");
     }
-
 }
