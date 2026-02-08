@@ -14,7 +14,7 @@ This approach was inspired by this tweet by [Dries Vints](https://x.com/driesvin
 3. Click **Create Token** and create a token with the **Account.Browser Rendering** permission
 4. Your Account ID can be found in the address bar of the Cloudflare dashboard URL
 
-![Cloudflare API tokens page](/docs/images/cloudflare-api-tokens.jpg)
+![Cloudflare API tokens page](/docs/laravel-pdf/v2/images/cloudflare-api-tokens.jpg)
 
 5. Add the following to your `.env` file:
 
