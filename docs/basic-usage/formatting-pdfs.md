@@ -48,6 +48,8 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
+> `@pageNumber` and `@totalPages` only work with the Browsershot and Cloudflare drivers. The DOMPDF driver does not support these directives.
+
 ### Display Images in Headers and Footers
 
 You can add an image using the blade directive `@inlinedImage`
@@ -149,6 +151,120 @@ use Spatie\LaravelPdf\Enums\Unit;
 Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->margins($top, $right, $bottom, $left, Unit::Pixel)
     ->save('/some/directory/invoice-april-2022.pdf');
+```
+
+## Scale
+
+You can scale the content of the PDF using the `scale` method. The value must be between 0.1 and 2.0.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->scale(0.75)
+    ->save('/some/directory/invoice.pdf');
+```
+
+> Scale is supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
+
+## Page ranges
+
+You can select specific pages to include in the output using the `pageRanges` method. The format supports individual pages and ranges.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.report', ['report' => $report])
+    ->pageRanges('1-3, 5')
+    ->save('/some/directory/report.pdf');
+```
+
+> Page ranges are supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
+
+## Tagged PDF
+
+You can generate a tagged (accessible) PDF using the `tagged` method. Tagged PDFs include structural information that makes them accessible to screen readers.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->tagged()
+    ->save('/some/directory/invoice.pdf');
+```
+
+> Tagged PDFs are supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
+
+## PDF metadata
+
+You can set PDF document metadata such as title, author, subject, and keywords using the `meta` method. This metadata is displayed in PDF viewers — for example, the title is shown in the browser tab when viewing a PDF inline.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->meta(
+        title: 'Invoice #123',
+        author: 'Acme Corp',
+        subject: 'Monthly invoice',
+        keywords: 'invoice, acme, april',
+        creator: 'My Application',
+    )
+    ->save('/some/directory/invoice.pdf');
+```
+
+All parameters are optional — only the fields you specify will be included in the PDF.
+
+You can also set a creation date. It accepts a `DateTimeInterface` instance (such as a Carbon date) or a raw PDF date string.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->meta(title: 'Invoice #123', creationDate: now())
+    ->save('/some/directory/invoice.pdf');
+```
+
+Metadata works with all drivers (Browsershot, Cloudflare, and DOMPDF).
+
+## Conditional formatting
+
+You can conditionally apply formatting options using the `when` and `unless` methods. This is useful when you want to change the PDF output based on some condition without breaking the method chain.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->format('a4')
+    ->when($invoice->isLandscape(), fn ($pdf) => $pdf->landscape())
+    ->when($invoice->hasLetterhead(), function ($pdf) use ($invoice) {
+        $pdf->headerView('pdf.letterhead', ['company' => $invoice->company]);
+    })
+    ->save('/some/directory/invoice.pdf');
+```
+
+The `unless` method works the opposite way:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.report', ['report' => $report])
+    ->unless($report->isCompact(), fn ($pdf) => $pdf->margins(20, 15, 20, 15))
+    ->save('/some/directory/report.pdf');
+```
+
+## Debugging
+
+You can call `dump` or `dd` on the builder to inspect its current state:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->format('a4')
+    ->landscape()
+    ->dump() // dumps the builder state and continues
+    ->save('/some/directory/invoice.pdf');
 ```
 
 ## Background color

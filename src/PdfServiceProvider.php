@@ -5,6 +5,11 @@ namespace Spatie\LaravelPdf;
 use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\LaravelPdf\Drivers\BrowsershotDriver;
+use Spatie\LaravelPdf\Drivers\CloudflareDriver;
+use Spatie\LaravelPdf\Drivers\DomPdfDriver;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
+use Spatie\LaravelPdf\Exceptions\InvalidDriver;
 
 class PdfServiceProvider extends PackageServiceProvider
 {
@@ -13,6 +18,32 @@ class PdfServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-pdf')
             ->hasConfigFile('laravel-pdf');
+    }
+
+    public function registeringPackage(): void
+    {
+        $this->app->singleton('laravel-pdf.driver.browsershot', function () {
+            return new BrowsershotDriver(config('laravel-pdf.browsershot', []));
+        });
+
+        $this->app->singleton('laravel-pdf.driver.cloudflare', function () {
+            return new CloudflareDriver(config('laravel-pdf.cloudflare', []));
+        });
+
+        $this->app->singleton('laravel-pdf.driver.dompdf', function () {
+            return new DomPdfDriver(config('laravel-pdf.dompdf', []));
+        });
+
+        $this->app->singleton(PdfDriver::class, function () {
+            $driverName = config('laravel-pdf.driver', 'browsershot');
+
+            return match ($driverName) {
+                'browsershot' => app('laravel-pdf.driver.browsershot'),
+                'cloudflare' => app('laravel-pdf.driver.cloudflare'),
+                'dompdf' => app('laravel-pdf.driver.dompdf'),
+                default => throw InvalidDriver::unknown($driverName),
+            };
+        });
     }
 
     public function bootingPackage()
@@ -37,13 +68,13 @@ class PdfServiceProvider extends PackageServiceProvider
                     try {
                         \$content = file_get_contents(\$url);
                     } catch(\Exception \$exception) {
-                        throw new \Illuminate\View\ViewException('Image not found: ' . \$exception->getMessage());
+                        throw \Spatie\LaravelPdf\Exceptions\CouldNotLoadImage::notFound(\$exception->getMessage());
                     }
                 } else {
                     \$response = \Illuminate\Support\Facades\Http::get(\$url);
 
                     if (! \$response->successful()) {
-                        throw new \Illuminate\View\ViewException('Failed to fetch the image: ' . \$response->toException());
+                        throw \Spatie\LaravelPdf\Exceptions\CouldNotLoadImage::fetchFailed(\$response->toException());
                     }
 
                     \$content = \$response->body();

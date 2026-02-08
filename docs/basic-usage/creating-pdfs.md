@@ -13,7 +13,7 @@ use Spatie\LaravelPdf\Facades\Pdf;
 Pdf::view('pdf.invoice')->save('/some/directory/invoice.pdf');
 ```
 
-As a second parameter you can pass an array of data that will be made available in the view. You might use that to pass an Eloquent model, such as an invoice, to the view.
+As a second parameter, you can pass an array of data that will be made available in the view. You might use that to pass an Eloquent model, such as an invoice, to the view.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -30,7 +30,7 @@ use Spatie\LaravelPdf\Facades\Pdf;
 Pdf::html('<h1>Hello world!!</h1>')->save('/some/directory/invoice.pdf');
 ```
 
-## Using Javascript
+## Using JavaScript
 
 The JavaScript in your HTML will be executed when the PDF is created. You could use this to have a JavaScript charting library render a chart.
 

@@ -2,9 +2,23 @@
 
 return [
     /*
-     * Here you can configure default Browsershot settings that will be applied
-     * to all PDF generation. These settings can still be overridden using the
-     * withBrowsershot() method on individual PDF instances.
+     * The default driver to use for PDF generation.
+     * Supported: "browsershot", "cloudflare", "dompdf"
+     */
+    'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
+
+    /*
+     * The job class used for queued PDF generation.
+     * You can replace this with your own class that extends GeneratePdfJob
+     * to customize things like $tries, $timeout, $backoff, or default queue.
+     */
+    'job' => Spatie\LaravelPdf\Jobs\GeneratePdfJob::class,
+
+    /*
+     * Browsershot driver configuration.
+     *
+     * Requires the spatie/browsershot package:
+     * composer require spatie/browsershot
      */
     'browsershot' => [
         /*
@@ -24,5 +38,37 @@ return [
          */
         'write_options_to_file' => env('LARAVEL_PDF_WRITE_OPTIONS_TO_FILE', false),
         'no_sandbox' => env('LARAVEL_PDF_NO_SANDBOX', false),
+    ],
+
+    /*
+     * Cloudflare Browser Rendering driver configuration.
+     *
+     * Requires a Cloudflare account with the Browser Rendering API enabled.
+     * https://developers.cloudflare.com/browser-rendering/
+     */
+    'cloudflare' => [
+        'api_token' => env('CLOUDFLARE_API_TOKEN'),
+        'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+    ],
+
+    /*
+     * DOMPDF driver configuration.
+     *
+     * Pure PHP PDF generation — no external binaries required.
+     * Requires the dompdf/dompdf package:
+     * composer require dompdf/dompdf
+     */
+    'dompdf' => [
+        /*
+         * Allow DOMPDF to fetch external resources (images, CSS).
+         * Set to true if your HTML references remote URLs.
+         */
+        'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
+
+        /*
+         * The base path for local file access.
+         * Defaults to DOMPDF's built-in chroot setting when null.
+         */
+        'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
     ],
 ];

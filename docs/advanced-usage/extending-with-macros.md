@@ -1,6 +1,6 @@
 ---
 title: Extending with Macros
-weight: 6
+weight: 4
 ---
 
 The `PdfBuilder` class is macroable, which means you can add custom methods to it using Laravel's macro functionality. This allows you to extend the PDF builder with your own custom methods.

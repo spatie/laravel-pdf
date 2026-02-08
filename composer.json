@@ -17,17 +17,21 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/contracts": "^10.0|^11.0|^12.0",
-        "spatie/browsershot": "^4.0|^5.0",
+        "illuminate/contracts": "^11.0|^12.0",
         "spatie/laravel-package-tools": "^1.16.1",
         "spatie/temporary-directory": "^2.2.1"
     },
+    "suggest": {
+        "dompdf/dompdf": "Required for the DOMPDF driver (^3.0)",
+        "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)"
+    },
     "require-dev": {
         "ext-imagick": "*",
+        "dompdf/dompdf": "^3.0",
         "larastan/larastan": "^2.7.0|^3.0",
         "laravel/pint": "^1.13.7",
-        "nunomaduro/collision": "^7.10|^8.0",
-        "orchestra/testbench": "^8.18|^9.6|^10.0",
+        "nunomaduro/collision": "^8.0",
+        "orchestra/testbench": "^9.6|^10.0",
         "pestphp/pest": "^2.30|^3.7",
         "pestphp/pest-plugin-arch": "^2.5|^3.0",
         "pestphp/pest-plugin-laravel": "^2.2|^3.1",

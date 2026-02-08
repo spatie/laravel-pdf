@@ -1,6 +1,6 @@
 ---
 title: Generating PDFs on AWS Lambda
-weight: 3
+weight: 5
 ---
 
 Generating PDFs locally can be resource intensive. If you're having to generate a lot of PDFs, or having troubles to install the necessary dependencies on your server, you may want to consider using AWS Lambda to generate your PDFs.
@@ -18,7 +18,7 @@ Pdf::view('pdf.invoice', $data)
     ->save('invoice.pdf');
 ```
 
-If you want to create all PDFs in your app on Lambda, you can [set it as a default](https://spatie.be/docs/laravel-pdf/v1/basic-usage/setting-defaults) like this:
+If you want to create all PDFs in your app on Lambda, you can [set it as a default](https://spatie.be/docs/laravel-pdf/v2/basic-usage/setting-defaults) like this:
 
 ```php
 // typically, in a service provider

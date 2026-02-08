@@ -3,19 +3,26 @@
 namespace Spatie\LaravelPdf;
 
 use Closure;
+use DateTimeInterface;
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Traits\Conditionable;
+use Illuminate\Support\Traits\Dumpable;
 use Illuminate\Support\Traits\Macroable;
-use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
+use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
+use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
-use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PdfBuilder implements Responsable
 {
+    use Conditionable;
+    use Dumpable;
     use Macroable;
 
     public string $viewName = '';
@@ -46,6 +53,14 @@ class PdfBuilder implements Responsable
 
     public ?array $margins = null;
 
+    public ?float $scale = null;
+
+    public ?string $pageRanges = null;
+
+    public bool $tagged = false;
+
+    public ?PdfMetadata $metadata = null;
+
     protected string $visibility = 'private';
 
     protected ?Closure $customizeBrowsershot = null;
@@ -57,6 +72,41 @@ class PdfBuilder implements Responsable
     protected bool $onLambda = false;
 
     protected ?string $diskName = null;
+
+    protected ?PdfDriver $driver = null;
+
+    protected ?string $driverName = null;
+
+    public function setDriver(PdfDriver $driver): self
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
+    public function driver(string $driverName): self
+    {
+        $this->driverName = $driverName;
+
+        $this->driver = null;
+
+        return $this;
+    }
+
+    protected function getDriver(): PdfDriver
+    {
+        if ($this->driver) {
+            $driver = $this->driver;
+        } elseif ($this->driverName) {
+            $driver = app("laravel-pdf.driver.{$this->driverName}");
+        } else {
+            $driver = app(PdfDriver::class);
+        }
+
+        $this->configureBrowsershotDriver($driver);
+
+        return $driver;
+    }
 
     public function view(string $view, array $data = []): self
     {
@@ -171,9 +221,7 @@ class PdfBuilder implements Responsable
 
     public function base64(): string
     {
-        return $this
-            ->getBrowsershot()
-            ->base64pdf();
+        return base64_encode($this->generatePdfContent());
     }
 
     public function margins(
@@ -224,6 +272,52 @@ class PdfBuilder implements Responsable
         return $this;
     }
 
+    public function scale(float $scale): self
+    {
+        $this->scale = $scale;
+
+        return $this;
+    }
+
+    public function pageRanges(string $pageRanges): self
+    {
+        $this->pageRanges = $pageRanges;
+
+        return $this;
+    }
+
+    public function tagged(): self
+    {
+        $this->tagged = true;
+
+        return $this;
+    }
+
+    public function meta(
+        ?string $title = null,
+        ?string $author = null,
+        ?string $subject = null,
+        ?string $keywords = null,
+        ?string $creator = null,
+        string|DateTimeInterface|null $creationDate = null,
+    ): self {
+        if ($creationDate instanceof DateTimeInterface) {
+            $offset = str_replace(':', "'", $creationDate->format('P'))."'";
+            $creationDate = 'D:'.$creationDate->format('YmdHis').$offset;
+        }
+
+        $this->metadata = new PdfMetadata(
+            title: $title,
+            author: $author,
+            subject: $subject,
+            keywords: $keywords,
+            creator: $creator,
+            creationDate: $creationDate,
+        );
+
+        return $this;
+    }
+
     public function withBrowsershot(callable $callback): self
     {
         $this->customizeBrowsershot = $callback;
@@ -244,11 +338,54 @@ class PdfBuilder implements Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        $this
-            ->getBrowsershot()
-            ->save($path);
+        if ($this->hasMetadata()) {
+            file_put_contents($path, $this->generatePdfContent());
+        } else {
+            $this->getDriver()->savePdf(
+                $this->getHtml(),
+                $this->getHeaderHtml(),
+                $this->getFooterHtml(),
+                $this->buildOptions(),
+                $path,
+            );
+        }
 
         return $this;
+    }
+
+    public function saveQueued(string $path, ?string $connection = null, ?string $queue = null): QueuedPdfResponse
+    {
+        if ($this->customizeBrowsershot) {
+            throw CouldNotGeneratePdf::cannotQueueWithBrowsershotClosure();
+        }
+
+        $driverName = $this->driverName ?? config('laravel-pdf.driver', 'browsershot');
+
+        $jobClass = config('laravel-pdf.job', GeneratePdfJob::class);
+
+        $job = new $jobClass(
+            html: $this->getHtml(),
+            headerHtml: $this->getHeaderHtml(),
+            footerHtml: $this->getFooterHtml(),
+            options: $this->buildOptions(),
+            path: $path,
+            diskName: $this->diskName,
+            visibility: $this->visibility,
+            driverName: $driverName,
+            metadata: $this->metadata,
+        );
+
+        if ($connection) {
+            $job->onConnection($connection);
+        }
+
+        if ($queue) {
+            $job->onQueue($queue);
+        }
+
+        $dispatch = new PendingDispatch($job);
+
+        return new QueuedPdfResponse($dispatch, $job);
     }
 
     public function disk(string $diskName, string $visibility = 'private'): self
@@ -265,20 +402,26 @@ class PdfBuilder implements Responsable
 
         $temporaryDirectory = (new TemporaryDirectory)->create();
 
-        $this->getBrowsershot()->save($temporaryDirectory->path($fileName));
+        $this->getDriver()->savePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+            $temporaryDirectory->path($fileName),
+        );
 
         $content = file_get_contents($temporaryDirectory->path($fileName));
 
         $temporaryDirectory->delete();
 
-        $visibility = $this->visibility;
+        $content = $this->applyMetadata($content);
 
-        Storage::disk($diskName)->put($path, $content, $visibility);
+        Storage::disk($diskName)->put($path, $content, $this->visibility);
 
         return $this;
     }
 
-    protected function getHtml(): string
+    public function getHtml(): string
     {
         if ($this->viewName) {
             $this->html = view($this->viewName, $this->viewData)->render();
@@ -291,7 +434,7 @@ class PdfBuilder implements Responsable
         return '&nbsp';
     }
 
-    protected function getHeaderHtml(): ?string
+    public function getHeaderHtml(): ?string
     {
         if ($this->headerViewName) {
             $this->headerHtml = view($this->headerViewName, $this->headerData)->render();
@@ -304,7 +447,7 @@ class PdfBuilder implements Responsable
         return null;
     }
 
-    protected function getFooterHtml(): ?string
+    public function getFooterHtml(): ?string
     {
         if ($this->footerViewName) {
             $this->footerHtml = view($this->footerViewName, $this->footerData)->render();
@@ -326,104 +469,55 @@ class PdfBuilder implements Responsable
         ]);
     }
 
-    public function getBrowsershot(): Browsershot
+    protected function buildOptions(): PdfOptions
     {
-        $browsershotClass = $this->onLambda
-            ? BrowsershotLambda::class
-            : Browsershot::class;
+        $options = new PdfOptions;
 
-        $browsershot = $browsershotClass::html($this->getHtml());
+        $options->format = $this->format;
+        $options->paperSize = $this->paperSize;
+        $options->margins = $this->margins;
+        $options->orientation = $this->orientation;
+        $options->scale = $this->scale;
+        $options->pageRanges = $this->pageRanges;
+        $options->tagged = $this->tagged;
 
-        $browsershot->showBackground();
-
-        $headerHtml = $this->getHeaderHtml();
-
-        $footerHtml = $this->getFooterHtml();
-
-        if ($headerHtml || $footerHtml) {
-            $browsershot->showBrowserHeaderAndFooter();
-
-            if (! $headerHtml) {
-                $browsershot->hideHeader();
-            }
-
-            if (! $footerHtml) {
-                $browsershot->hideFooter();
-            }
-
-            if ($headerHtml) {
-                $browsershot->headerHtml($headerHtml);
-            }
-
-            if ($footerHtml) {
-                $browsershot->footerHtml($footerHtml);
-            }
-        }
-
-        if ($this->margins) {
-            $browsershot->margins(...$this->margins);
-        }
-
-        if ($this->format) {
-            $browsershot->format($this->format);
-        }
-
-        if ($this->paperSize) {
-            $browsershot->paperSize(...$this->paperSize);
-        }
-
-        if ($this->orientation === Orientation::Landscape->value) {
-            $browsershot->landscape();
-        }
-
-        $this->applyConfigurationDefaults($browsershot);
-
-        if ($this->customizeBrowsershot) {
-            ($this->customizeBrowsershot)($browsershot);
-        }
-
-        return $browsershot;
+        return $options;
     }
 
-    protected function applyConfigurationDefaults(Browsershot $browsershot): void
+    protected function generatePdfContent(): string
     {
-        // Apply binary paths
-        if ($nodeBinary = config('laravel-pdf.browsershot.node_binary')) {
-            $browsershot->setNodeBinary($nodeBinary);
+        $content = $this->getDriver()->generatePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+        );
+
+        return $this->applyMetadata($content);
+    }
+
+    protected function applyMetadata(string $pdfContent): string
+    {
+        if (! $this->hasMetadata()) {
+            return $pdfContent;
         }
 
-        if ($npmBinary = config('laravel-pdf.browsershot.npm_binary')) {
-            $browsershot->setNpmBinary($npmBinary);
+        return PdfMetadataWriter::write($pdfContent, $this->metadata);
+    }
+
+    protected function hasMetadata(): bool
+    {
+        return $this->metadata !== null && ! $this->metadata->isEmpty();
+    }
+
+    protected function configureBrowsershotDriver(PdfDriver $driver): void
+    {
+        if (! $driver instanceof Drivers\BrowsershotDriver) {
+            return;
         }
 
-        if ($includePath = config('laravel-pdf.browsershot.include_path')) {
-            $browsershot->setIncludePath($includePath);
-        }
-
-        if ($chromePath = config('laravel-pdf.browsershot.chrome_path')) {
-            $browsershot->setChromePath($chromePath);
-        }
-
-        if ($nodeModulesPath = config('laravel-pdf.browsershot.node_modules_path')) {
-            $browsershot->setNodeModulePath($nodeModulesPath);
-        }
-
-        if ($binPath = config('laravel-pdf.browsershot.bin_path')) {
-            $browsershot->setBinPath($binPath);
-        }
-
-        if ($tempPath = config('laravel-pdf.browsershot.temp_path')) {
-            $browsershot->setCustomTempPath($tempPath);
-        }
-
-        // Apply additional options
-        if (config('laravel-pdf.browsershot.write_options_to_file')) {
-            $browsershot->writeOptionsToFile();
-        }
-
-        if (config('laravel-pdf.browsershot.no_sandbox')) {
-            $browsershot->noSandbox();
-        }
+        $driver->onLambda($this->onLambda);
+        $driver->customizeBrowsershot($this->customizeBrowsershot);
     }
 
     public function toResponse($request): Response
@@ -432,7 +526,7 @@ class PdfBuilder implements Responsable
             $this->inline($this->downloadName);
         }
 
-        $pdfContent = $this->getBrowsershot()->pdf();
+        $pdfContent = $this->generatePdfContent();
 
         return response($pdfContent, 200, $this->responseHeaders);
     }
