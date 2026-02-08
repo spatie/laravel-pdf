@@ -2,6 +2,36 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.0.0 - 2026-02-08
+
+### What's new
+
+v2 introduces a **driver-based architecture**, allowing you to choose between different PDF generation backends.
+
+#### New drivers
+
+- **Cloudflare** - Generate PDFs using Cloudflare's Browser Rendering API
+- **DomPdf** - Generate PDFs using DomPdf (no external binary required)
+- **Browsershot** - Remains the default driver
+
+#### New features
+
+- Queued PDF generation via `saveQueued()`
+- PDF metadata support (title, author, subject, keywords, creator, creation date)
+- Runtime driver switching with `->driver('dompdf')`
+- Custom driver support
+
+#### Breaking changes
+
+- `spatie/browsershot` must now be explicitly required via Composer
+- `getBrowsershot()` has been removed — use `withBrowsershot()` instead
+- Config file structure has changed (new `driver` key)
+- Laravel 10 support has been dropped
+
+See the full [upgrade guide](https://github.com/spatie/laravel-pdf/blob/main/UPGRADING.md) for migration steps.
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/1.9.0...2.0.0
+
 ## 1.9.0 - 2026-01-31
 
 ### What's Changed
