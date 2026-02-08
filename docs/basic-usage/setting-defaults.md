@@ -1,6 +1,6 @@
 ---
 title: Setting defaults
-weight: 6
+weight: 7
 ---
 
 You can set the default options for every PDF, by using the `default` method on the `Pdf` facade.
