@@ -13,22 +13,6 @@ composer require spatie/laravel-pdf
 
 This package supports multiple PDF generation drivers. You can set the driver via the `LARAVEL_PDF_DRIVER` environment variable, or in the config file.
 
-### DOMPDF driver
-
-The DOMPDF driver is the easiest to set up — it requires no external binaries, no Node.js, and no Docker. It works everywhere PHP runs.
-
-```bash
-composer require dompdf/dompdf
-```
-
-Then set the driver in your `.env` file:
-
-```env
-LARAVEL_PDF_DRIVER=dompdf
-```
-
-Note that DOMPDF has more limited CSS support than the Chromium-based drivers. See [Using the DOMPDF driver](/docs/laravel-pdf/v2/advanced-usage/using-the-dompdf-driver) for details.
-
 ### Browsershot driver (default)
 
 The Browsershot driver requires the `spatie/browsershot` package:
@@ -58,6 +42,22 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
 ```
 
 That's it. No other dependencies are required since the Cloudflare driver uses Laravel's built-in HTTP client.
+
+### DOMPDF driver
+
+The DOMPDF driver requires no external binaries, no Node.js, and no Docker. It works everywhere PHP runs.
+
+```bash
+composer require dompdf/dompdf
+```
+
+Then set the driver in your `.env` file:
+
+```env
+LARAVEL_PDF_DRIVER=dompdf
+```
+
+Note that DOMPDF has more limited CSS support than the Chromium-based drivers. See [Using the DOMPDF driver](/docs/laravel-pdf/v2/drivers/using-the-dompdf-driver) for details.
 
 ## Laravel Boost
 

@@ -102,7 +102,7 @@ This lets you set defaults like retry attempts, timeouts, or a default queue for
 
 ## Limitations
 
-`saveQueued()` cannot be used with `withBrowsershot()`. Closures passed to `withBrowsershot()` cannot be serialized for the queue. An exception will be thrown if you try.
+`saveQueued()` cannot be used with `withBrowsershot()`. The closure passed to `withBrowsershot()` may capture objects or state that cannot be reliably serialized for the queue. An exception will be thrown if you try.
 
 ## Testing
 
