@@ -120,6 +120,9 @@ jobs:
       - name: Fix Imagick Policy
         run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
 
+      - name: Disable AppArmor
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+
       - name: Install ghostscript
         run: sudo apt-get -y install ghostscript
 
