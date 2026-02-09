@@ -56,21 +56,6 @@ The Gotenberg driver supports the following PDF options:
 - `headerView()` / `headerHtml()` — Page headers (repeated on every page)
 - `footerView()` / `footerHtml()` — Page footers (repeated on every page)
 
-## Using Gotenberg for specific PDFs only
-
-If you want to use another driver as your default but switch to Gotenberg for specific PDFs, use the `driver` method:
-
-```php
-use Spatie\LaravelPdf\Facades\Pdf;
-
-Pdf::view('pdfs.invoice', ['invoice' => $invoice])
-    ->driver('gotenberg')
-    ->format('a4')
-    ->save('invoice.pdf');
-```
-
-Make sure you have the Gotenberg URL configured in your `config/laravel-pdf.php` or `.env`, even if Gotenberg is not the default driver.
-
 ## Headers and footers
 
 Gotenberg supports repeating headers and footers on every page, just like the Browsershot and Cloudflare drivers. Header and footer HTML is sent as separate HTML documents to Gotenberg.
