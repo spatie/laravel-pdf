@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.1.0 - 2026-02-09
+
+### What's Changed
+
+* Add Gotenberg driver by @freekmurze in https://github.com/spatie/laravel-pdf/pull/302
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2026-02-08
 
 ### What's new
