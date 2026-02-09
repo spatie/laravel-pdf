@@ -70,8 +70,3 @@ Note that Gotenberg requires header and footer HTML to be complete HTML document
 </body>
 </html>
 ```
-
-## Limitations
-
-- The `withBrowsershot()` and `onLambda()` methods have no effect when using the Gotenberg driver.
-- Gotenberg must be running and accessible from your application. If it's not reachable, PDF generation will fail.
