@@ -1,23 +1,27 @@
 <?php
 
+use Exception;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 use Spatie\LaravelPdf\Drivers\GotenbergDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfMetadata;
+use Spatie\LaravelPdf\PdfMetadataWriter;
 use Spatie\LaravelPdf\PdfOptions;
 
 beforeEach(function () {
     $this->gotenbergUrl = env('GOTENBERG_URL', 'http://localhost:3000');
 
     try {
-        $response = \Illuminate\Support\Facades\Http::get("{$this->gotenbergUrl}/health");
+        $response = Http::get("{$this->gotenbergUrl}/health");
 
         if (! $response->successful()) {
             $this->markTestSkipped('Gotenberg is not running.');
         }
-    } catch (\Exception $e) {
-        $this->markTestSkipped('Gotenberg is not available: '.$e->getMessage());
+    } catch (Exception $exception) {
+        $this->markTestSkipped('Gotenberg is not available: '.$exception->getMessage());
     }
 
     $this->driver = new GotenbergDriver([
@@ -190,14 +194,14 @@ it('uses gotenberg as default driver when configured', function () {
 it('generates a pdf with metadata', function () {
     $result = $this->driver->generatePdf('<h1>Hello</h1>', null, null, new PdfOptions);
 
-    $metadata = new \Spatie\LaravelPdf\PdfMetadata(
+    $metadata = new PdfMetadata(
         title: 'Invoice #123',
         author: 'Acme Corp',
         subject: 'Monthly Invoice',
         keywords: 'invoice, acme',
     );
 
-    $result = \Spatie\LaravelPdf\PdfMetadataWriter::write($result, $metadata);
+    $result = PdfMetadataWriter::write($result, $metadata);
 
     expect($result)
         ->toStartWith('%PDF')

@@ -2,6 +2,7 @@
 
 namespace Spatie\LaravelPdf\Drivers;
 
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
@@ -54,7 +55,7 @@ class GotenbergDriver implements PdfDriver
         return "{$this->url}/forms/chromium/convert/html";
     }
 
-    protected function buildRequest(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): \Illuminate\Http\Client\PendingRequest
+    protected function buildRequest(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): PendingRequest
     {
         $request = Http::attach('files', $html, 'index.html');
 
