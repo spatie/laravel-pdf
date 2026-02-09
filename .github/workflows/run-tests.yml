@@ -89,3 +89,55 @@ jobs:
         run: |
           npm install
           vendor/bin/pest
+
+  gotenberg-test:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 5
+
+    name: Gotenberg integration tests
+
+    services:
+      gotenberg:
+        image: gotenberg/gotenberg:8
+        ports:
+          - 3000:3000
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install poppler-utils
+        run: sudo apt-get install -y poppler-utils
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: none
+
+      - name: Fix Imagick Policy
+        run: sudo sed -i 's/none/read|write/g' /etc/ImageMagick-6/policy.xml
+
+      - name: Install ghostscript
+        run: sudo apt-get -y install ghostscript
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Execute tests
+        env:
+          GOTENBERG_URL: http://localhost:3000
+        run: |
+          npm install
+          vendor/bin/pest
