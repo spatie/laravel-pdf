@@ -3,7 +3,7 @@
 return [
     /*
      * The default driver to use for PDF generation.
-     * Supported: "browsershot", "cloudflare", "dompdf"
+     * Supported: "browsershot", "cloudflare", "dompdf", "gotenberg"
      */
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
@@ -49,6 +49,16 @@ return [
     'cloudflare' => [
         'api_token' => env('CLOUDFLARE_API_TOKEN'),
         'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+    ],
+
+    /*
+     * Gotenberg driver configuration.
+     *
+     * Requires a running Gotenberg instance (Docker recommended).
+     * https://gotenberg.dev
+     */
+    'gotenberg' => [
+        'url' => env('GOTENBERG_URL', 'http://localhost:3000'),
     ],
 
     /*

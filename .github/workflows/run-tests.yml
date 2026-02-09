@@ -22,6 +22,12 @@ jobs:
 
     timeout-minutes: 5
 
+    services:
+      gotenberg:
+        image: gotenberg/gotenberg:8
+        ports:
+          - 3000:3000
+
     strategy:
       fail-fast: false
       matrix:
@@ -86,6 +92,8 @@ jobs:
         run: npm install puppeteer
 
       - name: Execute tests
+        env:
+          GOTENBERG_URL: http://localhost:3000
         run: |
           npm install
           vendor/bin/pest

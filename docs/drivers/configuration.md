@@ -23,7 +23,7 @@ The `driver` option determines which PDF generation backend to use:
 'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 ```
 
-Supported values: `browsershot`, `cloudflare`, `dompdf`.
+Supported values: `browsershot`, `cloudflare`, `dompdf`, `gotenberg`.
 
 ## Browsershot Configuration
 
@@ -51,6 +51,16 @@ Configure the Cloudflare Browser Rendering API credentials:
 'cloudflare' => [
     'api_token' => env('CLOUDFLARE_API_TOKEN'),
     'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+],
+```
+
+## Gotenberg Configuration
+
+Configure the Gotenberg API URL:
+
+```php
+'gotenberg' => [
+    'url' => env('GOTENBERG_URL', 'http://localhost:3000'),
 ],
 ```
 
@@ -90,6 +100,9 @@ LARAVEL_PDF_NO_SANDBOX=true
 # Cloudflare settings
 CLOUDFLARE_API_TOKEN=your-api-token
 CLOUDFLARE_ACCOUNT_ID=your-account-id
+
+# Gotenberg settings
+GOTENBERG_URL=http://localhost:3000
 
 # DOMPDF settings
 LARAVEL_PDF_DOMPDF_REMOTE_ENABLED=false

@@ -19,6 +19,12 @@ composer require dompdf/dompdf
 
 The Browsershot driver uses [Browsershot](https://spatie.be/docs/browsershot) under the hood to generate PDFs. You can find the necessary requirements [here](https://spatie.be/docs/browsershot/v4/requirements). This includes Node.js and a Chrome/Chromium binary.
 
+## Gotenberg driver
+
+The Gotenberg driver uses [Gotenberg](https://gotenberg.dev), an open-source Docker-based API for PDF generation. You will need:
+
+- A running Gotenberg instance (easily started with `docker run --rm -p 3000:3000 gotenberg/gotenberg:8`)
+
 ## Cloudflare driver
 
 The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/). This driver does not require Node.js or a Chrome binary on your server. You will need:

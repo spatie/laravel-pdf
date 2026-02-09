@@ -35,6 +35,11 @@ class CouldNotGeneratePdf extends Exception
         );
     }
 
+    public static function gotenbergApiError(string $body): self
+    {
+        return new self("Gotenberg PDF generation failed: {$body}");
+    }
+
     public static function cannotQueueWithBrowsershotClosure(): self
     {
         return new self(

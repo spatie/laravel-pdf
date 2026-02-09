@@ -6,10 +6,11 @@ weight: 1
 This package provides a simple way to create PDFs in Laravel apps. It uses a driver-based architecture, so you can choose between different PDF generation backends:
 
 - **Browsershot** (default): Uses [Chromium](https://www.chromium.org/chromium-projects/) via [Browsershot](https://spatie.be/docs/browsershot) to generate PDFs from HTML. Requires Node.js and a Chrome/Chromium binary.
+- **Gotenberg**: Uses [Gotenberg](https://gotenberg.dev), an open-source Docker-based API with headless Chromium. Great for containerized and microservice environments.
 - **Cloudflare**: Uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs with a simple HTTP call. No Node.js or Chrome binary needed. This driver was inspired by [a suggestion from Dries Vints](https://x.com/driesvints/status/2016131972477632850).
 - **DOMPDF**: Uses [dompdf/dompdf](https://github.com/dompdf/dompdf) for pure PHP PDF generation. No external binaries, no Node.js, no Docker — works everywhere PHP runs.
 
-The Browsershot and Cloudflare drivers support modern CSS features like grid and flexbox, or even a framework like Tailwind, to create beautiful PDFs. The DOMPDF driver supports CSS 2.1 and some CSS 3 properties, making it ideal for simpler PDFs that don't need advanced layout features.
+The Browsershot, Gotenberg, and Cloudflare drivers support modern CSS features like grid and flexbox, or even a framework like Tailwind, to create beautiful PDFs. The DOMPDF driver supports CSS 2.1 and some CSS 3 properties, making it ideal for simpler PDFs that don't need advanced layout features.
 
 Here's a quick example:
 

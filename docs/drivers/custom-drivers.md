@@ -1,6 +1,6 @@
 ---
 title: Custom drivers
-weight: 6
+weight: 7
 ---
 
 You can create your own PDF generation driver by implementing the `PdfDriver` interface. This allows you to integrate any PDF generation service or library.
@@ -15,7 +15,7 @@ namespace App\Pdf\Drivers;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\PdfOptions;
 
-class GotenbergDriver implements PdfDriver
+class WeasyPrintDriver implements PdfDriver
 {
     public function __construct(protected array $config = [])
     {
@@ -56,15 +56,15 @@ Register your driver as a singleton in a service provider:
 ```php
 namespace App\Providers;
 
-use App\Pdf\Drivers\GotenbergDriver;
+use App\Pdf\Drivers\WeasyPrintDriver;
 use Illuminate\Support\ServiceProvider;
 
 class PdfServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton('laravel-pdf.driver.gotenberg', function () {
-            return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
+        $this->app->singleton('laravel-pdf.driver.weasyprint', function () {
+            return new WeasyPrintDriver(config('laravel-pdf.weasyprint', []));
         });
     }
 }
@@ -78,17 +78,17 @@ Once registered, you can use the driver on a per-PDF basis:
 use Spatie\LaravelPdf\Facades\Pdf;
 
 Pdf::view('pdfs.invoice', ['invoice' => $invoice])
-    ->driver('gotenberg')
+    ->driver('weasyprint')
     ->save('invoice.pdf');
 ```
 
 To make it the default driver, bind it to the `PdfDriver` interface in your service provider:
 
 ```php
-use App\Pdf\Drivers\GotenbergDriver;
+use App\Pdf\Drivers\WeasyPrintDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 
 $this->app->singleton(PdfDriver::class, function () {
-    return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
+    return new WeasyPrintDriver(config('laravel-pdf.weasyprint', []));
 });
 ```
