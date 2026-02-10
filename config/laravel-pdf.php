@@ -59,6 +59,8 @@ return [
      */
     'gotenberg' => [
         'url' => env('GOTENBERG_URL', 'http://localhost:3000'),
+        'username' => env('GOTENBERG_USERNAME'),
+        'password' => env('GOTENBERG_PASSWORD'),
     ],
 
     /*

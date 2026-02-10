@@ -11,6 +11,8 @@ use Spatie\LaravelPdf\PdfOptions;
 class GotenbergDriver implements PdfDriver
 {
     protected string $url;
+    protected ?string $username;
+    protected ?string $password;
 
     protected array $formatDimensions = [
         'letter' => ['width' => 8.5, 'height' => 11],
@@ -29,6 +31,8 @@ class GotenbergDriver implements PdfDriver
     public function __construct(array $config = [])
     {
         $this->url = rtrim($config['url'] ?? 'http://localhost:3000', '/');
+        $this->username = $config['username'] ?? null;
+        $this->password = $config['password'] ?? null;
     }
 
     public function generatePdf(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): string
@@ -57,7 +61,14 @@ class GotenbergDriver implements PdfDriver
 
     protected function buildRequest(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): PendingRequest
     {
-        $request = Http::attach('files', $html, 'index.html');
+        $request = Http::attach('files', $html, 'index.html')
+            ->when(
+                $this->username && $this->password,
+                fn (PendingRequest $request): PendingRequest => $request->withBasicAuth(
+                    $this->username,
+                    $this->password
+                )
+            );
 
         if ($headerHtml) {
             $request = $request->attach('files', $headerHtml, 'header.html');
