@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.1.1 - 2026-02-10
+
+### What's Changed
+
+* Add support for basic auth in the Gotenberg driver by @grantholle in https://github.com/spatie/laravel-pdf/pull/303
+
+### New Contributors
+
+* @grantholle made their first contribution in https://github.com/spatie/laravel-pdf/pull/303
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.1.0...2.1.1
+
 ## 2.1.0 - 2026-02-09
 
 ### What's Changed
