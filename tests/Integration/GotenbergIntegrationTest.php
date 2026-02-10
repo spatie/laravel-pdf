@@ -1,6 +1,6 @@
 <?php
 
-use Exception;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Spatie\LaravelPdf\Drivers\GotenbergDriver;
@@ -189,6 +189,28 @@ it('uses gotenberg as default driver when configured', function () {
 
     expect(file_exists($path))->toBeTrue();
     expect(file_get_contents($path))->toStartWith('%PDF');
+});
+
+it('uses basic auth when configured', function () {
+    Config::set('laravel-pdf.driver', 'gotenberg');
+    Config::set('laravel-pdf.gotenberg', [
+        'url' => $this->gotenbergUrl,
+        'username' => 'testuser',
+        'password' => 'testpass',
+    ]);
+
+    app()->forgetInstance(PdfDriver::class);
+    app()->forgetInstance('laravel-pdf.driver.gotenberg');
+
+    $path = getTempPath('default-gotenberg.pdf');
+
+    Http::fake();
+
+    Pdf::html('<h1>Hello</h1>')->save($path);
+
+    Http::assertSent(function (Request $request) {
+        return $request->header('Authorization')[0] === 'Basic ' . base64_encode("testuser:testpass");
+    });
 });
 
 it('generates a pdf with metadata', function () {
