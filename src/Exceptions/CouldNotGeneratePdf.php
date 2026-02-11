@@ -35,6 +35,14 @@ class CouldNotGeneratePdf extends Exception
         );
     }
 
+    public static function weasyPrintPackageNotInstalled(): self
+    {
+        return new self(
+            'The pontedilana/php-weasyprint package is required to use the WeasyPrint driver. '
+            .'Install it with: composer require pontedilana/php-weasyprint'
+        );
+    }
+
     public static function gotenbergApiError(string $body): self
     {
         return new self("Gotenberg PDF generation failed: {$body}");
