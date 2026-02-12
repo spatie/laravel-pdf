@@ -111,11 +111,11 @@ it('converts paper size to size correctly', function ($paperSize, $expected) {
     [['width' => 1, 'height' => 2], '1mm 2mm'],
 ]);
 
-it('converts format size to size correctly', function ($format, $expected) {
+it('converts format size to size correctly', function (Format $format, $expected) {
     $driver = new WeasyPrintDriver;
 
     $options = new PdfOptions;
-    $options->format = $format;
+    $options->format = $format->value;
 
     $result = invade($driver)->prepareOptions($options)['stylesheet'];
 
