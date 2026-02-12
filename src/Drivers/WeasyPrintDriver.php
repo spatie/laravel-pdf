@@ -99,7 +99,7 @@ class WeasyPrintDriver implements PdfDriver
         } elseif ($options->format || $options->orientation) {
             $format = strtolower($options->format);
             if ($options->orientation) {
-                $format .= ' ' . strtolower($options->orientation);
+                $format .= ' '.strtolower($options->orientation);
             }
             $sizeCss = "size: {$format};";
         }

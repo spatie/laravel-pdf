@@ -103,11 +103,11 @@ it('converts paper size to size correctly', function ($paperSize, $expected) {
 
     expect($result)->toContain($expected);
 })->with([
-    [['width' => 1, 'height' => 2, 'unit' => 'in',], 'size: 1in 2in;'],
-    [['width' => 10, 'height' => 21, 'unit' => 'mm',], 'size: 10mm 21mm;'],
-    [['width' => 1, 'height' => 2, 'unit' => 'cm',], 'size: 1cm 2cm;'],
-    [['width' => 72, 'height' => 144, 'unit' => 'pt',], 'size: 72pt 144pt;'],
-    [['width' => 1, 'height' => 2, 'unit' => 'px',], 'size: 1px 2px;'],
+    [['width' => 1, 'height' => 2, 'unit' => 'in'], 'size: 1in 2in;'],
+    [['width' => 10, 'height' => 21, 'unit' => 'mm'], 'size: 10mm 21mm;'],
+    [['width' => 1, 'height' => 2, 'unit' => 'cm'], 'size: 1cm 2cm;'],
+    [['width' => 72, 'height' => 144, 'unit' => 'pt'], 'size: 72pt 144pt;'],
+    [['width' => 1, 'height' => 2, 'unit' => 'px'], 'size: 1px 2px;'],
     [['width' => 1, 'height' => 2], '1mm 2mm'],
 ]);
 
@@ -121,8 +121,8 @@ it('converts format size to size correctly', function (Format $format, $expected
 
     expect($result)->toContain($expected);
 })->with([
-   [Format::A4, 'size: a4;'],
-   [Format::Letter, 'size: letter;']
+    [Format::A4, 'size: a4;'],
+    [Format::Letter, 'size: letter;'],
 ]);
 
 it('respects binary config', function () {

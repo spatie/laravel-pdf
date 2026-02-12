@@ -10,9 +10,9 @@ use Spatie\LaravelPdf\PdfOptions;
 beforeEach(function () {
     $binary = config('laravel-pdf.weasyprint.binary');
 
-    $resolved = trim(shell_exec('command -v ' . escapeshellarg($binary) . ' 2>/dev/null'));
+    $resolved = trim(shell_exec('command -v '.escapeshellarg($binary).' 2>/dev/null'));
 
-    if (!$resolved || !is_executable($resolved)) {
+    if (! $resolved || ! is_executable($resolved)) {
         $this->markTestSkipped('WeasyPrint is not available at: '.$binary);
     }
 
@@ -175,10 +175,9 @@ it('generates a pdf with styled html', function () {
     expect($path)->toContainText(['Invoice', 'Widget', '150']);
 });
 
-
 it('can switch to weasyprint driver at runtime', function () {
     Config::set('laravel-pdf.weasyprint', [
-        'binary' => config('laravel-pdf.weasyprint.binary')
+        'binary' => config('laravel-pdf.weasyprint.binary'),
     ]);
 
     app()->forgetInstance('laravel-pdf.driver.weasyprint');
@@ -218,7 +217,7 @@ it('generates a pdf with metadata', function () {
 it('saves a pdf with metadata via the facade', function () {
     Config::set('laravel-pdf.driver', 'weasyprint');
     Config::set('laravel-pdf.weasyprint', [
-        'binary' => config('laravel-pdf.weasyprint.binary')
+        'binary' => config('laravel-pdf.weasyprint.binary'),
     ]);
     app()->forgetInstance(PdfDriver::class);
     app()->forgetInstance('laravel-pdf.driver.weasyprint');
@@ -241,7 +240,7 @@ it('saves a pdf with metadata via the facade', function () {
 it('saves a pdf with metadata and creation date via the facade', function () {
     Config::set('laravel-pdf.driver', 'weasyprint');
     Config::set('laravel-pdf.weasyprint', [
-        'binary' => config('laravel-pdf.weasyprint.binary')
+        'binary' => config('laravel-pdf.weasyprint.binary'),
     ]);
     app()->forgetInstance(PdfDriver::class);
     app()->forgetInstance('laravel-pdf.driver.weasyprint');
@@ -262,7 +261,7 @@ it('saves a pdf with metadata and creation date via the facade', function () {
 it('uses weasyprint as default driver when configured', function () {
     Config::set('laravel-pdf.driver', 'weasyprint');
     Config::set('laravel-pdf.weasyprint', [
-        'binary' => config('laravel-pdf.weasyprint.binary')
+        'binary' => config('laravel-pdf.weasyprint.binary'),
     ]);
     app()->forgetInstance(PdfDriver::class);
     app()->forgetInstance('laravel-pdf.driver.weasyprint');

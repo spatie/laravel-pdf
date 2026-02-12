@@ -209,7 +209,7 @@ it('uses basic auth when configured', function () {
     Pdf::html('<h1>Hello</h1>')->save($path);
 
     Http::assertSent(function (Request $request) {
-        return $request->header('Authorization')[0] === 'Basic ' . base64_encode("testuser:testpass");
+        return $request->header('Authorization')[0] === 'Basic '.base64_encode('testuser:testpass');
     });
 });
 
