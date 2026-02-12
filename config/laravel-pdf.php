@@ -83,4 +83,24 @@ return [
          */
         'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
     ],
+
+    /*
+    * WeasyPrint driver configuration.
+    *
+    * Requires the Weasyprint binary and pontedilana/php-weasyprint package:
+    * composer require pontedilana/php-weasyprint
+    *
+    * @see https://doc.courtbouillon.org/weasyprint/stable/first_steps.html
+    */
+    'weasyprint' => [
+        /*
+         * Configure the paths to the Weasyprint binary.
+         */
+        'binary' => env('LARAVEL_PDF_WEASYPRINT_BINARY', 'weasyprint'),
+
+        /*
+         * The timeout (default = 10 seconds)
+         */
+        'timeout' => 10,
+    ],
 ];

@@ -10,6 +10,7 @@ use Spatie\LaravelPdf\Drivers\CloudflareDriver;
 use Spatie\LaravelPdf\Drivers\DomPdfDriver;
 use Spatie\LaravelPdf\Drivers\GotenbergDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
+use Spatie\LaravelPdf\Drivers\WeasyPrintDriver;
 use Spatie\LaravelPdf\Exceptions\InvalidDriver;
 
 class PdfServiceProvider extends PackageServiceProvider
@@ -35,6 +36,10 @@ class PdfServiceProvider extends PackageServiceProvider
             return new DomPdfDriver(config('laravel-pdf.dompdf', []));
         });
 
+        $this->app->singleton('laravel-pdf.driver.weasyprint', function () {
+            return new WeasyPrintDriver(config('laravel-pdf.weasyprint', []));
+        });
+
         $this->app->singleton('laravel-pdf.driver.gotenberg', function () {
             return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
         });
@@ -47,6 +52,7 @@ class PdfServiceProvider extends PackageServiceProvider
                 'cloudflare' => app('laravel-pdf.driver.cloudflare'),
                 'dompdf' => app('laravel-pdf.driver.dompdf'),
                 'gotenberg' => app('laravel-pdf.driver.gotenberg'),
+                'weasyprint' => app('laravel-pdf.driver.weasyprint'),
                 default => throw InvalidDriver::unknown($driverName),
             };
         });
