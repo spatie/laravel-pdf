@@ -52,6 +52,7 @@ class PdfServiceProvider extends PackageServiceProvider
                 'cloudflare' => app('laravel-pdf.driver.cloudflare'),
                 'dompdf' => app('laravel-pdf.driver.dompdf'),
                 'gotenberg' => app('laravel-pdf.driver.gotenberg'),
+                'weasyprint' => app('laravel-pdf.driver.weasyprint'),
                 default => throw InvalidDriver::unknown($driverName),
             };
         });

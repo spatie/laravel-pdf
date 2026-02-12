@@ -19,7 +19,7 @@ class WeasyPrintDriver implements PdfDriver
         $this->config = $config;
     }
 
-    public function buildWeasyPrint(): Pdf
+    protected function buildWeasyPrint(): Pdf
     {
         $options = $this->config;
 
@@ -98,8 +98,10 @@ class WeasyPrintDriver implements PdfDriver
             $sizeCss = "size: {$sizeWidth} {$sizeHeight};";
         } elseif ($options->format || $options->orientation) {
             $format = strtolower($options->format);
-            $orientation = strtolower($options->orientation);
-            $sizeCss = "size: {$format} {$orientation};";
+            if ($options->orientation) {
+                $format .= ' ' . strtolower($options->orientation);
+            }
+            $sizeCss = "size: {$format};";
         }
 
         $stylesheet = <<<CSS

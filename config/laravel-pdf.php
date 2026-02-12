@@ -96,10 +96,10 @@ return [
         /*
          * Configure the paths to the Weasyprint binary.
          */
-        'binary' => env('LARAVEL_PDF_WEASYPRINT_BINARY', '/usr/local/bin/weasyprint'),
+        'binary' => env('LARAVEL_PDF_WEASYPRINT_BINARY', 'weasyprint'),
 
         /*
-         * The timeout (default = 10 secods)
+         * The timeout (default = 10 seconds)
          */
         'timeout' => 10,
     ],
