@@ -1,6 +1,7 @@
 <?php
 
 use Spatie\LaravelPdf\Drivers\WeasyPrintDriver;
+use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\PdfOptions;
 
 it('injects margin css before closing head tag', function () {
@@ -120,8 +121,8 @@ it('converts format size to size correctly', function ($format, $expected) {
 
     expect($result)->toContain($expected);
 })->with([
-   ['A4', 'size: a4;'],
-   ['B5', 'size: b5;']
+   [Format::A4, 'size: a4;'],
+   [Format::Letter, 'size: letter;']
 ]);
 
 it('respects binary config', function () {
