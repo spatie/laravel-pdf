@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.2.0 - 2026-02-12
+
+### What's Changed
+
+* Add Weasyprint driver by @barryvdh in https://github.com/spatie/laravel-pdf/pull/304
+
+### New Contributors
+
+* @barryvdh made their first contribution in https://github.com/spatie/laravel-pdf/pull/304
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.1.1...2.2.0
+
 ## 2.1.1 - 2026-02-10
 
 ### What's Changed
