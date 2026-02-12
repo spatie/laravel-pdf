@@ -11,7 +11,9 @@ use Spatie\LaravelPdf\PdfOptions;
 class GotenbergDriver implements PdfDriver
 {
     protected string $url;
+
     protected ?string $username;
+
     protected ?string $password;
 
     protected array $formatDimensions = [
