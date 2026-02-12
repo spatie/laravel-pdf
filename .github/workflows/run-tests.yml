@@ -75,10 +75,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install Pillow numpy filetype setuptools wheel twine
           pip install -r requirements.txt
-
-      - name: Install weasyprint
-        run: |
-
           weasyprint --info
           whereis weasyprint
 
