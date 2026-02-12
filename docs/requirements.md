@@ -25,6 +25,13 @@ The Gotenberg driver uses [Gotenberg](https://gotenberg.dev), an open-source Doc
 
 - A running Gotenberg instance (easily started with `docker run --rm -p 3000:3000 gotenberg/gotenberg:8`)
 
+## WeasyPrint driver
+
+The WeasyPrint driver uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/), a Python-based PDF generation tool with excellent CSS Paged Media support. You will need:
+
+- The WeasyPrint binary installed on your system ([installation guide](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html))
+- The PHP wrapper package: `composer require pontedilana/php-weasyprint`
+
 ## Cloudflare driver
 
 The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/). This driver does not require Node.js or a Chrome binary on your server. You will need:

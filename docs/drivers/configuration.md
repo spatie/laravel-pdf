@@ -23,7 +23,7 @@ The `driver` option determines which PDF generation backend to use:
 'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 ```
 
-Supported values: `browsershot`, `cloudflare`, `dompdf`, `gotenberg`.
+Supported values: `browsershot`, `cloudflare`, `dompdf`, `gotenberg`, `weasyprint`.
 
 ## Browsershot Configuration
 
@@ -64,6 +64,20 @@ Configure the Gotenberg API URL:
 ],
 ```
 
+## WeasyPrint Configuration
+
+Configure the WeasyPrint driver options:
+
+```php
+'weasyprint' => [
+    'binary' => env('LARAVEL_PDF_WEASYPRINT_BINARY', 'weasyprint'),
+    'timeout' => 10,
+],
+```
+
+- **binary**: Path to the WeasyPrint binary. Defaults to `weasyprint` (found via `$PATH`).
+- **timeout**: Maximum time in seconds for PDF generation. Defaults to `10`.
+
 ## DOMPDF Configuration
 
 Configure the DOMPDF driver options:
@@ -103,6 +117,9 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
 
 # Gotenberg settings
 GOTENBERG_URL=http://localhost:3000
+
+# WeasyPrint settings
+LARAVEL_PDF_WEASYPRINT_BINARY=/usr/local/bin/weasyprint
 
 # DOMPDF settings
 LARAVEL_PDF_DOMPDF_REMOTE_ENABLED=false

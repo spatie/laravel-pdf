@@ -43,6 +43,26 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
 
 That's it. No other dependencies are required since the Cloudflare driver uses Laravel's built-in HTTP client.
 
+### WeasyPrint driver
+
+The WeasyPrint driver uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/), a Python-based PDF generation tool with excellent CSS Paged Media support including repeating headers/footers and page counters.
+
+First, install the WeasyPrint binary on your system. Follow the [installation guide](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html) for your OS.
+
+Then install the PHP wrapper:
+
+```bash
+composer require pontedilana/php-weasyprint
+```
+
+Set the driver in your `.env` file:
+
+```env
+LARAVEL_PDF_DRIVER=weasyprint
+```
+
+See [Using the WeasyPrint driver](/docs/laravel-pdf/v2/drivers/using-the-weasyprint-driver) for more details on configuration and supported options.
+
 ### DOMPDF driver
 
 The DOMPDF driver requires no external binaries, no Node.js, and no Docker. It works everywhere PHP runs.
@@ -97,6 +117,11 @@ return [
     'dompdf' => [
         'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
         'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
+    ],
+
+    'weasyprint' => [
+        'binary' => env('LARAVEL_PDF_WEASYPRINT_BINARY', 'weasyprint'),
+        'timeout' => 10,
     ],
 
 ];
