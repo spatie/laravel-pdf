@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.2.1 - 2026-03-04
+
+### What's Changed
+
+- Default `write_options_to_file` to `true` to prevent "Argument list too long" errors when headers/footers contain large content (e.g. inline images)
+
+Fixes #317
+
 ## 2.2.0 - 2026-02-12
 
 ### What's Changed
