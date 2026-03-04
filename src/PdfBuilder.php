@@ -484,7 +484,7 @@ class PdfBuilder implements Responsable
         return $options;
     }
 
-    protected function generatePdfContent(): string
+    public function generatePdfContent(): string
     {
         $content = $this->getDriver()->generatePdf(
             $this->getHtml(),
