@@ -43,6 +43,22 @@ CLOUDFLARE_ACCOUNT_ID=your-account-id
 
 That's it. No other dependencies are required since the Cloudflare driver uses Laravel's built-in HTTP client.
 
+### Gotenberg driver
+
+The Gotenberg driver uses [Gotenberg](https://gotenberg.dev), an open-source Docker-based API with headless Chromium.
+
+You will need a running Gotenberg instance (started with `docker run --rm -p 3000:3000 gotenberg/gotenberg:8`, or similar; see the [installation guide](https://gotenberg.dev/docs/getting-started/installation) for additional setup instructions).
+
+Add the following to your `.env` file:
+
+```env
+LARAVEL_PDF_DRIVER=gotenberg
+GOTENBERG_URL=http://your-host:your-port
+# If you set up authentication, add these lines too:
+GOTENBERG_USERNAME=username
+GOTENBERG_PASSWORD=password
+```
+
 ### WeasyPrint driver
 
 The WeasyPrint driver uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/), a Python-based PDF generation tool with excellent CSS Paged Media support including repeating headers/footers and page counters.
