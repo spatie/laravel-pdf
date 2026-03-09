@@ -3,7 +3,7 @@ title: Requirements
 weight: 3
 ---
 
-The laravel-pdf package requires **PHP 8.2+** and **Laravel 10+**.
+The laravel-pdf package requires **PHP 8.2+** and **Laravel 11+**.
 
 The additional requirements depend on which driver you use:
 
