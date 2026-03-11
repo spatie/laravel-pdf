@@ -2,6 +2,12 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.3.0 - 2026-03-11
+
+### What's new
+
+- Make `generatePdfContent()` public on `PdfBuilder`, allowing users to get raw PDF content directly without saving to a file
+
 ## 2.2.1 - 2026-03-04
 
 ### What's Changed
