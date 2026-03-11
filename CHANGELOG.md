@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.4.0 - 2026-03-11
+
+Add Laravel 13 support
+
 ## 2.3.0 - 2026-03-11
 
 ### What's new
