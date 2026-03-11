@@ -99,7 +99,9 @@ jobs:
 
       - name: Remove incompatible packages for Laravel 13
         if: matrix.laravel == '13.*'
-        run: composer remove wnx/sidecar-browsershot nunomaduro/collision --dev --no-interaction --no-update
+        run: |
+          composer remove wnx/sidecar-browsershot nunomaduro/collision --dev --no-interaction --no-update
+          composer require spatie/browsershot --dev --no-interaction --no-update
 
       - name: Install dependencies
         run: |
