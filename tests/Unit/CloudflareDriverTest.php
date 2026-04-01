@@ -104,7 +104,7 @@ it('sends landscape option to cloudflare', function () {
     });
 });
 
-it('sends paper size to cloudflare', function () {
+it('sends paper size to cloudflare using preferCSSPageSize and injects page size css', function () {
     Http::fake([
         'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
     ]);
@@ -121,11 +121,61 @@ it('sends paper size to cloudflare', function () {
         'unit' => 'mm',
     ];
 
+    $driver->generatePdf('<html><head></head><body><h1>Hello</h1></body></html>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return $request['pdfOptions']['preferCSSPageSize'] === true
+            && str_contains($request['html'], '@page { size: 200mm 400mm; }')
+            && ! isset($request['pdfOptions']['width'])
+            && ! isset($request['pdfOptions']['height']);
+    });
+});
+
+it('injects page size css before closing head tag', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->paperSize = [
+        'width' => 1920,
+        'height' => 1080,
+        'unit' => 'px',
+    ];
+
+    $driver->generatePdf('<html><head><title>Test</title></head><body></body></html>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return str_contains($request['html'], '<style>@page { size: 1920px 1080px; }</style></head>');
+    });
+});
+
+it('prepends page size css when no head tag exists', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->paperSize = [
+        'width' => 100,
+        'height' => 200,
+        'unit' => 'mm',
+    ];
+
     $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
 
     Http::assertSent(function ($request) {
-        return $request['pdfOptions']['width'] === '200mm'
-            && $request['pdfOptions']['height'] === '400mm';
+        return str_starts_with($request['html'], '<style>@page { size: 100mm 200mm; }</style>');
     });
 });
 

@@ -61,8 +61,11 @@ class CloudflareDriver implements PdfDriver
 
         if ($options->paperSize) {
             $unit = $options->paperSize['unit'] ?? 'mm';
-            $pdfOptions['width'] = $options->paperSize['width'].$unit;
-            $pdfOptions['height'] = $options->paperSize['height'].$unit;
+            $width = $options->paperSize['width'].$unit;
+            $height = $options->paperSize['height'].$unit;
+
+            $html = $this->injectPageSizeCss($html, $width, $height);
+            $pdfOptions['preferCSSPageSize'] = true;
         }
 
         if ($options->margins) {
@@ -107,5 +110,16 @@ class CloudflareDriver implements PdfDriver
             'html' => $html,
             'pdfOptions' => $pdfOptions,
         ];
+    }
+
+    protected function injectPageSizeCss(string $html, string $width, string $height): string
+    {
+        $style = "<style>@page { size: {$width} {$height}; }</style>";
+
+        if (str_contains($html, '</head>')) {
+            return str_replace('</head>', "{$style}</head>", $html);
+        }
+
+        return $style.$html;
     }
 }
