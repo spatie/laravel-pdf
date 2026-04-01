@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
+use Spatie\LaravelPdf\PdfMetadata;
 use Spatie\LaravelPdf\PdfOptions;
 
 beforeEach(function () {
@@ -146,7 +147,7 @@ it('saves a pdf with metadata to a local path', function () {
         options: new PdfOptions,
         path: $path,
         driverName: 'dompdf',
-        metadata: new \Spatie\LaravelPdf\PdfMetadata(title: 'Queued Invoice', author: 'Acme Corp'),
+        metadata: new PdfMetadata(title: 'Queued Invoice', author: 'Acme Corp'),
     );
 
     $job->handle();
@@ -170,7 +171,7 @@ it('saves a pdf with metadata to a disk', function () {
         path: 'invoices/meta.pdf',
         diskName: 'testing',
         driverName: 'dompdf',
-        metadata: new \Spatie\LaravelPdf\PdfMetadata(title: 'Disk Invoice'),
+        metadata: new PdfMetadata(title: 'Disk Invoice'),
     );
 
     $job->handle();
@@ -193,12 +194,12 @@ it('invokes catch callback on failure', function () {
         driverName: 'dompdf',
     );
 
-    $job->catch(function (\Throwable $e) use (&$caughtException) {
+    $job->catch(function (Throwable $e) use (&$caughtException) {
         $caughtException = $e;
     });
 
-    $job->failed(new \RuntimeException('Test failure'));
+    $job->failed(new RuntimeException('Test failure'));
 
-    expect($caughtException)->toBeInstanceOf(\RuntimeException::class);
+    expect($caughtException)->toBeInstanceOf(RuntimeException::class);
     expect($caughtException->getMessage())->toBe('Test failure');
 });

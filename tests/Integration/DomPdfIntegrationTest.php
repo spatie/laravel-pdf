@@ -5,6 +5,8 @@ use Spatie\LaravelPdf\Drivers\DomPdfDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfMetadata;
+use Spatie\LaravelPdf\PdfMetadataWriter;
 use Spatie\LaravelPdf\PdfOptions;
 
 it('generates a pdf with default options', function () {
@@ -200,14 +202,14 @@ it('generates a pdf with metadata', function () {
 
     $result = $driver->generatePdf('<h1>Hello</h1>', null, null, new PdfOptions);
 
-    $metadata = new \Spatie\LaravelPdf\PdfMetadata(
+    $metadata = new PdfMetadata(
         title: 'Invoice #123',
         author: 'Acme Corp',
         subject: 'Monthly Invoice',
         keywords: 'invoice, acme',
     );
 
-    $result = \Spatie\LaravelPdf\PdfMetadataWriter::write($result, $metadata);
+    $result = PdfMetadataWriter::write($result, $metadata);
 
     expect($result)
         ->toStartWith('%PDF')

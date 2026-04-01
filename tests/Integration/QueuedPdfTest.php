@@ -6,6 +6,7 @@ use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
+use Spatie\LaravelPdf\PdfOptions;
 use Spatie\LaravelPdf\QueuedPdfResponse;
 
 class CustomGeneratePdfJob extends GeneratePdfJob
@@ -69,7 +70,7 @@ it('generates a pdf when the job runs synchronously', function () {
         html: '<h1>Queued sync test</h1>',
         headerHtml: null,
         footerHtml: null,
-        options: new \Spatie\LaravelPdf\PdfOptions,
+        options: new PdfOptions,
         path: $path,
         driverName: 'dompdf',
     );
