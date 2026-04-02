@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.5.0 - 2026-04-02
+
+### What's Changed
+
+* Fix custom page size for Cloudflare driver by @freekmurze in https://github.com/spatie/laravel-pdf/pull/326
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.4.0...2.5.0
+
 ## 2.4.0 - 2026-03-11
 
 Add Laravel 13 support
