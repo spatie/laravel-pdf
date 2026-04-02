@@ -1,5 +1,6 @@
 <?php
 
+use Pontedilana\PhpWeasyPrint\Pdf;
 use Spatie\LaravelPdf\Drivers\WeasyPrintDriver;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\PdfOptions;
@@ -128,7 +129,7 @@ it('converts format size to size correctly', function (Format $format, $expected
 it('respects binary config', function () {
     $driver = new WeasyPrintDriver(['binary' => '/path/to/weasyprint']);
 
-    /** @var \Pontedilana\PhpWeasyPrint\Pdf $weasyPrint */
+    /** @var Pdf $weasyPrint */
     $weasyPrint = invade($driver)->buildWeasyPrint();
 
     expect($weasyPrint->getBinary())->toBe('/path/to/weasyprint');

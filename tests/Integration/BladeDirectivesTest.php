@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\View\ViewException;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 beforeEach(function () {
@@ -75,7 +76,7 @@ it('can throw view exception with image relative path', function () {
             'logo' => './not-found.png',
         ])
         ->save($this->targetPath);
-})->throws(\Illuminate\View\ViewException::class, 'Image not found:');
+})->throws(ViewException::class, 'Image not found:');
 
 it('can throw view exception with image absolute path', function () {
 
@@ -84,4 +85,4 @@ it('can throw view exception with image absolute path', function () {
             'logo' => 'https://picsum.photos/not-found',
         ])
         ->save($this->targetPath);
-})->throws(\Illuminate\View\ViewException::class, 'Failed to fetch the image:');
+})->throws(ViewException::class, 'Failed to fetch the image:');
