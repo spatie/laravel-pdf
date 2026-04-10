@@ -4,9 +4,11 @@ namespace Spatie\LaravelPdf;
 
 use Closure;
 use DateTimeInterface;
+use Illuminate\Contracts\Mail\Attachable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Http\Response;
+use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Dumpable;
@@ -19,7 +21,7 @@ use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
-class PdfBuilder implements Responsable
+class PdfBuilder implements Attachable, Responsable
 {
     use Conditionable;
     use Dumpable;
@@ -529,6 +531,13 @@ class PdfBuilder implements Responsable
         $pdfContent = $this->generatePdfContent();
 
         return response($pdfContent, 200, $this->responseHeaders);
+    }
+
+    public function toMailAttachment(): Attachment
+    {
+        return Attachment::fromData(fn () => $this->generatePdfContent())
+            ->as($this->downloadName)
+            ->withMime('application/pdf');
     }
 
     protected function addHeaders(array $headers): self
