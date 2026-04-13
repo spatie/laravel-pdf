@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.6.0 - 2026-04-13
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.5.0 to 3.0.0 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/324
+* Implement toMailAttachment and Attachable on PdfBuilder by @QuentinGab in https://github.com/spatie/laravel-pdf/pull/327
+
+### New Contributors
+
+* @QuentinGab made their first contribution in https://github.com/spatie/laravel-pdf/pull/327
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.5.0...2.6.0
+
 ## 2.5.0 - 2026-04-02
 
 ### What's Changed
