@@ -205,6 +205,20 @@ Pdf::view('pdf.invoice', $data)
     ->save('invoice.pdf');
 ```
 
+### Chrome driver
+
+Requires `chrome-php/chrome` and a local Chrome/Chromium binary.
+
+```bash
+composer require chrome-php/chrome
+```
+
+```env
+LARAVEL_PDF_DRIVER=chrome
+```
+
+The Cloudflare driver does not support `tagged`, `withBrowsershot()`, `onLambda()`, or PNG output.
+
 ## Queued PDF generation
 
 Dispatch PDF generation to a background queue:

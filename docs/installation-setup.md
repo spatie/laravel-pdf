@@ -95,6 +95,24 @@ LARAVEL_PDF_DRIVER=dompdf
 
 Note that DOMPDF has more limited CSS support than the Chromium-based drivers. See [Using the DOMPDF driver](/docs/laravel-pdf/v2/drivers/using-the-dompdf-driver) for details.
 
+### Chrome driver
+
+The Chrome driver uses [chrome-php/chrome](https://github.com/chrome-php/chrome) to talk directly to a local Chrome or Chromium binary from PHP.
+
+```bash
+composer require chrome-php/chrome
+```
+
+Then set the driver in your `.env` file:
+
+```env
+LARAVEL_PDF_DRIVER=chrome
+```
+
+You'll also need to install the Chrome/Chromium binary to work. You can find the instructions [here](https://www.chromium.org/getting-involved/download-chromium/).
+
+See [Using the Chrome driver](/docs/laravel-pdf/v2/drivers/using-the-chrome-driver) for more details on configuration, supported options, and limitations.
+
 ## Laravel Boost
 
 This package ships with a [Laravel Boost](https://laravel.com/docs/12.x/boost) skill. After installing the package, run `php artisan boost:install` to register the skill. This will help AI agents in your project generate correct PDF code.
@@ -140,5 +158,14 @@ return [
         'timeout' => 10,
     ],
 
+    'chrome' => [
+        'chrome_binary' => env('LARAVEL_PDF_CHROME_BINARY', env('LARAVEL_PDF_CHROME_PATH')),
+        'no_sandbox' => env('LARAVEL_PDF_CHROME_NO_SANDBOX', false),
+        'startup_timeout' => env('LARAVEL_PDF_CHROME_STARTUP_TIMEOUT', 30),
+        'timeout' => env('LARAVEL_PDF_CHROME_TIMEOUT', 30000),
+        'user_data_dir' => env('LARAVEL_PDF_CHROME_USER_DATA_DIR'),
+        'custom_flags' => [],
+        'env_variables' => [],
+    ],
 ];
 ```

@@ -48,7 +48,7 @@ Inside the footer, you can use the following Blade directives:
 - `@pageNumber`:  The current page number
 - `@totalPages`:  The total number of pages
 
-> `@pageNumber` and `@totalPages` only work with the Browsershot and Cloudflare drivers. The DOMPDF driver does not support these directives.
+> `@pageNumber` and `@totalPages` only work with the Browsershot, Cloudflare and Chrome drivers. The DOMPDF driver does not support these directives.
 
 ### Display Images in Headers and Footers
 
@@ -165,7 +165,7 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('/some/directory/invoice.pdf');
 ```
 
-> Scale is supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
+> Scale is supported by the Browsershot, Cloudflare and Chrome drivers. The DOMPDF driver does not support this option.
 
 ## Page ranges
 
@@ -179,7 +179,7 @@ Pdf::view('pdf.report', ['report' => $report])
     ->save('/some/directory/report.pdf');
 ```
 
-> Page ranges are supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
+> Page ranges are supported by the Browsershot, Cloudflare and Chrome drivers. The DOMPDF driver does not support this option.
 
 ## Tagged PDF
 

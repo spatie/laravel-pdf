@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPdf\Drivers\BrowsershotDriver;
+use Spatie\LaravelPdf\Drivers\ChromeDriver;
 use Spatie\LaravelPdf\Drivers\CloudflareDriver;
 use Spatie\LaravelPdf\Drivers\DomPdfDriver;
 use Spatie\LaravelPdf\Drivers\GotenbergDriver;
@@ -44,6 +45,10 @@ class PdfServiceProvider extends PackageServiceProvider
             return new GotenbergDriver(config('laravel-pdf.gotenberg', []));
         });
 
+        $this->app->singleton('laravel-pdf.driver.chrome', function () {
+            return new ChromeDriver(config('laravel-pdf.chrome', []));
+        });
+
         $this->app->singleton(PdfDriver::class, function () {
             $driverName = config('laravel-pdf.driver', 'browsershot');
 
@@ -53,6 +58,7 @@ class PdfServiceProvider extends PackageServiceProvider
                 'dompdf' => app('laravel-pdf.driver.dompdf'),
                 'gotenberg' => app('laravel-pdf.driver.gotenberg'),
                 'weasyprint' => app('laravel-pdf.driver.weasyprint'),
+                'chrome' => app('laravel-pdf.driver.chrome'),
                 default => throw InvalidDriver::unknown($driverName),
             };
         });

@@ -32,7 +32,7 @@ Pdf::html('<h1>Hello world!!</h1>')->save('/some/directory/invoice.pdf');
 
 ## Using JavaScript
 
-When using a browser-based driver (Browsershot or Cloudflare), the JavaScript in your HTML will be executed when the PDF is created. You could use this to have a JavaScript charting library render a chart. The DomPDF driver does not support JavaScript execution.
+When using a browser-based driver (Browsershot, Cloudflare or Chrome), the JavaScript in your HTML will be executed when the PDF is created. You could use this to have a JavaScript charting library render a chart. The DomPDF driver does not support JavaScript execution.
 
 Here's a simple example. If you have this Blade view...
 
