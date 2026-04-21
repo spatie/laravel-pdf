@@ -137,6 +137,17 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function setWatermark(?string $viewName = null, ?array $viewData = []): self
+    {
+        if ($viewName !== null) {
+            $this->headerHtml = $this->getHeaderHtml() . view($viewName, $viewData)->render();
+            $this->headerViewName = '';
+            $this->headerData = [];
+        }
+
+        return $this;
+    }
+
     public function landscape(): self
     {
         return $this->orientation(Orientation::Landscape);
