@@ -89,6 +89,23 @@ expect()->extend('toHavePageCount', function (int $expectedNumberOfPages) {
     expect($image->getNumberImages())->toBe($expectedNumberOfPages);
 });
 
+function retryOnFlake(callable $callback, int $tries = 3): void
+{
+    for ($attempt = 1; $attempt <= $tries; $attempt++) {
+        try {
+            $callback();
+
+            return;
+        } catch (Throwable $exception) {
+            if ($attempt === $tries) {
+                throw $exception;
+            }
+
+            usleep(200_000);
+        }
+    }
+}
+
 function convertPdfToImage(string $pdfPath): string
 {
     $imagePath = getTempPath('test'.'.png');
