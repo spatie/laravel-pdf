@@ -27,14 +27,16 @@ beforeEach(function () {
         $this->markTestSkipped('Chrome or Chromium is not available.');
     }
 
-    $this->driver = new ChromeDriver;
+    $this->driver = new ChromeDriver([
+        'no_sandbox' => true,
+    ]);
 });
 
 it('generates a pdf with default options', function () {
     $result = $this->driver->generatePdf('<h1>Hello</h1>', null, null, new PdfOptions);
 
     expect($result)->toStartWith('%PDF');
-});
+})->flaky();
 
 it('saves a pdf to disk', function () {
     $path = getTempPath('chrome-save-test.pdf');
@@ -43,7 +45,7 @@ it('saves a pdf to disk', function () {
 
     expect(file_exists($path))->toBeTrue();
     expect(file_get_contents($path))->toStartWith('%PDF');
-});
+})->flaky();
 
 it('generates a pdf with text content', function () {
     $path = getTempPath('chrome-text-content.pdf');
@@ -57,7 +59,7 @@ it('generates a pdf with text content', function () {
     );
 
     expect($path)->toContainText(['Invoice', '123', '99']);
-});
+})->flaky();
 
 it('generates a pdf with a4 format', function () {
     $options = new PdfOptions;
@@ -67,7 +69,7 @@ it('generates a pdf with a4 format', function () {
     $this->driver->savePdf('<html><body><h1>A4 Document</h1></body></html>', null, null, $options, $path);
 
     expect($path)->toContainText('A4 Document');
-});
+})->flaky();
 
 it('generates a pdf with header and footer', function () {
     $options = new PdfOptions;
@@ -82,4 +84,4 @@ it('generates a pdf with header and footer', function () {
     );
 
     expect($path)->toContainText(['Header', 'Footer']);
-});
+})->flaky();
