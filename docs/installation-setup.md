@@ -159,7 +159,7 @@ return [
     ],
 
     'chrome' => [
-        'chrome_binary' => env('LARAVEL_PDF_CHROME_BINARY', env('LARAVEL_PDF_CHROME_PATH')),
+        'chrome_binary' => env('LARAVEL_PDF_CHROME_BINARY'),
         'no_sandbox' => env('LARAVEL_PDF_CHROME_NO_SANDBOX', false),
         'startup_timeout' => env('LARAVEL_PDF_CHROME_STARTUP_TIMEOUT', 30),
         'timeout' => env('LARAVEL_PDF_CHROME_TIMEOUT', 30000),

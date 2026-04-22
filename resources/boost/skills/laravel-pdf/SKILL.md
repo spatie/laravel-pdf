@@ -217,7 +217,7 @@ composer require chrome-php/chrome
 LARAVEL_PDF_DRIVER=chrome
 ```
 
-The Cloudflare driver does not support `tagged`, `withBrowsershot()`, `onLambda()`, or PNG output.
+The Chrome driver does not support `tagged`, `withBrowsershot()`, `onLambda()`, or PNG output.
 
 ## Queued PDF generation
 

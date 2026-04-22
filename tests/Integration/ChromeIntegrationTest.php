@@ -4,6 +4,29 @@ use Spatie\LaravelPdf\Drivers\ChromeDriver;
 use Spatie\LaravelPdf\PdfOptions;
 
 beforeEach(function () {
+    $binaries = array_filter([
+        env('LARAVEL_PDF_CHROME_BINARY'),
+        'google-chrome-stable',
+        'google-chrome',
+        'chromium',
+        'chromium-browser',
+    ]);
+
+    $found = false;
+
+    foreach ($binaries as $binary) {
+        $resolved = trim((string) shell_exec('command -v '.escapeshellarg($binary).' 2>/dev/null'));
+
+        if ($resolved && is_executable($resolved)) {
+            $found = true;
+            break;
+        }
+    }
+
+    if (! $found) {
+        $this->markTestSkipped('Chrome or Chromium is not available.');
+    }
+
     $this->driver = new ChromeDriver;
 });
 
