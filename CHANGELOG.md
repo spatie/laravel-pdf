@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.7.0 - 2026-04-23
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 by @dependabot[bot] in https://github.com/spatie/laravel-pdf/pull/330
+* feat(chrome): implement chrome-php/chrome driver by @ycchuang99 in https://github.com/spatie/laravel-pdf/pull/332
+
+### New Contributors
+
+* @ycchuang99 made their first contribution in https://github.com/spatie/laravel-pdf/pull/332
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.6.0...2.7.0
+
 ## 2.6.0 - 2026-04-13
 
 ### What's Changed
