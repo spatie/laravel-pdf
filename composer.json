@@ -22,11 +22,13 @@
         "spatie/temporary-directory": "^2.2.1"
     },
     "suggest": {
+        "chrome-php/chrome": "Required for the Chrome PHP driver (^1.0)",
         "dompdf/dompdf": "Required for the DOMPDF driver (^3.0)",
         "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)"
     },
     "require-dev": {
         "ext-imagick": "*",
+        "chrome-php/chrome": "^1.0",
         "dompdf/dompdf": "^3.0",
         "larastan/larastan": "^2.7.0|^3.0",
         "laravel/pint": "^1.13.7",

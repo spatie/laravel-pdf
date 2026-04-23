@@ -3,7 +3,7 @@ title: Queued PDF generation
 weight: 6
 ---
 
-PDF generation can be slow, especially with the Browsershot or Cloudflare driver. If you don't need the PDF immediately, you can dispatch the generation to a background queue using `saveQueued()`.
+PDF generation can be slow, especially with the Browsershot, Cloudflare and Chrome drivers. If you don't need the PDF immediately, you can dispatch the generation to a background queue using `saveQueued()`.
 
 ## Basic usage
 

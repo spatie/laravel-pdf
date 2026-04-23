@@ -48,6 +48,14 @@ class CouldNotGeneratePdf extends Exception
         return new self("Gotenberg PDF generation failed: {$body}");
     }
 
+    public static function chromeNotInstalled(): self
+    {
+        return new self(
+            'The chrome-php/chrome package is required to use the Chrome PHP driver. '
+            .'Install it with: composer require chrome-php/chrome'
+        );
+    }
+
     public static function cannotQueueWithBrowsershotClosure(): self
     {
         return new self(

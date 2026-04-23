@@ -23,7 +23,7 @@ The `driver` option determines which PDF generation backend to use:
 'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 ```
 
-Supported values: `browsershot`, `cloudflare`, `dompdf`, `gotenberg`, `weasyprint`.
+Supported values: `browsershot`, `chrome`, `cloudflare`, `dompdf`, `gotenberg`, `weasyprint`.
 
 ## Browsershot Configuration
 
@@ -53,6 +53,30 @@ Configure the Cloudflare Browser Rendering API credentials:
     'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
 ],
 ```
+
+## Chrome Configuration
+
+Configure the Chrome driver options:
+
+```php
+'chrome' => [
+    'chrome_binary' => env('LARAVEL_PDF_CHROME_BINARY'),
+    'no_sandbox' => env('LARAVEL_PDF_CHROME_NO_SANDBOX', false),
+    'startup_timeout' => env('LARAVEL_PDF_CHROME_STARTUP_TIMEOUT', 30),
+    'timeout' => env('LARAVEL_PDF_CHROME_TIMEOUT', 30000),
+    'user_data_dir' => env('LARAVEL_PDF_CHROME_USER_DATA_DIR'),
+    'custom_flags' => [],
+    'env_variables' => [],
+],
+```
+
+- **chrome_binary**: Path to the Chrome or Chromium executable. Defaults to auto-discovery when available.
+- **no_sandbox**: Disables Chrome's sandbox. This is sometimes needed in Docker or restricted server environments.
+- **startup_timeout**: Maximum time in seconds to wait for Chrome to start.
+- **timeout**: Maximum time in milliseconds to wait while setting the page HTML.
+- **user_data_dir**: Custom Chrome profile directory.
+- **custom_flags**: Additional Chrome command-line flags.
+- **env_variables**: Environment variables passed to the Chrome process.
 
 ## Gotenberg Configuration
 
@@ -114,6 +138,13 @@ LARAVEL_PDF_NO_SANDBOX=true
 # Cloudflare settings
 CLOUDFLARE_API_TOKEN=your-api-token
 CLOUDFLARE_ACCOUNT_ID=your-account-id
+
+# Chrome driver settings
+LARAVEL_PDF_CHROME_BINARY=/usr/bin/google-chrome-stable
+LARAVEL_PDF_CHROME_NO_SANDBOX=false
+LARAVEL_PDF_CHROME_STARTUP_TIMEOUT=30
+LARAVEL_PDF_CHROME_TIMEOUT=30000
+LARAVEL_PDF_CHROME_USER_DATA_DIR=/tmp/chrome-profile
 
 # Gotenberg settings
 GOTENBERG_URL=http://localhost:3000

@@ -39,3 +39,10 @@ The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://develope
 - A [Cloudflare account](https://dash.cloudflare.com/sign-up) with the Browser Rendering API enabled
 - A Cloudflare API token with the appropriate permissions
 - Your Cloudflare account ID
+
+## Chrome driver
+
+The Chrome driver uses [chrome-php/chrome](https://github.com/chrome-php/chrome) to talk directly to a local Chrome or Chromium binary from PHP. You will need:
+
+- The PHP wrapper package: `composer require chrome-php/chrome`
+- A Chrome/Chromium 65+ executable.

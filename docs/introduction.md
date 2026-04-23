@@ -10,8 +10,9 @@ This package provides a simple way to create PDFs in Laravel apps. It uses a dri
 - **Cloudflare**: Uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs with a simple HTTP call. No Node.js or Chrome binary needed. This driver was inspired by [a suggestion from Dries Vints](https://x.com/driesvints/status/2016131972477632850).
 - **WeasyPrint**: Uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/) via [pontedilana/php-weasyprint](https://github.com/pontedilana/php-weasyprint) for Python-based PDF generation with excellent CSS Paged Media support. Requires the WeasyPrint binary.
 - **DOMPDF**: Uses [dompdf/dompdf](https://github.com/dompdf/dompdf) for pure PHP PDF generation. No external binaries, no Node.js, no Docker — works everywhere PHP runs.
+- **Chrome**: Uses [chrome-php/chrome](https://github.com/chrome-php/chrome) to talk directly to a local Chrome or Chromium binary from PHP. Requires a Chrome/Chromium 65+ executable.
 
-The Browsershot, Gotenberg, and Cloudflare drivers support modern CSS features like grid and flexbox, or even a framework like Tailwind, to create beautiful PDFs. The WeasyPrint driver supports CSS Paged Media, making it a strong choice for documents with repeating headers/footers and page counters. The DOMPDF driver supports CSS 2.1 and some CSS 3 properties, making it ideal for simpler PDFs that don't need advanced layout features.
+The Browsershot, Gotenberg, Cloudflare, and Chrome drivers support modern CSS features like grid and flexbox, or even a framework like Tailwind, to create beautiful PDFs. The WeasyPrint driver supports CSS Paged Media, making it a strong choice for documents with repeating headers/footers and page counters. The DOMPDF driver supports CSS 2.1 and some CSS 3 properties, making it ideal for simpler PDFs that don't need advanced layout features.
 
 Here's a quick example:
 

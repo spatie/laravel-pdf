@@ -5,7 +5,7 @@ use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 return [
     /*
      * The default driver to use for PDF generation.
-     * Supported: "browsershot", "cloudflare", "dompdf", "gotenberg"
+     * Supported: "browsershot", "cloudflare", "dompdf", "gotenberg", "chrome"
      */
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
@@ -104,5 +104,29 @@ return [
          * The timeout (default = 10 seconds)
          */
         'timeout' => 10,
+    ],
+
+    /*
+     * Chrome PHP driver configuration.
+     *
+     * Requires the Chrome/Chromium executable and chrome-php/chrome package:
+     * composer require chrome-php/chrome
+     *
+     * @see https://github.com/chrome-php/chrome
+     */
+    'chrome' => [
+        'chrome_binary' => env('LARAVEL_PDF_CHROME_BINARY'),
+
+        'no_sandbox' => env('LARAVEL_PDF_CHROME_NO_SANDBOX', false),
+
+        'startup_timeout' => env('LARAVEL_PDF_CHROME_STARTUP_TIMEOUT', 30),
+
+        'timeout' => env('LARAVEL_PDF_CHROME_TIMEOUT', 30000),
+
+        'user_data_dir' => env('LARAVEL_PDF_CHROME_USER_DATA_DIR'),
+
+        'custom_flags' => [],
+
+        'env_variables' => [],
     ],
 ];
