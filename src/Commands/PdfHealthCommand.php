@@ -20,6 +20,9 @@ class PdfHealthCommand extends Command
 
         $names = array_values(array_unique([$primary, ...$fallbacks]));
 
+        $this->newLine();
+        $this->components->info('Checking PDF driver health');
+
         $failed = 0;
 
         foreach ($names as $name) {
