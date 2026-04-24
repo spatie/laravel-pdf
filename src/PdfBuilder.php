@@ -79,6 +79,9 @@ class PdfBuilder implements Attachable, Responsable
 
     protected ?string $driverName = null;
 
+    /** @var array<int, string> */
+    protected array $fallbackDrivers = [];
+
     public function setDriver(PdfDriver $driver): self
     {
         $this->driver = $driver;
@@ -95,9 +98,23 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    /**
+     * @param  string|array<int, string>  $drivers
+     */
+    public function fallback(string|array $drivers): self
+    {
+        $this->fallbackDrivers = array_values((array) $drivers);
+
+        return $this;
+    }
+
     protected function getDriver(): PdfDriver
     {
-        if ($this->driver) {
+        if ($this->fallbackDrivers !== []) {
+            $primary = $this->driverName ?? config('laravel-pdf.driver', 'browsershot');
+
+            $driver = PdfServiceProvider::buildFallbackDriver([$primary, ...$this->fallbackDrivers]);
+        } elseif ($this->driver) {
             $driver = $this->driver;
         } elseif ($this->driverName) {
             $driver = app("laravel-pdf.driver.{$this->driverName}");
@@ -514,6 +531,14 @@ class PdfBuilder implements Attachable, Responsable
 
     protected function configureBrowsershotDriver(PdfDriver $driver): void
     {
+        if ($driver instanceof Drivers\FallbackDriver) {
+            foreach ($driver->getDrivers() as $inner) {
+                $this->configureBrowsershotDriver($inner);
+            }
+
+            return;
+        }
+
         if (! $driver instanceof Drivers\BrowsershotDriver) {
             return;
         }
