@@ -15,10 +15,11 @@ return [
     'fallback' => [
         /*
          * Ordered list of drivers to try when the default driver fails.
-         * Empty array = no fallback (default behavior).
-         * Example: ['browsershot', 'dompdf']
+         * Set LARAVEL_PDF_FALLBACK_DRIVERS to a comma-separated list (e.g.
+         * "dompdf,chrome"), or override this array directly.
+         * Empty = no fallback (default behavior).
          */
-        'drivers' => [],
+        'drivers' => array_filter(explode(',', env('LARAVEL_PDF_FALLBACK_DRIVERS', ''))),
 
         /*
          * Allowlist of exception FQCNs that trigger a fallback.

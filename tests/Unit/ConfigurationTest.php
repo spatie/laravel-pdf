@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Config;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Drivers\BrowsershotDriver;
@@ -131,6 +132,38 @@ it('applies tagged pdf option to browsershot', function () {
     $browsershot = invade($driver)->buildBrowsershot('test', null, null, $options);
 
     expect(invade($browsershot)->taggedPdf)->toBeTrue();
+});
+
+it('splits LARAVEL_PDF_FALLBACK_DRIVERS env into the drivers array', function () {
+    Env::getRepository()->set('LARAVEL_PDF_FALLBACK_DRIVERS', 'dompdf,chrome,gotenberg');
+
+    try {
+        $config = require __DIR__.'/../../config/laravel-pdf.php';
+
+        expect(array_values($config['fallback']['drivers']))->toBe(['dompdf', 'chrome', 'gotenberg']);
+    } finally {
+        Env::getRepository()->clear('LARAVEL_PDF_FALLBACK_DRIVERS');
+    }
+});
+
+it('returns an empty drivers array when LARAVEL_PDF_FALLBACK_DRIVERS env is unset', function () {
+    Env::getRepository()->clear('LARAVEL_PDF_FALLBACK_DRIVERS');
+
+    $config = require __DIR__.'/../../config/laravel-pdf.php';
+
+    expect($config['fallback']['drivers'])->toBe([]);
+});
+
+it('splits a single LARAVEL_PDF_FALLBACK_DRIVERS driver', function () {
+    Env::getRepository()->set('LARAVEL_PDF_FALLBACK_DRIVERS', 'dompdf');
+
+    try {
+        $config = require __DIR__.'/../../config/laravel-pdf.php';
+
+        expect(array_values($config['fallback']['drivers']))->toBe(['dompdf']);
+    } finally {
+        Env::getRepository()->clear('LARAVEL_PDF_FALLBACK_DRIVERS');
+    }
 });
 
 function getBrowsershotOption(object $browsershot, string $key): mixed
