@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Exceptions;
 use Spatie\LaravelPdf\Drivers\FallbackDriver;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Facades\Pdf;
 
 beforeEach(function () {
+    Exceptions::fake();
     forgetPdfDriverInstances();
 
     Config::set('laravel-pdf.fallback', [
