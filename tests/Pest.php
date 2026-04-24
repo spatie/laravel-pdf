@@ -1,7 +1,9 @@
 <?php
 
 use Spatie\Image\Image;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\PdfFactory;
+use Spatie\LaravelPdf\PdfOptions;
 use Spatie\LaravelPdf\Tests\TestCase;
 use Spatie\PdfToText\Pdf;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -116,4 +118,52 @@ function convertPdfToImage(string $pdfPath): string
     file_put_contents($imagePath, $imagick);
 
     return $imagePath;
+}
+
+function fakePdfDriver(string|Throwable $output): PdfDriver
+{
+    return new class($output) implements PdfDriver
+    {
+        public int $generateCalls = 0;
+
+        public int $saveCalls = 0;
+
+        public function __construct(public string|Throwable $output) {}
+
+        public function generatePdf(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): string
+        {
+            $this->generateCalls++;
+
+            if ($this->output instanceof Throwable) {
+                throw $this->output;
+            }
+
+            return $this->output;
+        }
+
+        public function savePdf(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options, string $path): void
+        {
+            $this->saveCalls++;
+
+            if ($this->output instanceof Throwable) {
+                throw $this->output;
+            }
+
+            file_put_contents($path, $this->output);
+        }
+    };
+}
+
+function bindFakeDriver(string $name, PdfDriver $driver): void
+{
+    app()->instance("laravel-pdf.driver.{$name}", $driver);
+}
+
+function forgetPdfDriverInstances(): void
+{
+    foreach (['browsershot', 'cloudflare', 'dompdf', 'gotenberg', 'weasyprint', 'chrome'] as $name) {
+        app()->forgetInstance("laravel-pdf.driver.{$name}");
+    }
+
+    app()->forgetInstance(PdfDriver::class);
 }
