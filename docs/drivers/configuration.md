@@ -25,6 +25,32 @@ The `driver` option determines which PDF generation backend to use:
 
 Supported values: `browsershot`, `chrome`, `cloudflare`, `dompdf`, `gotenberg`, `weasyprint`.
 
+## Fallback Configuration
+
+You can configure an ordered chain of drivers to try when the primary driver fails:
+
+```php
+'fallback' => [
+    'drivers' => array_filter(explode(',', env('LARAVEL_PDF_FALLBACK_DRIVERS', ''))),
+    'only_on_exceptions' => [],
+    'except_exceptions' => [],
+    'health_cache' => [
+        'ttl' => env('LARAVEL_PDF_FALLBACK_HEALTH_TTL', 0),
+        'key_prefix' => 'laravel_pdf_driver_health_',
+        'store' => env('LARAVEL_PDF_FALLBACK_HEALTH_STORE'),
+    ],
+],
+```
+
+- **drivers**: ordered list of fallback drivers. Empty disables the chain. Can also be set via `LARAVEL_PDF_FALLBACK_DRIVERS` as a comma-separated list.
+- **only_on_exceptions**: allowlist of exception classes that trigger a fallback. When non-empty, takes precedence over `except_exceptions`.
+- **except_exceptions**: denylist of exception classes that are always re-thrown as-is.
+- **health_cache.ttl**: seconds a failing driver stays marked unhealthy. `0` disables the cache.
+- **health_cache.key_prefix**: cache key prefix.
+- **health_cache.store**: cache store name. Null uses the application's default store.
+
+See [Driver fallback chain](/docs/laravel-pdf/v2/advanced-usage/driver-fallback-chain) for full usage and examples.
+
 ## Browsershot Configuration
 
 Configure paths to Node.js, npm, Chrome, and other binaries used by the Browsershot driver:
@@ -123,6 +149,11 @@ You can use environment variables to configure PDF generation:
 ```env
 # Driver selection
 LARAVEL_PDF_DRIVER=browsershot
+
+# Fallback chain (comma-separated)
+LARAVEL_PDF_FALLBACK_DRIVERS=chrome,dompdf
+LARAVEL_PDF_FALLBACK_HEALTH_TTL=600
+LARAVEL_PDF_FALLBACK_HEALTH_STORE=redis
 
 # Browsershot settings
 LARAVEL_PDF_NODE_BINARY=/usr/local/bin/node
