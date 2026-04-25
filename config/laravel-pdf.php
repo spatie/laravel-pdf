@@ -10,6 +10,56 @@ return [
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
     /*
+     * Configuration for the driver fallback chain.
+     */
+    'fallback' => [
+        /*
+         * Ordered list of drivers to try when the default driver fails.
+         * Set LARAVEL_PDF_FALLBACK_DRIVERS to a comma-separated list (e.g.
+         * "dompdf,chrome"), or override this array directly.
+         * Empty = no fallback (default behavior).
+         */
+        'drivers' => array_filter(explode(',', env('LARAVEL_PDF_FALLBACK_DRIVERS', ''))),
+
+        /*
+         * Allowlist of exception FQCNs that trigger a fallback.
+         * If non-empty, only these exceptions will cause the next driver to be tried.
+         * Takes precedence over `except_exceptions` when both are configured.
+         * Example: ['GuzzleHttp\Exception\ConnectException']
+         */
+        'only_on_exceptions' => [],
+
+        /*
+         * Denylist of exception FQCNs that must NOT trigger a fallback.
+         * If non-empty (and `only_on_exceptions` is empty), any other exception
+         * triggers the fallback while these are re-thrown as-is.
+         * Example: ['Illuminate\View\ViewException']
+         */
+        'except_exceptions' => [],
+
+        /*
+         * After a driver fails, mark it unhealthy in the cache so that subsequent
+         * requests skip it without re-attempting until the TTL expires.
+         */
+        'health_cache' => [
+            /*
+             * Seconds to keep a driver marked as unhealthy. Zero disables the health cache.
+             */
+            'ttl' => env('LARAVEL_PDF_FALLBACK_HEALTH_TTL', 0),
+
+            /*
+             * Cache key prefix.
+             */
+            'key_prefix' => 'laravel_pdf_driver_health_',
+
+            /*
+             * Cache store to use. Null uses the application's default store.
+             */
+            'store' => env('LARAVEL_PDF_FALLBACK_HEALTH_STORE'),
+        ],
+    ],
+
+    /*
      * The job class used for queued PDF generation.
      * You can replace this with your own class that extends GeneratePdfJob
      * to customize things like $tries, $timeout, $backoff, or default queue.

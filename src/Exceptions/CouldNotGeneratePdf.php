@@ -3,9 +3,52 @@
 namespace Spatie\LaravelPdf\Exceptions;
 
 use Exception;
+use Throwable;
 
 class CouldNotGeneratePdf extends Exception
 {
+    /** @var array<int, string> */
+    public array $attemptedDrivers = [];
+
+    /** @var array<string, Throwable> */
+    public array $driverExceptions = [];
+
+    /**
+     * @param  array<int, string>  $drivers
+     * @param  array<string, Throwable>  $exceptions
+     */
+    public static function allFallbackFailed(array $drivers, array $exceptions): self
+    {
+        $list = implode(', ', $drivers);
+        $previous = end($exceptions) ?: null;
+
+        $exception = new self(
+            "PDF generation failed after trying all configured drivers: {$list}.",
+            previous: $previous ?: null,
+        );
+
+        $exception->attemptedDrivers = $drivers;
+        $exception->driverExceptions = $exceptions;
+
+        return $exception;
+    }
+
+    /**
+     * @param  array<int, string>  $drivers
+     */
+    public static function allDriversUnhealthy(array $drivers): self
+    {
+        $list = implode(', ', $drivers);
+
+        $exception = new self(
+            "All configured PDF drivers are currently marked unhealthy: {$list}."
+        );
+
+        $exception->attemptedDrivers = $drivers;
+
+        return $exception;
+    }
+
     public static function browsershotNotInstalled(): self
     {
         return new self(
