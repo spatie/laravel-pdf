@@ -59,7 +59,7 @@ class ChromeDriver implements PdfDriver
             $pdfOptions = $this->buildPdfOptions($headerHtml, $footerHtml, $options);
             $pdf = $page->pdf($pdfOptions);
 
-            return $pdf->getRawBinary();
+            return $pdf->getRawBinary($this->config['operation_timeout'] ?? null);
         } finally {
             $browser->close();
         }
@@ -74,7 +74,9 @@ class ChromeDriver implements PdfDriver
             $page->setHtml($html, $this->config['timeout'] ?? 30000);
 
             $pdfOptions = $this->buildPdfOptions($headerHtml, $footerHtml, $options);
-            $page->pdf($pdfOptions)->saveToFile($path);
+            $pdf = $page->pdf($pdfOptions);
+
+            $pdf->saveToFile($path, $this->config['operation_timeout'] ?? 5000);
         } finally {
             $browser->close();
         }
