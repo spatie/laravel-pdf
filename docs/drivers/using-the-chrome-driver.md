@@ -62,6 +62,7 @@ The Chrome driver accepts these configuration options in `config/laravel-pdf.php
     'no_sandbox' => env('LARAVEL_PDF_CHROME_NO_SANDBOX', false),
     'startup_timeout' => env('LARAVEL_PDF_CHROME_STARTUP_TIMEOUT', 30),
     'timeout' => env('LARAVEL_PDF_CHROME_TIMEOUT', 30000),
+    'operation_timeout' => env('LARAVEL_PDF_CHROME_OPERATION_TIMEOUT', 5000),
     'user_data_dir' => env('LARAVEL_PDF_CHROME_USER_DATA_DIR'),
     'custom_flags' => [],
     'env_variables' => [],
@@ -72,6 +73,7 @@ The Chrome driver accepts these configuration options in `config/laravel-pdf.php
 - **no_sandbox**: Disables Chrome's sandbox. This is sometimes needed in Docker or restricted server environments.
 - **startup_timeout**: Maximum time in seconds to wait for Chrome to start.
 - **timeout**: Maximum time in milliseconds to wait when setting the page HTML.
+- **operation_timeout**: Maximum time in milliseconds to wait for Chrome PDF operations like binary output and file saves.
 - **user_data_dir**: Custom Chrome profile directory.
 - **custom_flags**: Additional Chrome command-line flags.
 - **env_variables**: Environment variables passed to the Chrome process.
