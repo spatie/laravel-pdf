@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.8.0 - 2026-04-27
+
+### What's Changed
+
+* feat(chrome): add operation timeout configuration for PDF generation by @ycchuang99 in https://github.com/spatie/laravel-pdf/pull/335
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.7.0...2.8.0
+
 ## 2.7.0 - 2026-04-23
 
 ### What's Changed
