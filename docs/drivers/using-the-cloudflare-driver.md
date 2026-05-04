@@ -68,4 +68,4 @@ The free Cloudflare Workers plan is limited to 6 REST API requests per minute an
 
 - The Cloudflare driver only supports PDF output. Saving as PNG (screenshots) is not supported.
 - The `withBrowsershot()` and `onLambda()` methods have no effect when using the Cloudflare driver.
-- JavaScript execution depends on Cloudflare's Browser Rendering API behavior — complex scripts may behave differently than in a local Chromium instance.
+- JavaScript execution depends on Cloudflare's Browser Run API behavior — complex scripts may behave differently than in a local Chromium instance.
