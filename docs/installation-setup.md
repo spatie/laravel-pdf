@@ -25,15 +25,14 @@ You'll also need to install the required dependencies for Browsershot to work. Y
 
 ### Cloudflare driver
 
-The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs. It does not require Node.js or a Chrome binary, making it a great choice for cloud-hosted Laravel apps.
+The Cloudflare driver uses [Cloudflare's Browser Run API](https://developers.cloudflare.com/browser-run/) to generate PDFs. It does not require Node.js or a Chrome binary, making it a great choice for cloud-hosted Laravel apps.
 
 To get started with Cloudflare:
 
 1. Make sure you have a [Cloudflare account](https://dash.cloudflare.com/sign-up)
 2. In the Cloudflare dashboard, go to **Manage account > Account API tokens** in the sidebar
-3. Click **Create Token** and create a token with the **Account.Browser Rendering** permission
-4. Your Account ID can be found in the address bar of the Cloudflare dashboard URL
-5. Add the following to your `.env` file:
+3. Click **Create Token** and create a token with the **Account.Browser Run** permission (both read and edit/write)
+4. Add the following to your `.env` file:
 
 ```env
 LARAVEL_PDF_DRIVER=cloudflare
