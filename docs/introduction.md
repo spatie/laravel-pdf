@@ -7,7 +7,7 @@ This package provides a simple way to create PDFs in Laravel apps. It uses a dri
 
 - **Browsershot** (default): Uses [Chromium](https://www.chromium.org/chromium-projects/) via [Browsershot](https://spatie.be/docs/browsershot) to generate PDFs from HTML. Requires Node.js and a Chrome/Chromium binary.
 - **Gotenberg**: Uses [Gotenberg](https://gotenberg.dev), an open-source Docker-based API with headless Chromium. Great for containerized and microservice environments.
-- **Cloudflare**: Uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs with a simple HTTP call. No Node.js or Chrome binary needed. This driver was inspired by [a suggestion from Dries Vints](https://x.com/driesvints/status/2016131972477632850).
+- **Cloudflare**: Uses [Cloudflare's Browser Run API](https://developers.cloudflare.com/browser-run/) to generate PDFs with a simple HTTP call. No Node.js or Chrome binary needed. This driver was inspired by [a suggestion from Dries Vints](https://x.com/driesvints/status/2016131972477632850).
 - **WeasyPrint**: Uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint/stable/) via [pontedilana/php-weasyprint](https://github.com/pontedilana/php-weasyprint) for Python-based PDF generation with excellent CSS Paged Media support. Requires the WeasyPrint binary.
 - **DOMPDF**: Uses [dompdf/dompdf](https://github.com/dompdf/dompdf) for pure PHP PDF generation. No external binaries, no Node.js, no Docker — works everywhere PHP runs.
 - **Chrome**: Uses [chrome-php/chrome](https://github.com/chrome-php/chrome) to talk directly to a local Chrome or Chromium binary from PHP. Requires a Chrome/Chromium 65+ executable.
