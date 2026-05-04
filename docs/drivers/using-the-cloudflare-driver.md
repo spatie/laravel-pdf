@@ -3,7 +3,7 @@ title: Using the Cloudflare driver
 weight: 3
 ---
 
-The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/) to generate PDFs. Unlike the Browsershot driver, it does not require Node.js or a Chrome binary on your server. Instead, it makes a simple HTTP call to Cloudflare's API, which renders your HTML and returns a PDF.
+The Cloudflare driver uses [Cloudflare's Browser Run API](https://developers.cloudflare.com/browser-run/) to generate PDFs. Unlike the Browsershot driver, it does not require Node.js or a Chrome binary on your server. Instead, it makes a simple HTTP call to Cloudflare's API, which renders your HTML and returns a PDF.
 
 This approach was inspired by this tweet by [Dries Vints](https://x.com/driesvints/status/2016131972477632850).
 
@@ -11,8 +11,7 @@ This approach was inspired by this tweet by [Dries Vints](https://x.com/driesvin
 
 1. Make sure you have a [Cloudflare account](https://dash.cloudflare.com/sign-up)
 2. In the Cloudflare dashboard, go to **Manage account > Account API tokens** in the sidebar
-3. Click **Create Token** and create a token with the **Account.Browser Rendering** permission
-4. Your Account ID can be found in the address bar of the Cloudflare dashboard URL
+3. Click **Create Token** and create a token with the **Account.Browser Run** permission (both read and edit/write)
 
 ![Cloudflare API tokens page](/docs/laravel-pdf/v2/images/cloudflare-api-tokens.jpg)
 
@@ -63,7 +62,7 @@ Make sure you have the Cloudflare credentials configured in your `config/laravel
 
 ## Limits
 
-The free Cloudflare Workers plan is limited to 6 REST API requests per minute and 10 minutes of Browser Rendering usage per day. The paid Workers plan offers significantly higher limits. Check the [Cloudflare Browser Rendering limits page](https://developers.cloudflare.com/browser-rendering/platform/limits/) for the latest details.
+The free Cloudflare Workers plan is limited to 6 REST API requests per minute and 10 minutes of Browser Rendering usage per day. The paid Workers plan offers significantly higher limits. Check the [Cloudflare Browser Run limits page](https://developers.cloudflare.com/browser-run/limits/) for the latest details.
 
 ## Limitations
 
