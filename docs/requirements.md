@@ -34,9 +34,9 @@ The WeasyPrint driver uses [WeasyPrint](https://doc.courtbouillon.org/weasyprint
 
 ## Cloudflare driver
 
-The Cloudflare driver uses [Cloudflare's Browser Rendering API](https://developers.cloudflare.com/browser-rendering/). This driver does not require Node.js or a Chrome binary on your server. You will need:
+The Cloudflare driver uses [Cloudflare's Browser Run API](https://developers.cloudflare.com/browser-run/). This driver does not require Node.js or a Chrome binary on your server. You will need:
 
-- A [Cloudflare account](https://dash.cloudflare.com/sign-up) with the Browser Rendering API enabled
+- A [Cloudflare account](https://dash.cloudflare.com/sign-up) with the Browser Run API enabled
 - A Cloudflare API token with the appropriate permissions
 - Your Cloudflare account ID
 
