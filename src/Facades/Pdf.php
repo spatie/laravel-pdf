@@ -18,10 +18,16 @@ class Pdf extends Facade
         return PdfFactory::class;
     }
 
-    public static function fake()
+    public static function fake(): FakePdfBuilder
     {
         $fake = new FakePdfBuilder;
 
+        if ($callback = PdfFactory::defaultBuilder()->getCustomizeBrowsershotCallback()) {
+            $fake->withBrowsershot($callback);
+        }
+
         static::swap($fake);
+
+        return $fake;
     }
 }

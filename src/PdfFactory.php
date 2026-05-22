@@ -8,9 +8,7 @@ class PdfFactory
 
     public function __construct()
     {
-        if (self::$defaultPdfBuilder === null) {
-            self::$defaultPdfBuilder = new PdfBuilder;
-        }
+        self::defaultBuilder();
     }
 
     public function __call($method, $parameters): PdfBuilder
@@ -27,6 +25,15 @@ class PdfFactory
         self::$defaultPdfBuilder = $pdfBuilder;
 
         return $pdfBuilder;
+    }
+
+    public static function defaultBuilder(): PdfBuilder
+    {
+        if (self::$defaultPdfBuilder === null) {
+            self::$defaultPdfBuilder = new PdfBuilder;
+        }
+
+        return self::$defaultPdfBuilder;
     }
 
     public static function resetDefaultBuilder(): void
