@@ -87,6 +87,31 @@ Pdf::assertSaved(function (PdfBuilder $pdf) {
 });
 ```
 
+## assertBrowsershot
+
+When you customize the underlying Browsershot instance with [`withBrowsershot`](/docs/laravel-pdf/v2/drivers/customizing-browsershot), you can use the `assertBrowsershot` method to verify that customization, without actually starting Chrome.
+
+The closure you pass receives a `Spatie\Browsershot\Browsershot` instance that has your `withBrowsershot` configuration applied to it. If the closure returns `true`, the assertion passes. The assertion runs against every saved PDF and PDF response that was faked.
+
+```php
+use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('invoice')
+    ->withBrowsershot(function (Browsershot $browsershot) {
+        $browsershot->setRemoteInstance('127.0.0.1', 9222);
+    })
+    ->save('invoice.pdf');
+
+Pdf::assertBrowsershot(function (Browsershot $browsershot) {
+    return invade($browsershot)->additionalOptions['remoteInstanceUrl'] === 'http://127.0.0.1:9222';
+});
+```
+
+In the example above, we use [`spatie/invade`](https://github.com/spatie/invade) to read a protected property on the Browsershot instance.
+
+`assertBrowsershot` also honors configuration set on the default builder. A `withBrowsershot` closure registered via `Pdf::default()` (typically in a service provider) is carried over when you call `Pdf::fake()`, so it gets applied to the Browsershot instance passed to your assertion.
+
 ## Simple assertion methods
 
 Beside the methods listed above, there are a few simple assertion methods that can be used to assert that a PDF was generated. They are meant to test code that generated a single PDF. The assertions will pass if any of the generated PDFs match the assertion.
