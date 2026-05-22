@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.9.0 - 2026-05-22
+
+### What's Changed
+
+* Update Cloudflare Driver Documentation by @Rorymercer in https://github.com/spatie/laravel-pdf/pull/337
+* Update Cloudflare API Token Screenshot by @intrepidws in https://github.com/spatie/laravel-pdf/pull/339
+* Support setting and asserting Browsershot config with Pdf::fake() by @freekmurze in https://github.com/spatie/laravel-pdf/pull/340
+
+### New Contributors
+
+* @Rorymercer made their first contribution in https://github.com/spatie/laravel-pdf/pull/337
+* @intrepidws made their first contribution in https://github.com/spatie/laravel-pdf/pull/339
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.8.0...2.9.0
+
 ## 2.8.0 - 2026-04-27
 
 ### What's Changed
