@@ -51,3 +51,7 @@ Pdf::default()->withBrowsershot(function (Browsershot $browsershot) {
     ]);
 });
 ```
+
+## Testing your Browsershot configuration
+
+When faking PDF generation in your tests, you can assert that your `withBrowsershot` configuration was applied using the `assertBrowsershot` method. Head over to [Testing PDFs](/docs/laravel-pdf/v2/basic-usage/testing-pdfs) to learn more.
