@@ -327,6 +327,11 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function getCustomizeBrowsershotCallback(): ?Closure
+    {
+        return $this->customizeBrowsershot;
+    }
+
     public function onLambda(): self
     {
         $this->onLambda = true;

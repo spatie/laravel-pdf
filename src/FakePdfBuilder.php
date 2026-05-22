@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
+use Spatie\Browsershot\Browsershot;
 
 class FakePdfBuilder extends PdfBuilder
 {
@@ -131,6 +132,32 @@ class FakePdfBuilder extends PdfBuilder
                 Assert::assertStringNotContainsString((string) $string, $savedPdf['pdf']->html);
             }
         }
+    }
+
+    public function assertBrowsershot(Closure $expectations): void
+    {
+        $recordedPdfs = [
+            ...array_column($this->savedPdfs, 'pdf'),
+            ...$this->respondedWithPdf,
+        ];
+
+        Assert::assertNotEmpty($recordedPdfs, 'No PDF was generated');
+
+        foreach ($recordedPdfs as $pdf) {
+            $browsershot = Browsershot::html($pdf->html);
+
+            if ($callback = $pdf->getCustomizeBrowsershotCallback()) {
+                $callback($browsershot);
+            }
+
+            if ($expectations($browsershot) === true) {
+                $this->markAssertionPassed();
+
+                return;
+            }
+        }
+
+        Assert::fail('Did not configure Browsershot in the expected way');
     }
 
     public function assertRespondedWithPdf(Closure $expectations): void
