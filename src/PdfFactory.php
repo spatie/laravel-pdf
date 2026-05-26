@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPdf;
 
 use Spatie\LaravelPdf\Encryption\PdfEncrypter;
+use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
 
 class PdfFactory
 {
@@ -20,9 +21,26 @@ class PdfFactory
         return $builder->{$method}(...$parameters);
     }
 
-    public function decrypt(string $pdf, string $password): string
+    public function decrypt(string $pathOrContents, string $password): string
     {
-        return app(PdfEncrypter::class)->decrypt($pdf, $password);
+        return app(PdfEncrypter::class)->decrypt($this->resolvePdfContents($pathOrContents), $password);
+    }
+
+    protected function resolvePdfContents(string $pathOrContents): string
+    {
+        if (str_starts_with($pathOrContents, '%PDF')) {
+            return $pathOrContents;
+        }
+
+        if (str_contains($pathOrContents, "\0") || strlen($pathOrContents) > PHP_MAXPATHLEN) {
+            return $pathOrContents;
+        }
+
+        if (! is_file($pathOrContents)) {
+            throw CouldNotDecryptPdf::fileNotFound($pathOrContents);
+        }
+
+        return file_get_contents($pathOrContents);
     }
 
     public function default(): PdfBuilder

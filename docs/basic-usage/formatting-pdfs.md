@@ -278,12 +278,29 @@ Encryption is applied as a post-processing step, so it works with any driver tha
 
 ### Decrypting a PDF
 
-You can decrypt a protected PDF with the `decrypt` method on the facade. It accepts the PDF contents and the user or owner password, and returns the decrypted PDF.
+You can decrypt a protected PDF with the `decrypt` method on the facade. It accepts either a path to a PDF file or the raw PDF contents, together with the user or owner password, and returns the decrypted PDF.
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
 
-$decrypted = Pdf::decrypt(file_get_contents('/some/directory/invoice.pdf'), 'open-sesame');
+// Pass a path...
+$decrypted = Pdf::decrypt('/some/directory/invoice.pdf', 'open-sesame');
+
+// ...or the raw contents
+$decrypted = Pdf::decrypt($contents, 'open-sesame');
+```
+
+When the password is incorrect, a `Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf` exception is thrown, so you can catch it to handle a wrong password.
+
+```php
+use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
+use Spatie\LaravelPdf\Facades\Pdf;
+
+try {
+    $decrypted = Pdf::decrypt('/some/directory/invoice.pdf', $password);
+} catch (CouldNotDecryptPdf $exception) {
+    // The password was incorrect, or the PDF could not be decrypted.
+}
 ```
 
 ### Using a custom encrypter

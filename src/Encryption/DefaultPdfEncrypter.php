@@ -4,6 +4,7 @@ namespace Spatie\LaravelPdf\Encryption;
 
 use Com\Tecnick\Pdf\Encrypt\Encrypt;
 use Spatie\LaravelPdf\Enums\Permission;
+use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
 use Spatie\LaravelPdf\Exceptions\CouldNotEncryptPdf;
 
 class DefaultPdfEncrypter implements PdfEncrypter
@@ -71,7 +72,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
         $objects = $this->parseObjects($pdf);
 
         $encryptionDictionary = $objects[$encryptObjectNumber]['dictionary']
-            ?? throw CouldNotEncryptPdf::couldNotParse('the encryption dictionary is missing');
+            ?? throw CouldNotDecryptPdf::missingEncryptionDictionary();
 
         $this->guardAgainstUnsupportedHandler($encryptionDictionary);
 
@@ -522,7 +523,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
             return $this->aesNoPadDecrypt($this->dictionaryString($encryptionDictionary, 'OE'), $intermediateKey);
         }
 
-        throw CouldNotEncryptPdf::invalidPassword();
+        throw CouldNotDecryptPdf::invalidPassword();
     }
 
     /**
@@ -588,7 +589,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
     protected function encryptObjectNumber(string $pdf): int
     {
         if (! preg_match('/\/Encrypt\s+(\d+)\s+\d+\s+R/', $pdf, $matches)) {
-            throw CouldNotEncryptPdf::couldNotParse('the PDF is not encrypted');
+            throw CouldNotDecryptPdf::notEncrypted();
         }
 
         return (int) $matches[1];
@@ -635,7 +636,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
     protected function guardAgainstUnsupportedHandler(string $encryptionDictionary): void
     {
         if ($this->dictionaryInteger($encryptionDictionary, 'R') !== 6) {
-            throw CouldNotEncryptPdf::unsupportedHandler();
+            throw CouldNotDecryptPdf::unsupportedHandler();
         }
     }
 }

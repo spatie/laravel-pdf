@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\LaravelPdf\Encryption\PdfEncrypter;
 use Spatie\LaravelPdf\Encryption\PdfEncryption;
 use Spatie\LaravelPdf\Enums\Permission;
+use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 use Spatie\LaravelPdf\PdfOptions;
@@ -109,7 +110,7 @@ it('uses a custom bound encrypter', function () {
     expect(file_get_contents($path))->toBe('custom-encrypted');
 });
 
-it('decrypts a pdf through the facade', function () {
+it('decrypts a pdf given its raw contents', function () {
     $path = getTempPath('to-decrypt.pdf');
 
     Pdf::html('<h1>Hello</h1>')
@@ -123,3 +124,22 @@ it('decrypts a pdf through the facade', function () {
         ->toStartWith('%PDF-')
         ->not->toContain('/Encrypt');
 });
+
+it('decrypts a pdf given a file path', function () {
+    $path = getTempPath('to-decrypt-path.pdf');
+
+    Pdf::html('<h1>Hello</h1>')
+        ->driver('dompdf')
+        ->encrypt('secret')
+        ->save($path);
+
+    $decrypted = Pdf::decrypt($path, 'secret');
+
+    expect($decrypted)
+        ->toStartWith('%PDF-')
+        ->not->toContain('/Encrypt');
+});
+
+it('throws when decrypting a path that does not exist', function () {
+    Pdf::decrypt('/this/file/does/not/exist.pdf', 'secret');
+})->throws(CouldNotDecryptPdf::class);

@@ -4,6 +4,7 @@ use Dompdf\Dompdf;
 use Spatie\LaravelPdf\Encryption\DefaultPdfEncrypter;
 use Spatie\LaravelPdf\Encryption\PdfEncryption;
 use Spatie\LaravelPdf\Enums\Permission;
+use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
 use Spatie\LaravelPdf\Exceptions\CouldNotEncryptPdf;
 
 function samplePdf(string $body = '<h1>Hello</h1><p>Visit <a href="https://spatie.be">spatie</a></p>'): string
@@ -65,7 +66,7 @@ it('throws when decrypting with the wrong password', function () {
     $encrypted = $encrypter->encrypt(samplePdf(), new PdfEncryption('secret'));
 
     $encrypter->decrypt($encrypted, 'wrong-password');
-})->throws(CouldNotEncryptPdf::class);
+})->throws(CouldNotDecryptPdf::class);
 
 it('grants every permission by default', function () {
     $encrypted = (new DefaultPdfEncrypter)->encrypt(samplePdf(), new PdfEncryption('secret'));
