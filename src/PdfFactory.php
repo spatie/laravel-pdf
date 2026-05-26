@@ -28,11 +28,7 @@ class PdfFactory
 
     protected function resolvePdfContents(string $pathOrContents): string
     {
-        if (str_starts_with($pathOrContents, '%PDF')) {
-            return $pathOrContents;
-        }
-
-        if (str_contains($pathOrContents, "\0") || strlen($pathOrContents) > PHP_MAXPATHLEN) {
+        if ($this->looksLikeContents($pathOrContents)) {
             return $pathOrContents;
         }
 
@@ -40,7 +36,20 @@ class PdfFactory
             throw CouldNotDecryptPdf::fileNotFound($pathOrContents);
         }
 
-        return file_get_contents($pathOrContents);
+        $contents = file_get_contents($pathOrContents);
+
+        if ($contents === false) {
+            throw CouldNotDecryptPdf::fileNotFound($pathOrContents);
+        }
+
+        return $contents;
+    }
+
+    protected function looksLikeContents(string $pathOrContents): bool
+    {
+        return str_starts_with($pathOrContents, '%PDF')
+            || str_contains($pathOrContents, "\0")
+            || strlen($pathOrContents) > PHP_MAXPATHLEN;
     }
 
     public function default(): PdfBuilder

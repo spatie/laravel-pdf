@@ -30,7 +30,7 @@ class WeasyPrintDriver implements PdfDriver
         return new Pdf($binary, $options);
     }
 
-    protected function resolveBinary(?string $binary): ?string
+    protected function resolveBinary(?string $binary): string
     {
         $binary ??= 'weasyprint';
 
