@@ -8,6 +8,8 @@ use Spatie\LaravelPdf\PdfBuilder;
 use Spatie\LaravelPdf\PdfFactory;
 
 /**
+ * @method static string decrypt(string $pdf, string $password)
+ *
  * @mixin PdfBuilder
  * @mixin FakePdfBuilder
  */

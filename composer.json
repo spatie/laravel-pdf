@@ -24,7 +24,8 @@
     "suggest": {
         "chrome-php/chrome": "Required for the Chrome PHP driver (^1.0)",
         "dompdf/dompdf": "Required for the DOMPDF driver (^3.0)",
-        "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)"
+        "spatie/browsershot": "Required for the Browsershot driver (^4.0|^5.0)",
+        "tecnickcom/tc-lib-pdf-encrypt": "Required to password-protect PDFs with the default encrypter (^2.5)"
     },
     "require-dev": {
         "ext-imagick": "*",
@@ -49,6 +50,7 @@
         "spatie/pest-expectations": "^1.5",
         "spatie/pest-plugin-snapshots": "^2.1",
         "spatie/pixelmatch-php": "^1.0",
+        "tecnickcom/tc-lib-pdf-encrypt": "^2.5",
         "wnx/sidecar-browsershot": "^2.0"
     },
     "autoload": {

@@ -2,6 +2,8 @@
 
 namespace Spatie\LaravelPdf;
 
+use Spatie\LaravelPdf\Encryption\PdfEncrypter;
+
 class PdfFactory
 {
     protected static ?PdfBuilder $defaultPdfBuilder = null;
@@ -16,6 +18,11 @@ class PdfFactory
         $builder = clone static::$defaultPdfBuilder;
 
         return $builder->{$method}(...$parameters);
+    }
+
+    public function decrypt(string $pdf, string $password): string
+    {
+        return app(PdfEncrypter::class)->decrypt($pdf, $password);
     }
 
     public function default(): PdfBuilder

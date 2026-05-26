@@ -1,5 +1,6 @@
 <?php
 
+use Spatie\LaravelPdf\Encryption\DefaultPdfEncrypter;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 
 return [
@@ -15,6 +16,15 @@ return [
      * to customize things like $tries, $timeout, $backoff, or default queue.
      */
     'job' => GeneratePdfJob::class,
+
+    /*
+     * The class used to encrypt and decrypt password-protected PDFs.
+     * The default implementation applies AES-256 encryption in pure PHP and
+     * requires the tecnickcom/tc-lib-pdf-encrypt package. Replace it with your
+     * own implementation of Spatie\LaravelPdf\Encryption\PdfEncrypter to use a
+     * different strategy (for example a qpdf binary or a commercial library).
+     */
+    'encrypter' => DefaultPdfEncrypter::class,
 
     /*
      * Browsershot driver configuration.
