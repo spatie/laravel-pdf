@@ -19,10 +19,8 @@ return [
 
     /*
      * The class used to encrypt and decrypt password-protected PDFs.
-     * The default implementation applies AES-256 encryption in pure PHP and
-     * requires the tecnickcom/tc-lib-pdf-encrypt package. Replace it with your
-     * own implementation of Spatie\LaravelPdf\Encryption\PdfEncrypter to use a
-     * different strategy (for example a qpdf binary or a commercial library).
+     *
+     * https://spatie.be/docs/laravel-pdf/v2/basic-usage/protecting-pdfs-with-a-password
      */
     'encrypter' => DefaultPdfEncrypter::class,
 
