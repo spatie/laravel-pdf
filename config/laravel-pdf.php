@@ -20,6 +20,7 @@ return [
     /*
      * The class used to encrypt and decrypt password-protected PDFs.
      *
+     * More info in our docs:
      * https://spatie.be/docs/laravel-pdf/v2/basic-usage/protecting-pdfs-with-a-password
      */
     'encrypter' => DefaultPdfEncrypter::class,
