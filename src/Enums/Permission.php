@@ -4,20 +4,13 @@ namespace Spatie\LaravelPdf\Enums;
 
 enum Permission: string
 {
-    case Print = 'print';
-
-    case Modify = 'modify';
-
-    case Copy = 'copy';
-
     case Annotate = 'annot-forms';
-
-    case FillForms = 'fill-forms';
-
-    case Extract = 'extract';
-
     case Assemble = 'assemble';
-
+    case Copy = 'copy';
+    case Extract = 'extract';
+    case FillForms = 'fill-forms';
+    case Modify = 'modify';
+    case Print = 'print';
     case PrintHighResolution = 'print-high';
 
     /** @return array<int, string> */
