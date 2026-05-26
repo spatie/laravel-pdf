@@ -19,6 +19,8 @@ use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Enums\Unit;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
+use Spatie\LaravelPdf\PostProcessing\PasswordProtectionPostProcessor;
+use Spatie\LaravelPdf\PostProcessing\PdfPostProcessor;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class PdfBuilder implements Attachable, Responsable
@@ -62,6 +64,8 @@ class PdfBuilder implements Attachable, Responsable
     public bool $tagged = false;
 
     public ?PdfMetadata $metadata = null;
+
+    public ?string $password = null;
 
     protected string $visibility = 'private';
 
@@ -295,6 +299,13 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function password(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function meta(
         ?string $title = null,
         ?string $author = null,
@@ -345,7 +356,7 @@ class PdfBuilder implements Attachable, Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        if ($this->hasMetadata()) {
+        if ($this->hasPostProcessors()) {
             file_put_contents($path, $this->generatePdfContent());
         } else {
             $this->getDriver()->savePdf(
@@ -421,7 +432,7 @@ class PdfBuilder implements Attachable, Responsable
 
         $temporaryDirectory->delete();
 
-        $content = $this->applyMetadata($content);
+        $content = $this->applyPostProcessors($content);
 
         Storage::disk($diskName)->put($path, $content, $this->visibility);
 
@@ -487,6 +498,7 @@ class PdfBuilder implements Attachable, Responsable
         $options->scale = $this->scale;
         $options->pageRanges = $this->pageRanges;
         $options->tagged = $this->tagged;
+        $options->password = $this->password;
 
         return $options;
     }
@@ -500,21 +512,41 @@ class PdfBuilder implements Attachable, Responsable
             $this->buildOptions(),
         );
 
-        return $this->applyMetadata($content);
+        return $this->applyPostProcessors($content);
     }
 
-    protected function applyMetadata(string $pdfContent): string
+    protected function applyPostProcessors(string $pdfContent): string
     {
-        if (! $this->hasMetadata()) {
-            return $pdfContent;
+        if ($this->hasMetadata()) {
+            $pdfContent = PdfMetadataWriter::write($pdfContent, $this->metadata);
         }
 
-        return PdfMetadataWriter::write($pdfContent, $this->metadata);
+        foreach ($this->postProcessors() as $postProcessor) {
+            $pdfContent = $postProcessor->process($pdfContent);
+        }
+
+        return $pdfContent;
     }
 
     protected function hasMetadata(): bool
     {
         return $this->metadata !== null && ! $this->metadata->isEmpty();
+    }
+
+    protected function hasPostProcessors(): bool
+    {
+        return $this->hasMetadata()
+            || $this->password !== null;
+    }
+
+    /**
+     * @return array<int, PdfPostProcessor>
+     */
+    protected function postProcessors(): array
+    {
+        return [
+            ...($this->password !== null ? [new PasswordProtectionPostProcessor($this->password)] : []),
+        ];
     }
 
     protected function configureBrowsershotDriver(PdfDriver $driver): void

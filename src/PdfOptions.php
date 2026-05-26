@@ -17,4 +17,6 @@ class PdfOptions
     public ?string $pageRanges = null;
 
     public bool $tagged = false;
+
+    public ?string $password = null;
 }

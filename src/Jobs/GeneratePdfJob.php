@@ -14,6 +14,8 @@ use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\PdfMetadata;
 use Spatie\LaravelPdf\PdfMetadataWriter;
 use Spatie\LaravelPdf\PdfOptions;
+use Spatie\LaravelPdf\PostProcessing\PasswordProtectionPostProcessor;
+use Spatie\LaravelPdf\PostProcessing\PdfPostProcessor;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Throwable;
 
@@ -62,7 +64,7 @@ class GeneratePdfJob implements ShouldQueue
 
         if ($this->diskName) {
             $this->saveOnDisk($driver);
-        } elseif ($this->hasMetadata()) {
+        } elseif ($this->hasPostProcessors()) {
             $content = $driver->generatePdf(
                 $this->html,
                 $this->headerHtml,
@@ -70,7 +72,7 @@ class GeneratePdfJob implements ShouldQueue
                 $this->options,
             );
 
-            file_put_contents($this->path, $this->applyMetadata($content));
+            file_put_contents($this->path, $this->applyPostProcessors($content));
         } else {
             $driver->savePdf(
                 $this->html,
@@ -120,22 +122,42 @@ class GeneratePdfJob implements ShouldQueue
 
         $temporaryDirectory->delete();
 
-        $content = $this->applyMetadata($content);
+        $content = $this->applyPostProcessors($content);
 
         Storage::disk($this->diskName)->put($this->path, $content, $this->visibility);
     }
 
-    protected function applyMetadata(string $pdfContent): string
+    protected function applyPostProcessors(string $pdfContent): string
     {
-        if (! $this->hasMetadata()) {
-            return $pdfContent;
+        if ($this->hasMetadata()) {
+            $pdfContent = PdfMetadataWriter::write($pdfContent, $this->metadata);
         }
 
-        return PdfMetadataWriter::write($pdfContent, $this->metadata);
+        foreach ($this->postProcessors() as $postProcessor) {
+            $pdfContent = $postProcessor->process($pdfContent);
+        }
+
+        return $pdfContent;
     }
 
     protected function hasMetadata(): bool
     {
         return $this->metadata !== null && ! $this->metadata->isEmpty();
+    }
+
+    protected function hasPostProcessors(): bool
+    {
+        return $this->hasMetadata()
+            || $this->options->password !== null;
+    }
+
+    /**
+     * @return array<int, PdfPostProcessor>
+     */
+    protected function postProcessors(): array
+    {
+        return [
+            ...($this->options->password !== null ? [new PasswordProtectionPostProcessor($this->options->password)] : []),
+        ];
     }
 }

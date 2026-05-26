@@ -182,6 +182,47 @@ it('saves a pdf with metadata to a disk', function () {
     expect($content)->toContain('/Title (Disk Invoice)');
 });
 
+it('saves a password protected pdf to a local path', function () {
+    $path = getTempPath('queued-protected.pdf');
+
+    $options = new PdfOptions;
+    $options->password = 'secret';
+
+    $job = new GeneratePdfJob(
+        html: '<h1>Hello with password</h1>',
+        headerHtml: null,
+        footerHtml: null,
+        options: $options,
+        path: $path,
+        driverName: 'dompdf',
+    );
+
+    $job->handle();
+
+    expect(file_get_contents($path))->toContain('/Encrypt');
+});
+
+it('saves a password protected pdf to a disk', function () {
+    Storage::fake('testing');
+
+    $options = new PdfOptions;
+    $options->password = 'secret';
+
+    $job = new GeneratePdfJob(
+        html: '<h1>Disk password test</h1>',
+        headerHtml: null,
+        footerHtml: null,
+        options: $options,
+        path: 'invoices/protected.pdf',
+        diskName: 'testing',
+        driverName: 'dompdf',
+    );
+
+    $job->handle();
+
+    expect(Storage::disk('testing')->get('invoices/protected.pdf'))->toContain('/Encrypt');
+});
+
 it('invokes catch callback on failure', function () {
     $caughtException = null;
 

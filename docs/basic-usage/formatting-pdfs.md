@@ -195,6 +195,20 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
 
 > Tagged PDFs are supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
 
+## Password protection
+
+You can require a password before the PDF can be opened using the `password` method.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->password('secret123')
+    ->save('/some/directory/invoice.pdf');
+```
+
+Password protection is applied after the driver has generated the PDF, so it works with all drivers.
+
 ## PDF metadata
 
 You can set PDF document metadata such as title, author, subject, and keywords using the `meta` method. This metadata is displayed in PDF viewers — for example, the title is shown in the browser tab when viewing a PDF inline.
