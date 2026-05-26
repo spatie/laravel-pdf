@@ -135,6 +135,16 @@ it('respects binary config', function () {
     expect($weasyPrint->getBinary())->toBe('/path/to/weasyprint');
 });
 
+it('resolves a binary name on the PATH to an absolute executable path', function () {
+    $driver = new WeasyPrintDriver(['binary' => 'php']);
+
+    $binary = invade($driver)->buildWeasyPrint()->getBinary();
+
+    expect($binary)
+        ->not->toBe('php')
+        ->and(is_executable($binary))->toBeTrue();
+});
+
 it('respects timeout config', function () {
     $driver = new WeasyPrintDriver(['timeout' => 684]);
 
