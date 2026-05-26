@@ -29,6 +29,14 @@ Pdf::view('pdfs.invoice', ['invoice' => $invoice])
 
 This will render the Blade view `pdfs.invoice` with the given data and save it as a PDF file.
 
+You may also require a password before the PDF can be opened:
+
+```php
+Pdf::view('pdfs.invoice', ['invoice' => $invoice])
+    ->password('secret123')
+    ->save('invoice.pdf')
+```
+
 You can also return the PDF as a response from your controller:
 
 ```php
