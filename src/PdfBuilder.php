@@ -14,11 +14,15 @@ use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Dumpable;
 use Illuminate\Support\Traits\Macroable;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
+use Spatie\LaravelPdf\Encryption\PdfEncryption;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
+use Spatie\LaravelPdf\Enums\Permission;
 use Spatie\LaravelPdf\Enums\Unit;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
+use Spatie\LaravelPdf\PostProcessing\EncryptPdf;
+use Spatie\LaravelPdf\PostProcessing\PdfPostProcessor;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class PdfBuilder implements Attachable, Responsable
@@ -62,6 +66,8 @@ class PdfBuilder implements Attachable, Responsable
     public bool $tagged = false;
 
     public ?PdfMetadata $metadata = null;
+
+    public ?PdfEncryption $encryption = null;
 
     protected string $visibility = 'private';
 
@@ -320,6 +326,19 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    /**
+     * @param  array<int, Permission>|null  $permissions  The permissions to grant. When null, every permission is granted.
+     */
+    public function encrypt(
+        string $userPassword = '',
+        ?string $ownerPassword = null,
+        ?array $permissions = null,
+    ): self {
+        $this->encryption = new PdfEncryption($userPassword, $ownerPassword, $permissions);
+
+        return $this;
+    }
+
     public function withBrowsershot(callable $callback): self
     {
         $this->customizeBrowsershot = $callback;
@@ -345,17 +364,19 @@ class PdfBuilder implements Attachable, Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        if ($this->hasMetadata()) {
+        if ($this->hasPostProcessors()) {
             file_put_contents($path, $this->generatePdfContent());
-        } else {
-            $this->getDriver()->savePdf(
-                $this->getHtml(),
-                $this->getHeaderHtml(),
-                $this->getFooterHtml(),
-                $this->buildOptions(),
-                $path,
-            );
+
+            return $this;
         }
+
+        $this->getDriver()->savePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+            $path,
+        );
 
         return $this;
     }
@@ -421,7 +442,7 @@ class PdfBuilder implements Attachable, Responsable
 
         $temporaryDirectory->delete();
 
-        $content = $this->applyMetadata($content);
+        $content = $this->applyPostProcessors($content);
 
         Storage::disk($diskName)->put($path, $content, $this->visibility);
 
@@ -487,6 +508,7 @@ class PdfBuilder implements Attachable, Responsable
         $options->scale = $this->scale;
         $options->pageRanges = $this->pageRanges;
         $options->tagged = $this->tagged;
+        $options->encryption = $this->encryption;
 
         return $options;
     }
@@ -500,21 +522,42 @@ class PdfBuilder implements Attachable, Responsable
             $this->buildOptions(),
         );
 
-        return $this->applyMetadata($content);
+        return $this->applyPostProcessors($content);
     }
 
-    protected function applyMetadata(string $pdfContent): string
+    protected function applyPostProcessors(string $pdfContent): string
     {
-        if (! $this->hasMetadata()) {
-            return $pdfContent;
+        if ($this->hasMetadata()) {
+            $pdfContent = PdfMetadataWriter::write($pdfContent, $this->metadata);
         }
 
-        return PdfMetadataWriter::write($pdfContent, $this->metadata);
+        foreach ($this->postProcessors() as $postProcessor) {
+            $pdfContent = $postProcessor->process($pdfContent);
+        }
+
+        return $pdfContent;
     }
 
     protected function hasMetadata(): bool
     {
         return $this->metadata !== null && ! $this->metadata->isEmpty();
+    }
+
+    protected function hasPostProcessors(): bool
+    {
+        return $this->hasMetadata() || $this->encryption !== null;
+    }
+
+    /**
+     * @return array<int, PdfPostProcessor>
+     */
+    protected function postProcessors(): array
+    {
+        if ($this->encryption === null) {
+            return [];
+        }
+
+        return [new EncryptPdf($this->encryption)];
     }
 
     protected function configureBrowsershotDriver(PdfDriver $driver): void

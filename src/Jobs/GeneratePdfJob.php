@@ -14,6 +14,8 @@ use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\PdfMetadata;
 use Spatie\LaravelPdf\PdfMetadataWriter;
 use Spatie\LaravelPdf\PdfOptions;
+use Spatie\LaravelPdf\PostProcessing\EncryptPdf;
+use Spatie\LaravelPdf\PostProcessing\PdfPostProcessor;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Throwable;
 
@@ -60,9 +62,22 @@ class GeneratePdfJob implements ShouldQueue
     {
         $driver = $this->resolveDriver();
 
+        $this->generatePdf($driver);
+
+        foreach ($this->thenCallbacks as $callback) {
+            ($callback->getClosure())($this->path, $this->diskName);
+        }
+    }
+
+    protected function generatePdf(PdfDriver $driver): void
+    {
         if ($this->diskName) {
             $this->saveOnDisk($driver);
-        } elseif ($this->hasMetadata()) {
+
+            return;
+        }
+
+        if ($this->hasPostProcessors()) {
             $content = $driver->generatePdf(
                 $this->html,
                 $this->headerHtml,
@@ -70,20 +85,20 @@ class GeneratePdfJob implements ShouldQueue
                 $this->options,
             );
 
-            file_put_contents($this->path, $this->applyMetadata($content));
-        } else {
-            $driver->savePdf(
-                $this->html,
-                $this->headerHtml,
-                $this->footerHtml,
-                $this->options,
-                $this->path,
-            );
+            $content = $this->applyPostProcessors($content);
+
+            file_put_contents($this->path, $content);
+
+            return;
         }
 
-        foreach ($this->thenCallbacks as $callback) {
-            ($callback->getClosure())($this->path, $this->diskName);
-        }
+        $driver->savePdf(
+            $this->html,
+            $this->headerHtml,
+            $this->footerHtml,
+            $this->options,
+            $this->path,
+        );
     }
 
     public function failed(Throwable $exception): void
@@ -120,22 +135,43 @@ class GeneratePdfJob implements ShouldQueue
 
         $temporaryDirectory->delete();
 
-        $content = $this->applyMetadata($content);
+        $content = $this->applyPostProcessors($content);
 
         Storage::disk($this->diskName)->put($this->path, $content, $this->visibility);
     }
 
-    protected function applyMetadata(string $pdfContent): string
+    protected function applyPostProcessors(string $pdfContent): string
     {
-        if (! $this->hasMetadata()) {
-            return $pdfContent;
+        if ($this->hasMetadata()) {
+            $pdfContent = PdfMetadataWriter::write($pdfContent, $this->metadata);
         }
 
-        return PdfMetadataWriter::write($pdfContent, $this->metadata);
+        foreach ($this->postProcessors() as $postProcessor) {
+            $pdfContent = $postProcessor->process($pdfContent);
+        }
+
+        return $pdfContent;
     }
 
     protected function hasMetadata(): bool
     {
         return $this->metadata !== null && ! $this->metadata->isEmpty();
+    }
+
+    protected function hasPostProcessors(): bool
+    {
+        return $this->hasMetadata() || $this->options->encryption !== null;
+    }
+
+    /**
+     * @return array<int, PdfPostProcessor>
+     */
+    protected function postProcessors(): array
+    {
+        if ($this->options->encryption === null) {
+            return [];
+        }
+
+        return [new EncryptPdf($this->options->encryption)];
     }
 }

@@ -5,6 +5,7 @@ namespace Spatie\LaravelPdf\Drivers;
 use Pontedilana\PhpWeasyPrint\Pdf;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\PdfOptions;
+use Symfony\Component\Process\ExecutableFinder;
 
 class WeasyPrintDriver implements PdfDriver
 {
@@ -23,10 +24,21 @@ class WeasyPrintDriver implements PdfDriver
     {
         $options = $this->config;
 
-        $binary = $this->config['binary'] ?? null;
+        $binary = $this->resolveBinary($this->config['binary'] ?? null);
         unset($options['binary']);
 
         return new Pdf($binary, $options);
+    }
+
+    protected function resolveBinary(?string $binary): string
+    {
+        $binary ??= 'weasyprint';
+
+        if (is_executable($binary)) {
+            return $binary;
+        }
+
+        return (new ExecutableFinder)->find($binary) ?? $binary;
     }
 
     public function generatePdf(

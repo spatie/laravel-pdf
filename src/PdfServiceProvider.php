@@ -12,6 +12,8 @@ use Spatie\LaravelPdf\Drivers\DomPdfDriver;
 use Spatie\LaravelPdf\Drivers\GotenbergDriver;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Drivers\WeasyPrintDriver;
+use Spatie\LaravelPdf\Encryption\DefaultPdfEncrypter;
+use Spatie\LaravelPdf\Encryption\PdfEncrypter;
 use Spatie\LaravelPdf\Exceptions\InvalidDriver;
 
 class PdfServiceProvider extends PackageServiceProvider
@@ -61,6 +63,10 @@ class PdfServiceProvider extends PackageServiceProvider
                 'chrome' => app('laravel-pdf.driver.chrome'),
                 default => throw InvalidDriver::unknown($driverName),
             };
+        });
+
+        $this->app->bind(PdfEncrypter::class, function () {
+            return app(config('laravel-pdf.encrypter', DefaultPdfEncrypter::class));
         });
     }
 
