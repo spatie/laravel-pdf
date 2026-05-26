@@ -366,15 +366,17 @@ class PdfBuilder implements Attachable, Responsable
 
         if ($this->hasPostProcessors()) {
             file_put_contents($path, $this->generatePdfContent());
-        } else {
-            $this->getDriver()->savePdf(
-                $this->getHtml(),
-                $this->getHeaderHtml(),
-                $this->getFooterHtml(),
-                $this->buildOptions(),
-                $path,
-            );
+
+            return $this;
         }
+
+        $this->getDriver()->savePdf(
+            $this->getHtml(),
+            $this->getHeaderHtml(),
+            $this->getFooterHtml(),
+            $this->buildOptions(),
+            $path,
+        );
 
         return $this;
     }

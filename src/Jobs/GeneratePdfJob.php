@@ -62,9 +62,22 @@ class GeneratePdfJob implements ShouldQueue
     {
         $driver = $this->resolveDriver();
 
+        $this->generatePdf($driver);
+
+        foreach ($this->thenCallbacks as $callback) {
+            ($callback->getClosure())($this->path, $this->diskName);
+        }
+    }
+
+    protected function generatePdf(PdfDriver $driver): void
+    {
         if ($this->diskName) {
             $this->saveOnDisk($driver);
-        } elseif ($this->hasPostProcessors()) {
+
+            return;
+        }
+
+        if ($this->hasPostProcessors()) {
             $content = $driver->generatePdf(
                 $this->html,
                 $this->headerHtml,
@@ -72,20 +85,20 @@ class GeneratePdfJob implements ShouldQueue
                 $this->options,
             );
 
-            file_put_contents($this->path, $this->applyPostProcessors($content));
-        } else {
-            $driver->savePdf(
-                $this->html,
-                $this->headerHtml,
-                $this->footerHtml,
-                $this->options,
-                $this->path,
-            );
+            $content = $this->applyPostProcessors($content);
+
+            file_put_contents($this->path, $content);
+
+            return;
         }
 
-        foreach ($this->thenCallbacks as $callback) {
-            ($callback->getClosure())($this->path, $this->diskName);
-        }
+        $driver->savePdf(
+            $this->html,
+            $this->headerHtml,
+            $this->footerHtml,
+            $this->options,
+            $this->path,
+        );
     }
 
     public function failed(Throwable $exception): void
