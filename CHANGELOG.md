@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.10.0 - 2026-05-27
+
+### What's Changed
+
+* Document Pdf::assertBrowsershot() by @freekmurze in https://github.com/spatie/laravel-pdf/pull/341
+* Add native AES-256 password protection by @freekmurze in https://github.com/spatie/laravel-pdf/pull/344
+* Add readiness waiting and render caching by @freekmurze in https://github.com/spatie/laravel-pdf/pull/345
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.9.0...2.10.0
+
 ## 2.9.0 - 2026-05-22
 
 ### What's Changed
