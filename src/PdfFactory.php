@@ -2,6 +2,7 @@
 
 namespace Spatie\LaravelPdf;
 
+use SensitiveParameter;
 use Spatie\LaravelPdf\Encryption\PdfEncrypter;
 use Spatie\LaravelPdf\Exceptions\CouldNotDecryptPdf;
 
@@ -21,7 +22,7 @@ class PdfFactory
         return $builder->{$method}(...$parameters);
     }
 
-    public function decrypt(string $pathOrContents, #[\SensitiveParameter] string $password): string
+    public function decrypt(string $pathOrContents, #[SensitiveParameter] string $password): string
     {
         return app(PdfEncrypter::class)->decrypt($this->resolvePdfContents($pathOrContents), $password);
     }
