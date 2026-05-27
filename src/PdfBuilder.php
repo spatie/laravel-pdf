@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Dumpable;
 use Illuminate\Support\Traits\Macroable;
+use SensitiveParameter;
 use Spatie\LaravelPdf\Caching\PdfCache;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Drivers\SupportsReadiness;
@@ -392,8 +393,8 @@ class PdfBuilder implements Attachable, Responsable
      * @param  array<int, Permission>|null  $permissions  The permissions to grant. When null, every permission is granted.
      */
     public function encrypt(
-        string $userPassword = '',
-        ?string $ownerPassword = null,
+        #[SensitiveParameter] string $userPassword = '',
+        #[SensitiveParameter] ?string $ownerPassword = null,
         ?array $permissions = null,
     ): self {
         $this->encryption = new PdfEncryption($userPassword, $ownerPassword, $permissions);
