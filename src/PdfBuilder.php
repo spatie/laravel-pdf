@@ -359,7 +359,7 @@ class PdfBuilder implements Attachable, Responsable
 
     protected function shouldCache(): bool
     {
-        return $this->shouldCache ?? config('laravel-pdf.cache.enabled', false);
+        return $this->shouldCache ?? config('laravel-pdf.cache.automatic', false);
     }
 
     public function meta(

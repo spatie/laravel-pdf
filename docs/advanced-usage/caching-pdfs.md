@@ -31,11 +31,11 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
 
 ## Caching every PDF by default
 
-If you want every PDF to be cached without calling `cache()` each time, enable caching in the config file (or set `LARAVEL_PDF_CACHE_ENABLED=true` in your `.env`).
+If you want every PDF to be cached without calling `cache()` each time, turn on automatic caching in the config file (or set `LARAVEL_PDF_CACHE_AUTOMATIC=true` in your `.env`).
 
 ```php
 'cache' => [
-    'enabled' => env('LARAVEL_PDF_CACHE_ENABLED', true),
+    'automatic' => env('LARAVEL_PDF_CACHE_AUTOMATIC', true),
 ],
 ```
 
@@ -66,14 +66,14 @@ The caching behaviour is configured in the `cache` section of the `laravel-pdf` 
 ```php
 'cache' => [
     'class' => Spatie\LaravelPdf\Caching\DefaultPdfCache::class,
-    'enabled' => env('LARAVEL_PDF_CACHE_ENABLED', false),
+    'automatic' => env('LARAVEL_PDF_CACHE_AUTOMATIC', false),
     'store' => env('LARAVEL_PDF_CACHE_STORE'),
     'prefix' => 'laravel-pdf',
     'ttl' => env('LARAVEL_PDF_CACHE_TTL', 60 * 60 * 24),
 ],
 ```
 
-* `enabled`: when `true`, every PDF is cached without calling `cache()`. Defaults to `false`.
+* `automatic`: when `true`, every PDF is cached without calling `cache()`. Defaults to `false`.
 * `store`: the cache store to use. Leave it `null` to use your application's default store.
 * `prefix`: the prefix prepended to every cache key.
 * `ttl`: the default lifetime in seconds. Defaults to one day. Set it to `null` to cache forever.

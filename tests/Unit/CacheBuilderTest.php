@@ -64,8 +64,8 @@ it('caches for a day by default', function () {
     expect(config('laravel-pdf.cache.ttl'))->toBe(60 * 60 * 24);
 });
 
-it('caches by default when enabled in config', function () {
-    config()->set('laravel-pdf.cache.enabled', true);
+it('caches automatically when enabled in config', function () {
+    config()->set('laravel-pdf.cache.automatic', true);
 
     $driver = new FakeDriver;
 
@@ -75,8 +75,8 @@ it('caches by default when enabled in config', function () {
     expect($driver->generateCount)->toBe(1);
 });
 
-it('can opt out of caching with dontCache when enabled in config', function () {
-    config()->set('laravel-pdf.cache.enabled', true);
+it('can opt out of automatic caching with dontCache', function () {
+    config()->set('laravel-pdf.cache.automatic', true);
 
     $driver = new FakeDriver;
 
