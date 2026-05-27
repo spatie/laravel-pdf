@@ -9,7 +9,7 @@ use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\PdfOptions;
 use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
-class BrowsershotDriver implements PdfDriver
+class BrowsershotDriver implements PdfDriver, SupportsReadiness
 {
     protected array $config;
 
@@ -110,6 +110,10 @@ class BrowsershotDriver implements PdfDriver
 
         if ($options->tagged) {
             $browsershot->taggedPdf();
+        }
+
+        if ($options->waitForReady !== null) {
+            $browsershot->waitForFunction($options->waitForReady, null, $options->waitForReadyTimeout ?? 0);
         }
 
         $this->applyConfigurationDefaults($browsershot);

@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Dumpable;
 use Illuminate\Support\Traits\Macroable;
+use Spatie\LaravelPdf\Caching\PdfCache;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
+use Spatie\LaravelPdf\Drivers\SupportsReadiness;
 use Spatie\LaravelPdf\Encryption\PdfEncryption;
 use Spatie\LaravelPdf\Enums\Format;
 use Spatie\LaravelPdf\Enums\Orientation;
@@ -65,6 +67,10 @@ class PdfBuilder implements Attachable, Responsable
 
     public bool $tagged = false;
 
+    public ?string $waitForReady = null;
+
+    public ?int $waitForReadyTimeout = null;
+
     public ?PdfMetadata $metadata = null;
 
     public ?PdfEncryption $encryption = null;
@@ -84,6 +90,12 @@ class PdfBuilder implements Attachable, Responsable
     protected ?PdfDriver $driver = null;
 
     protected ?string $driverName = null;
+
+    protected bool $shouldCache = false;
+
+    protected ?int $cacheTtl = null;
+
+    protected ?string $cacheKey = null;
 
     public function setDriver(PdfDriver $driver): self
     {
@@ -113,7 +125,24 @@ class PdfBuilder implements Attachable, Responsable
 
         $this->configureBrowsershotDriver($driver);
 
+        $this->ensureDriverSupportsReadiness($driver);
+
         return $driver;
+    }
+
+    protected function ensureDriverSupportsReadiness(PdfDriver $driver): void
+    {
+        if ($this->waitForReady === null) {
+            return;
+        }
+
+        if ($driver instanceof SupportsReadiness) {
+            return;
+        }
+
+        throw CouldNotGeneratePdf::driverDoesNotSupportReadiness(
+            $this->driverName ?? config('laravel-pdf.driver', 'browsershot'),
+        );
     }
 
     public function view(string $view, array $data = []): self
@@ -301,6 +330,26 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function waitUntilReady(?string $expression = null, ?int $timeout = null): self
+    {
+        $this->waitForReady = $expression ?? 'window.pdfReady === true';
+
+        $this->waitForReadyTimeout = $timeout;
+
+        return $this;
+    }
+
+    public function cache(?int $ttl = null, ?string $key = null): self
+    {
+        $this->shouldCache = true;
+
+        $this->cacheTtl = $ttl;
+
+        $this->cacheKey = $key;
+
+        return $this;
+    }
+
     public function meta(
         ?string $title = null,
         ?string $author = null,
@@ -364,7 +413,7 @@ class PdfBuilder implements Attachable, Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        if ($this->hasPostProcessors()) {
+        if ($this->shouldCache || $this->hasPostProcessors()) {
             file_put_contents($path, $this->generatePdfContent());
 
             return $this;
@@ -426,6 +475,12 @@ class PdfBuilder implements Attachable, Responsable
 
     protected function saveOnDisk(string $diskName, string $path): self
     {
+        if ($this->shouldCache) {
+            Storage::disk($diskName)->put($path, $this->generatePdfContent(), $this->visibility);
+
+            return $this;
+        }
+
         $fileName = pathinfo($path, PATHINFO_BASENAME);
 
         $temporaryDirectory = (new TemporaryDirectory)->create();
@@ -509,18 +564,34 @@ class PdfBuilder implements Attachable, Responsable
         $options->pageRanges = $this->pageRanges;
         $options->tagged = $this->tagged;
         $options->encryption = $this->encryption;
+        $options->waitForReady = $this->waitForReady;
+        $options->waitForReadyTimeout = $this->waitForReadyTimeout;
 
         return $options;
     }
 
     public function generatePdfContent(): string
     {
-        $content = $this->getDriver()->generatePdf(
-            $this->getHtml(),
-            $this->getHeaderHtml(),
-            $this->getFooterHtml(),
-            $this->buildOptions(),
+        $html = $this->getHtml();
+        $headerHtml = $this->getHeaderHtml();
+        $footerHtml = $this->getFooterHtml();
+        $options = $this->buildOptions();
+
+        if (! $this->shouldCache) {
+            return $this->processPdfContent($html, $headerHtml, $footerHtml, $options);
+        }
+
+        return app(PdfCache::class)->remember(
+            serialize([$html, $headerHtml, $footerHtml, $options, $this->metadata]),
+            $this->cacheKey,
+            $this->cacheTtl,
+            fn () => $this->processPdfContent($html, $headerHtml, $footerHtml, $options),
         );
+    }
+
+    protected function processPdfContent(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): string
+    {
+        $content = $this->getDriver()->generatePdf($html, $headerHtml, $footerHtml, $options);
 
         return $this->applyPostProcessors($content);
     }

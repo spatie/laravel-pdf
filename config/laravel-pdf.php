@@ -1,5 +1,6 @@
 <?php
 
+use Spatie\LaravelPdf\Caching\DefaultPdfCache;
 use Spatie\LaravelPdf\Encryption\DefaultPdfEncrypter;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 
@@ -24,6 +25,32 @@ return [
      * https://spatie.be/docs/laravel-pdf/v2/basic-usage/protecting-pdfs-with-a-password
      */
     'encrypter' => DefaultPdfEncrypter::class,
+
+    /*
+     * Render caching. When you call `->cache()` on a PDF, the generated
+     * content is stored so identical renders are served from the cache.
+     *
+     * Swap `class` for your own implementation of the PdfCache contract
+     * to fully customize how PDFs are keyed, stored, and expired.
+     */
+    'cache' => [
+        'class' => DefaultPdfCache::class,
+
+        /*
+         * The cache store to use. Leave null to use the default store.
+         */
+        'store' => env('LARAVEL_PDF_CACHE_STORE'),
+
+        /*
+         * The prefix prepended to every cache key.
+         */
+        'prefix' => 'laravel-pdf',
+
+        /*
+         * The default lifetime in seconds. Leave null to cache forever.
+         */
+        'ttl' => env('LARAVEL_PDF_CACHE_TTL'),
+    ],
 
     /*
      * Browsershot driver configuration.
