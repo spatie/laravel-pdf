@@ -37,6 +37,12 @@ return [
         'class' => DefaultPdfCache::class,
 
         /*
+         * When enabled, every PDF is cached without having to call `->cache()`.
+         * Call `->cache()` or `->dontCache()` on a PDF to override this.
+         */
+        'enabled' => env('LARAVEL_PDF_CACHE_ENABLED', false),
+
+        /*
          * The cache store to use. Leave null to use the default store.
          */
         'store' => env('LARAVEL_PDF_CACHE_STORE'),
@@ -49,7 +55,7 @@ return [
         /*
          * The default lifetime in seconds. Leave null to cache forever.
          */
-        'ttl' => env('LARAVEL_PDF_CACHE_TTL'),
+        'ttl' => env('LARAVEL_PDF_CACHE_TTL', 60 * 60 * 24),
     ],
 
     /*

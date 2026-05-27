@@ -21,12 +21,30 @@ Caching applies to every output method, including `save()`, `download()`, `base6
 
 ## Setting a lifetime
 
-By default the cache entry is stored forever. Pass a lifetime (in seconds) to expire it after a while.
+By default a cache entry lives for one day. Pass a lifetime (in seconds) to use a different duration.
 
 ```php
 Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->cache(3600)
     ->save('invoice.pdf');
+```
+
+## Caching every PDF by default
+
+If you want every PDF to be cached without calling `cache()` each time, enable caching in the config file (or set `LARAVEL_PDF_CACHE_ENABLED=true` in your `.env`).
+
+```php
+'cache' => [
+    'enabled' => env('LARAVEL_PDF_CACHE_ENABLED', true),
+],
+```
+
+With caching enabled, calling `cache()` still works to override the lifetime or key for a specific PDF. To skip the cache for a single PDF, call `dontCache()`.
+
+```php
+Pdf::view('pdf.receipt', ['receipt' => $receipt])
+    ->dontCache()
+    ->download('receipt.pdf');
 ```
 
 ## How the cache key is determined
@@ -48,15 +66,17 @@ The caching behaviour is configured in the `cache` section of the `laravel-pdf` 
 ```php
 'cache' => [
     'class' => Spatie\LaravelPdf\Caching\DefaultPdfCache::class,
+    'enabled' => env('LARAVEL_PDF_CACHE_ENABLED', false),
     'store' => env('LARAVEL_PDF_CACHE_STORE'),
     'prefix' => 'laravel-pdf',
-    'ttl' => env('LARAVEL_PDF_CACHE_TTL'),
+    'ttl' => env('LARAVEL_PDF_CACHE_TTL', 60 * 60 * 24),
 ],
 ```
 
+* `enabled`: when `true`, every PDF is cached without calling `cache()`. Defaults to `false`.
 * `store`: the cache store to use. Leave it `null` to use your application's default store.
 * `prefix`: the prefix prepended to every cache key.
-* `ttl`: the default lifetime in seconds. Leave it `null` to cache forever.
+* `ttl`: the default lifetime in seconds. Defaults to one day. Set it to `null` to cache forever.
 
 ## Customizing the caching behaviour
 

@@ -58,6 +58,32 @@ it('serves a cached pdf when saving to a path', function () {
     expect(file_get_contents($path))->toBe('%PDF-cached');
 });
 
+it('caches for a day by default', function () {
+    expect(config('laravel-pdf.cache.ttl'))->toBe(60 * 60 * 24);
+});
+
+it('caches by default when enabled in config', function () {
+    config()->set('laravel-pdf.cache.enabled', true);
+
+    $driver = new FakeDriver;
+
+    Pdf::html('<p>hi</p>')->setDriver($driver)->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->base64();
+
+    expect($driver->generateCount)->toBe(1);
+});
+
+it('can opt out of caching with dontCache when enabled in config', function () {
+    config()->set('laravel-pdf.cache.enabled', true);
+
+    $driver = new FakeDriver;
+
+    Pdf::html('<p>hi</p>')->setDriver($driver)->dontCache()->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->dontCache()->base64();
+
+    expect($driver->generateCount)->toBe(2);
+});
+
 it('uses the cache implementation bound in the container', function () {
     app()->instance(PdfCache::class, new class implements PdfCache
     {

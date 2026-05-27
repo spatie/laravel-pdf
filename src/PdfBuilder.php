@@ -91,7 +91,7 @@ class PdfBuilder implements Attachable, Responsable
 
     protected ?string $driverName = null;
 
-    protected bool $shouldCache = false;
+    protected ?bool $shouldCache = null;
 
     protected ?int $cacheTtl = null;
 
@@ -350,6 +350,18 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function dontCache(): self
+    {
+        $this->shouldCache = false;
+
+        return $this;
+    }
+
+    protected function shouldCache(): bool
+    {
+        return $this->shouldCache ?? config('laravel-pdf.cache.enabled', false);
+    }
+
     public function meta(
         ?string $title = null,
         ?string $author = null,
@@ -413,7 +425,7 @@ class PdfBuilder implements Attachable, Responsable
             return $this->saveOnDisk($this->diskName, $path);
         }
 
-        if ($this->shouldCache || $this->hasPostProcessors()) {
+        if ($this->shouldCache() || $this->hasPostProcessors()) {
             file_put_contents($path, $this->generatePdfContent());
 
             return $this;
@@ -475,7 +487,7 @@ class PdfBuilder implements Attachable, Responsable
 
     protected function saveOnDisk(string $diskName, string $path): self
     {
-        if ($this->shouldCache) {
+        if ($this->shouldCache()) {
             Storage::disk($diskName)->put($path, $this->generatePdfContent(), $this->visibility);
 
             return $this;
@@ -577,7 +589,7 @@ class PdfBuilder implements Attachable, Responsable
         $footerHtml = $this->getFooterHtml();
         $options = $this->buildOptions();
 
-        if (! $this->shouldCache) {
+        if (! $this->shouldCache()) {
             return $this->processPdfContent($html, $headerHtml, $footerHtml, $options);
         }
 
