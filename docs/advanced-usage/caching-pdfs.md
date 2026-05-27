@@ -29,21 +29,21 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->save('invoice.pdf');
 ```
 
-You can use Laravel's duration helpers (`minutes`, `hours`, `days`) for a more expressive lifetime.
+A Carbon instance (or any `DateTimeInterface`) works too, expiring the entry at that moment.
+
+```php
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->cache(now()->endOfDay())
+    ->save('invoice.pdf');
+```
+
+On Laravel versions that ship the duration helpers (`minutes`, `hours`, `days`), you can use those for an even more expressive lifetime.
 
 ```php
 use function Illuminate\Support\hours;
 
 Pdf::view('pdf.invoice', ['invoice' => $invoice])
     ->cache(hours(2))
-    ->save('invoice.pdf');
-```
-
-A Carbon instance (or any `DateTimeInterface`) works too, expiring the entry at that moment.
-
-```php
-Pdf::view('pdf.invoice', ['invoice' => $invoice])
-    ->cache(now()->endOfDay())
     ->save('invoice.pdf');
 ```
 

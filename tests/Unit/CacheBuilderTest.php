@@ -1,13 +1,12 @@
 <?php
 
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Cache;
 use Spatie\LaravelPdf\Caching\PdfCache;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfOptions;
 use Spatie\LaravelPdf\Tests\TestSupport\FakeDriver;
-
-use function Illuminate\Support\hours;
 
 beforeEach(function () {
     Cache::flush();
@@ -119,8 +118,8 @@ it('uses the driver name in the cache fingerprint', function () {
 it('accepts a carbon interval as a lifetime', function () {
     $driver = new FakeDriver;
 
-    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(hours(2))->base64();
-    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(hours(2))->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(CarbonInterval::hours(2))->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(CarbonInterval::hours(2))->base64();
 
     expect($driver->generateCount)->toBe(1);
 });
