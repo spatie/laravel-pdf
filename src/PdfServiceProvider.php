@@ -5,6 +5,8 @@ namespace Spatie\LaravelPdf;
 use Illuminate\Support\Facades\Blade;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\LaravelPdf\Caching\DefaultPdfCache;
+use Spatie\LaravelPdf\Caching\PdfCache;
 use Spatie\LaravelPdf\Drivers\BrowsershotDriver;
 use Spatie\LaravelPdf\Drivers\ChromeDriver;
 use Spatie\LaravelPdf\Drivers\CloudflareDriver;
@@ -67,6 +69,10 @@ class PdfServiceProvider extends PackageServiceProvider
 
         $this->app->bind(PdfEncrypter::class, function () {
             return app(config('laravel-pdf.encrypter', DefaultPdfEncrypter::class));
+        });
+
+        $this->app->bind(PdfCache::class, function () {
+            return app(config('laravel-pdf.cache.class', DefaultPdfCache::class));
         });
     }
 

@@ -63,4 +63,20 @@ class CouldNotGeneratePdf extends Exception
             .'Closures passed to withBrowsershot() cannot be serialized for the queue.'
         );
     }
+
+    public static function cannotCacheWithBrowsershotClosure(): self
+    {
+        return new self(
+            'Cannot cache a PDF that is customized with withBrowsershot(). '
+            .'Closures cannot be added to the cache key. Pass an explicit key with cache(key: ...) to cache anyway.'
+        );
+    }
+
+    public static function driverDoesNotSupportReadiness(string $driverName): self
+    {
+        return new self(
+            "The [{$driverName}] driver does not support waiting for readiness. "
+            .'Use a Chromium-based driver such as browsershot or chrome.'
+        );
+    }
 }

@@ -4,11 +4,12 @@ namespace Spatie\LaravelPdf\Drivers;
 
 use HeadlessChromium\Browser\ProcessAwareBrowser;
 use HeadlessChromium\BrowserFactory;
+use HeadlessChromium\Page;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\PdfOptions;
 
-class ChromeDriver implements PdfDriver
+class ChromeDriver implements PdfDriver, SupportsReadiness
 {
     protected array $config;
 
@@ -56,6 +57,8 @@ class ChromeDriver implements PdfDriver
             $page = $browser->createPage();
             $page->setHtml($html, $this->config['timeout'] ?? 30000);
 
+            $this->waitForReadiness($page, $options);
+
             $pdfOptions = $this->buildPdfOptions($headerHtml, $footerHtml, $options);
             $pdf = $page->pdf($pdfOptions);
 
@@ -73,6 +76,8 @@ class ChromeDriver implements PdfDriver
             $page = $browser->createPage();
             $page->setHtml($html, $this->config['timeout'] ?? 30000);
 
+            $this->waitForReadiness($page, $options);
+
             $pdfOptions = $this->buildPdfOptions($headerHtml, $footerHtml, $options);
             $pdf = $page->pdf($pdfOptions);
 
@@ -80,6 +85,25 @@ class ChromeDriver implements PdfDriver
         } finally {
             $browser->close();
         }
+    }
+
+    protected function waitForReadiness(Page $page, PdfOptions $options): void
+    {
+        if ($options->waitForReady === null) {
+            return;
+        }
+
+        $timeout = $options->waitForReadyTimeout ?? 30000;
+        $deadline = microtime(true) + ($timeout / 1000);
+        $expression = "(() => { try { return Boolean({$options->waitForReady}); } catch (error) { return false; } })()";
+
+        do {
+            if ($page->evaluate($expression)->getReturnValue()) {
+                return;
+            }
+
+            usleep(100_000);
+        } while (microtime(true) < $deadline);
     }
 
     protected function createBrowser(): ProcessAwareBrowser

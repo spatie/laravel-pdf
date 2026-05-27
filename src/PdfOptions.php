@@ -21,4 +21,8 @@ class PdfOptions
     public bool $tagged = false;
 
     public ?PdfEncryption $encryption = null;
+
+    public ?string $waitForReady = null;
+
+    public ?int $waitForReadyTimeout = null;
 }

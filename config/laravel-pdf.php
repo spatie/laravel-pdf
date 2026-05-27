@@ -1,5 +1,6 @@
 <?php
 
+use Spatie\LaravelPdf\Caching\DefaultPdfCache;
 use Spatie\LaravelPdf\Encryption\DefaultPdfEncrypter;
 use Spatie\LaravelPdf\Jobs\GeneratePdfJob;
 
@@ -11,19 +12,37 @@ return [
     'driver' => env('LARAVEL_PDF_DRIVER', 'browsershot'),
 
     /*
-     * The job class used for queued PDF generation.
-     * You can replace this with your own class that extends GeneratePdfJob
-     * to customize things like $tries, $timeout, $backoff, or default queue.
-     */
-    'job' => GeneratePdfJob::class,
-
-    /*
-     * The class used to encrypt and decrypt password-protected PDFs.
+     * Render caching. When you call `->cache()` on a PDF, the generated
+     * content is stored so identical renders are served from the cache.
      *
-     * More info in our docs:
-     * https://spatie.be/docs/laravel-pdf/v2/basic-usage/protecting-pdfs-with-a-password
+     * Swap `class` for your own implementation of the PdfCache contract
+     * to fully customize how PDFs are keyed, stored, and expired.
      */
-    'encrypter' => DefaultPdfEncrypter::class,
+    'cache' => [
+        'class' => DefaultPdfCache::class,
+
+        /*
+         * When set to true, every PDF is cached automatically without having
+         * to call `->cache()`. Call `->cache()` or `->dontCache()` on a PDF
+         * to override this.
+         */
+        'automatic' => env('LARAVEL_PDF_CACHE_AUTOMATIC', false),
+
+        /*
+         * The cache store to use. Leave null to use the default store.
+         */
+        'store' => env('LARAVEL_PDF_CACHE_STORE'),
+
+        /*
+         * The prefix prepended to every cache key.
+         */
+        'prefix' => 'laravel-pdf',
+
+        /*
+         * The default lifetime in seconds. Leave null to cache forever.
+         */
+        'ttl' => env('LARAVEL_PDF_CACHE_TTL', 60 * 60 * 24),
+    ],
 
     /*
      * Browsershot driver configuration.
@@ -140,4 +159,19 @@ return [
 
         'env_variables' => [],
     ],
+
+    /*
+     * The job class used for queued PDF generation.
+     * You can replace this with your own class that extends GeneratePdfJob
+     * to customize things like $tries, $timeout, $backoff, or default queue.
+     */
+    'job' => GeneratePdfJob::class,
+
+    /*
+     * The class used to encrypt and decrypt password-protected PDFs.
+     *
+     * More info in our docs:
+     * https://spatie.be/docs/laravel-pdf/v2/basic-usage/protecting-pdfs-with-a-password
+     */
+    'encrypter' => DefaultPdfEncrypter::class,
 ];
