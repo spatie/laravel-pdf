@@ -593,8 +593,12 @@ class PdfBuilder implements Attachable, Responsable
             return $this->processPdfContent($html, $headerHtml, $footerHtml, $options);
         }
 
+        if ($this->customizeBrowsershot && $this->cacheKey === null) {
+            throw CouldNotGeneratePdf::cannotCacheWithBrowsershotClosure();
+        }
+
         return app(PdfCache::class)->remember(
-            serialize([$html, $headerHtml, $footerHtml, $options, $this->metadata]),
+            $this->cacheFingerprint($html, $headerHtml, $footerHtml, $options),
             $this->cacheKey,
             $this->cacheTtl,
             fn () => $this->processPdfContent($html, $headerHtml, $footerHtml, $options),
@@ -606,6 +610,19 @@ class PdfBuilder implements Attachable, Responsable
         $content = $this->getDriver()->generatePdf($html, $headerHtml, $footerHtml, $options);
 
         return $this->applyPostProcessors($content);
+    }
+
+    protected function cacheFingerprint(string $html, ?string $headerHtml, ?string $footerHtml, PdfOptions $options): string
+    {
+        return serialize([
+            $html,
+            $headerHtml,
+            $footerHtml,
+            $options,
+            $this->metadata,
+            $this->driverName,
+            $this->onLambda,
+        ]);
     }
 
     protected function applyPostProcessors(string $pdfContent): string

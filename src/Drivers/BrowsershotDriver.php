@@ -113,7 +113,7 @@ class BrowsershotDriver implements PdfDriver, SupportsReadiness
         }
 
         if ($options->waitForReady !== null) {
-            $browsershot->waitForFunction($options->waitForReady, null, $options->waitForReadyTimeout ?? 0);
+            $browsershot->waitForFunction($options->waitForReady, null, $options->waitForReadyTimeout ?? 30000);
         }
 
         $this->applyConfigurationDefaults($browsershot);

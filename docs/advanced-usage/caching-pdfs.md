@@ -105,6 +105,17 @@ Register it in the `cache.class` key of the config file.
 ],
 ```
 
+## Caching and `withBrowsershot()`
+
+A closure passed to `withBrowsershot()` can change the output, but it cannot be added to the cache key. Caching a PDF that is customized this way throws an exception unless you pass an explicit key, which makes you responsible for keeping it unique.
+
+```php
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->withBrowsershot(fn ($browsershot) => $browsershot->setRemoteInstance('127.0.0.1', 9222))
+    ->cache(key: "invoice-{$invoice->id}")
+    ->save('invoice.pdf');
+```
+
 ## Caching and queued generation
 
 Caching applies to PDFs generated synchronously. PDFs generated with [queued generation](/docs/laravel-pdf/v2/basic-usage/queued-pdf-generation) are not cached.

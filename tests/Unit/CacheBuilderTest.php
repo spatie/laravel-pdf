@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Cache;
 use Spatie\LaravelPdf\Caching\PdfCache;
+use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\Facades\Pdf;
+use Spatie\LaravelPdf\PdfOptions;
 use Spatie\LaravelPdf\Tests\TestSupport\FakeDriver;
 
 beforeEach(function () {
@@ -82,6 +84,34 @@ it('can opt out of caching with dontCache when enabled in config', function () {
     Pdf::html('<p>hi</p>')->setDriver($driver)->dontCache()->base64();
 
     expect($driver->generateCount)->toBe(2);
+});
+
+it('throws when caching a pdf customized with a browsershot closure', function () {
+    Pdf::html('<p>hi</p>')
+        ->setDriver(new FakeDriver)
+        ->withBrowsershot(fn () => null)
+        ->cache()
+        ->base64();
+})->throws(CouldNotGeneratePdf::class);
+
+it('allows caching a browsershot-customized pdf when an explicit key is given', function () {
+    $content = Pdf::html('<p>hi</p>')
+        ->setDriver(new FakeDriver)
+        ->withBrowsershot(fn () => null)
+        ->cache(key: 'explicit')
+        ->base64();
+
+    expect(base64_decode($content))->toBe('%PDF-fake');
+});
+
+it('uses the driver name in the cache fingerprint', function () {
+    $first = invade(Pdf::html('<p>hi</p>')->driver('browsershot'))
+        ->cacheFingerprint('<p>hi</p>', null, null, new PdfOptions);
+
+    $second = invade(Pdf::html('<p>hi</p>')->driver('chrome'))
+        ->cacheFingerprint('<p>hi</p>', null, null, new PdfOptions);
+
+    expect($first)->not->toBe($second);
 });
 
 it('uses the cache implementation bound in the container', function () {

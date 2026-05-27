@@ -95,7 +95,7 @@ class ChromeDriver implements PdfDriver, SupportsReadiness
 
         $timeout = $options->waitForReadyTimeout ?? 30000;
         $deadline = microtime(true) + ($timeout / 1000);
-        $expression = "(() => Boolean({$options->waitForReady}))()";
+        $expression = "(() => { try { return Boolean({$options->waitForReady}); } catch (error) { return false; } })()";
 
         do {
             if ($page->evaluate($expression)->getReturnValue()) {

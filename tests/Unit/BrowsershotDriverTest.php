@@ -21,6 +21,17 @@ it('configures browsershot to wait for the readiness expression', function () {
     expect(invade($browsershot)->additionalOptions['functionTimeout'])->toBe(5000);
 });
 
+it('defaults the readiness timeout to 30 seconds', function () {
+    $driver = new BrowsershotDriver;
+
+    $options = new PdfOptions;
+    $options->waitForReady = 'window.pdfReady === true';
+
+    $browsershot = invade($driver)->buildBrowsershot('<p>hi</p>', null, null, $options);
+
+    expect(invade($browsershot)->additionalOptions['functionTimeout'])->toBe(30000);
+});
+
 it('does not configure a wait function when readiness is not requested', function () {
     $driver = new BrowsershotDriver;
 
