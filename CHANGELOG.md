@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.11.0 - 2026-05-27
+
+### What's Changed
+
+* Add `SensitiveParameter` attribute to password parameters by @sebdesign in https://github.com/spatie/laravel-pdf/pull/346
+
+### New Contributors
+
+* @sebdesign made their first contribution in https://github.com/spatie/laravel-pdf/pull/346
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.10.0...2.11.0
+
 ## 2.10.0 - 2026-05-27
 
 ### What's Changed
