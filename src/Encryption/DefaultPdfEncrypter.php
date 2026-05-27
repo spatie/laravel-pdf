@@ -65,7 +65,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
         return $body.$this->renderCrossReference($offsets, strlen($body), $trailer);
     }
 
-    public function decrypt(string $pdf, string $password): string
+    public function decrypt(string $pdf, #[\SensitiveParameter] string $password): string
     {
         $encryptObjectNumber = $this->encryptObjectNumber($pdf);
 
@@ -486,7 +486,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
      *
      * @return array{0: string, 1: string}
      */
-    protected function ownerValues(string $ownerPassword, string $fileKey, string $userValue): array
+    protected function ownerValues(#[\SensitiveParameter] string $ownerPassword, string $fileKey, string $userValue): array
     {
         $validationSalt = random_bytes(8);
         $keySalt = random_bytes(8);
@@ -506,7 +506,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
         return [$ownerValue, $ownerKeyValue];
     }
 
-    protected function recoverDocumentKey(string $encryptionDictionary, string $password): string
+    protected function recoverDocumentKey(string $encryptionDictionary, #[\SensitiveParameter] string $password): string
     {
         $userValue = $this->dictionaryString($encryptionDictionary, 'U');
         $ownerValue = $this->dictionaryString($encryptionDictionary, 'O');
@@ -529,7 +529,7 @@ class DefaultPdfEncrypter implements PdfEncrypter
     /**
      * Algorithm 2.B from ISO 32000-2 (the AES-256 R6 key-derivation hash).
      */
-    protected function hash2B(string $password, string $salt, string $userValue): string
+    protected function hash2B(#[\SensitiveParameter] string $password, string $salt, string $userValue): string
     {
         $hash = hash('sha256', $password.$salt.$userValue, true);
         $round = 0;

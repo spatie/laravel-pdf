@@ -94,7 +94,7 @@ it('uses a custom bound encrypter', function () {
             return 'custom-encrypted';
         }
 
-        public function decrypt(string $pdf, string $password): string
+        public function decrypt(string $pdf, #[\SensitiveParameter] string $password): string
         {
             return 'custom-decrypted';
         }
