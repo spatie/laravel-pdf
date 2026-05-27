@@ -3,11 +3,13 @@
 namespace Spatie\LaravelPdf\Caching;
 
 use Closure;
+use DateInterval;
+use DateTimeInterface;
 use Illuminate\Support\Facades\Cache;
 
 class DefaultPdfCache implements PdfCache
 {
-    public function remember(string $fingerprint, ?string $key, ?int $ttl, Closure $generate): string
+    public function remember(string $fingerprint, ?string $key, DateTimeInterface|DateInterval|int|null $ttl, Closure $generate): string
     {
         $store = Cache::store(config('laravel-pdf.cache.store'));
 

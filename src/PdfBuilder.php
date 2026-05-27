@@ -3,6 +3,7 @@
 namespace Spatie\LaravelPdf;
 
 use Closure;
+use DateInterval;
 use DateTimeInterface;
 use Illuminate\Contracts\Mail\Attachable;
 use Illuminate\Contracts\Support\Responsable;
@@ -93,7 +94,7 @@ class PdfBuilder implements Attachable, Responsable
 
     protected ?bool $shouldCache = null;
 
-    protected ?int $cacheTtl = null;
+    protected DateTimeInterface|DateInterval|int|null $cacheTtl = null;
 
     protected ?string $cacheKey = null;
 
@@ -339,7 +340,7 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
-    public function cache(?int $ttl = null, ?string $key = null): self
+    public function cache(DateTimeInterface|DateInterval|int|null $ttl = null, ?string $key = null): self
     {
         $this->shouldCache = true;
 

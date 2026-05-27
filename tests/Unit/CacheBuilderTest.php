@@ -7,6 +7,8 @@ use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfOptions;
 use Spatie\LaravelPdf\Tests\TestSupport\FakeDriver;
 
+use function Illuminate\Support\hours;
+
 beforeEach(function () {
     Cache::flush();
 });
@@ -114,10 +116,37 @@ it('uses the driver name in the cache fingerprint', function () {
     expect($first)->not->toBe($second);
 });
 
+it('accepts a carbon interval as a lifetime', function () {
+    $driver = new FakeDriver;
+
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(hours(2))->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(hours(2))->base64();
+
+    expect($driver->generateCount)->toBe(1);
+});
+
+it('accepts a date time as a lifetime', function () {
+    $driver = new FakeDriver;
+
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(now()->addHour())->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(now()->addHour())->base64();
+
+    expect($driver->generateCount)->toBe(1);
+});
+
+it('honors an expired lifetime by regenerating', function () {
+    $driver = new FakeDriver;
+
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(now()->subMinute())->base64();
+    Pdf::html('<p>hi</p>')->setDriver($driver)->cache(now()->subMinute())->base64();
+
+    expect($driver->generateCount)->toBe(2);
+});
+
 it('uses the cache implementation bound in the container', function () {
     app()->instance(PdfCache::class, new class implements PdfCache
     {
-        public function remember(string $fingerprint, ?string $key, ?int $ttl, Closure $generate): string
+        public function remember(string $fingerprint, ?string $key, DateTimeInterface|DateInterval|int|null $ttl, Closure $generate): string
         {
             return 'overridden-content';
         }

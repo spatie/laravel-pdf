@@ -21,11 +21,29 @@ Caching applies to every output method, including `save()`, `download()`, `base6
 
 ## Setting a lifetime
 
-By default a cache entry lives for one day. Pass a lifetime (in seconds) to use a different duration.
+By default a cache entry lives for one day. Pass a lifetime to use a different duration. It accepts a number of seconds, a `DateInterval`, or a `DateTimeInterface`.
 
 ```php
 Pdf::view('pdf.invoice', ['invoice' => $invoice])
-    ->cache(3600)
+    ->cache(3600) // seconds
+    ->save('invoice.pdf');
+```
+
+You can use Laravel's duration helpers (`minutes`, `hours`, `days`) for a more expressive lifetime.
+
+```php
+use function Illuminate\Support\hours;
+
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->cache(hours(2))
+    ->save('invoice.pdf');
+```
+
+A Carbon instance (or any `DateTimeInterface`) works too, expiring the entry at that moment.
+
+```php
+Pdf::view('pdf.invoice', ['invoice' => $invoice])
+    ->cache(now()->endOfDay())
     ->save('invoice.pdf');
 ```
 
