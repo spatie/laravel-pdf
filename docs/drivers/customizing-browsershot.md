@@ -7,7 +7,7 @@ When using the Browsershot driver, you can customize the underlying [Browsershot
 
 ## Configuration-Based Customization
 
-For settings that apply to all PDFs in your application, use the [configuration file](/docs/advanced-usage/configuration) to set defaults. This is especially useful for binary paths, Chrome arguments, and language settings.
+For settings that apply to all PDFs in your application, use the [configuration file](/docs/laravel-pdf/v2/drivers/configuration#content-browsershot-configuration) to set defaults. This is especially useful for binary paths, Chrome arguments, and language settings.
 
 ## Per-PDF Customization
 
