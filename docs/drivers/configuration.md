@@ -38,7 +38,7 @@ Configure paths to Node.js, npm, Chrome, and other binaries used by the Browsers
     'node_modules_path' => env('LARAVEL_PDF_NODE_MODULES_PATH'),
     'bin_path' => env('LARAVEL_PDF_BIN_PATH'),
     'temp_path' => env('LARAVEL_PDF_TEMP_PATH'),
-    'write_options_to_file' => env('LARAVEL_PDF_WRITE_OPTIONS_TO_FILE', false),
+    'write_options_to_file' => env('LARAVEL_PDF_WRITE_OPTIONS_TO_FILE', true),
     'no_sandbox' => env('LARAVEL_PDF_NO_SANDBOX', false),
 ],
 ```
