@@ -2,6 +2,16 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.12.0 - 2026-06-11
+
+### What's Changed
+
+* docs: Update link to Browsershot configuration documentation by @A909M in https://github.com/spatie/laravel-pdf/pull/348
+* docs: update  default write_options_to_file to true by @A909M in https://github.com/spatie/laravel-pdf/pull/347
+* Add readiness support to the Gotenberg driver by @freekmurze in https://github.com/spatie/laravel-pdf/pull/350
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.11.0...2.12.0
+
 ## 2.11.0 - 2026-05-27
 
 ### What's Changed
