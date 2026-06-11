@@ -55,6 +55,8 @@ Pdf::view('pdf.report')
 
 ## Driver support
 
-Waiting for readiness requires a driver that can execute JavaScript. It is supported by the [Browsershot](/docs/laravel-pdf/v2/drivers/customizing-browsershot) and [Chrome](/docs/laravel-pdf/v2/drivers/using-the-chrome-driver) drivers.
+Waiting for readiness requires a driver that can execute JavaScript. It is supported by the [Browsershot](/docs/laravel-pdf/v2/drivers/customizing-browsershot), [Chrome](/docs/laravel-pdf/v2/drivers/using-the-chrome-driver), and [Gotenberg](/docs/laravel-pdf/v2/drivers/using-the-gotenberg-driver) drivers.
+
+When using Gotenberg, the readiness expression is passed as its `waitForExpression` field, and the timeout is applied to the HTTP request so it does not abort before Gotenberg finishes rendering.
 
 Calling `waitUntilReady()` while a driver that cannot run JavaScript is active (such as DOMPDF or WeasyPrint) throws a `CouldNotGeneratePdf` exception.

@@ -222,8 +222,53 @@ it('does not send optional fields when not set', function () {
             && ! $names->contains('nativePageRanges')
             && ! $names->contains('generateTaggedPdf')
             && ! $names->contains('landscape')
-            && ! $names->contains('paperWidth');
+            && ! $names->contains('paperWidth')
+            && ! $names->contains('waitForExpression');
     });
+});
+
+it('sends the readiness expression as waitForExpression', function () {
+    Http::fake([
+        'localhost:3000/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new GotenbergDriver(['url' => 'http://localhost:3000']);
+
+    $options = new PdfOptions;
+    $options->waitForReady = 'window.pdfReady === true';
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return collect($request->data())->contains(
+            fn ($part) => ($part['name'] ?? null) === 'waitForExpression'
+                && $part['contents'] === 'window.pdfReady === true'
+        );
+    });
+});
+
+it('sets the request timeout from the readiness timeout', function () {
+    $driver = new GotenbergDriver(['url' => 'http://localhost:3000']);
+
+    $options = new PdfOptions;
+    $options->waitForReady = 'window.pdfReady === true';
+    $options->waitForReadyTimeout = 60000;
+
+    $request = invade($driver)->buildRequest('<h1>Hello</h1>', null, null, $options);
+
+    expect(invade($request)->options['timeout'])->toBe(60);
+});
+
+it('rounds a sub-second readiness timeout up to a whole second', function () {
+    $driver = new GotenbergDriver(['url' => 'http://localhost:3000']);
+
+    $options = new PdfOptions;
+    $options->waitForReady = 'window.pdfReady === true';
+    $options->waitForReadyTimeout = 4500;
+
+    $request = invade($driver)->buildRequest('<h1>Hello</h1>', null, null, $options);
+
+    expect(invade($request)->options['timeout'])->toBe(5);
 });
 
 it('sends header and footer as html files', function () {
