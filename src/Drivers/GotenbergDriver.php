@@ -8,7 +8,7 @@ use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\Exceptions\CouldNotGeneratePdf;
 use Spatie\LaravelPdf\PdfOptions;
 
-class GotenbergDriver implements PdfDriver
+class GotenbergDriver implements PdfDriver, SupportsReadiness
 {
     protected string $url;
 
@@ -69,6 +69,12 @@ class GotenbergDriver implements PdfDriver
                 fn (PendingRequest $request): PendingRequest => $request->withBasicAuth(
                     $this->username,
                     $this->password
+                )
+            )
+            ->when(
+                $options->waitForReady !== null,
+                fn (PendingRequest $request): PendingRequest => $request->timeout(
+                    (int) ceil(($options->waitForReadyTimeout ?? 30000) / 1000)
                 )
             );
 
@@ -132,6 +138,10 @@ class GotenbergDriver implements PdfDriver
 
         if ($options->tagged) {
             $fields['generateTaggedPdf'] = 'true';
+        }
+
+        if ($options->waitForReady !== null) {
+            $fields['waitForExpression'] = $options->waitForReady;
         }
 
         return $fields;

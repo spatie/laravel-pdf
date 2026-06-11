@@ -55,6 +55,21 @@ The Gotenberg driver supports the following PDF options:
 - `tagged()` — Generate tagged (accessible) PDF
 - `headerView()` / `headerHtml()` — Page headers (repeated on every page)
 - `footerView()` / `footerHtml()` — Page footers (repeated on every page)
+- `waitUntilReady()` — Wait for a JavaScript readiness signal before capturing (see [Waiting for readiness](/docs/laravel-pdf/v2/advanced-usage/waiting-for-readiness))
+
+## Waiting for readiness
+
+Because Gotenberg renders with headless Chromium, it can wait for a JavaScript expression to become truthy before capturing the PDF. Call `waitUntilReady()` on the builder to defer capturing until your view signals it is done rendering:
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdfs.report', ['report' => $report])
+    ->waitUntilReady()
+    ->save('report.pdf');
+```
+
+The readiness expression is sent to Gotenberg as its `waitForExpression` field. The timeout you pass to `waitUntilReady()` (30 seconds by default) is also applied to the HTTP request, so the request does not abort before Gotenberg finishes rendering. See [Waiting for readiness](/docs/laravel-pdf/v2/advanced-usage/waiting-for-readiness) for the full details.
 
 ## Headers and footers
 

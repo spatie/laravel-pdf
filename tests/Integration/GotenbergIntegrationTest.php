@@ -35,6 +35,30 @@ it('generates a pdf with default options', function () {
     expect($result)->toStartWith('%PDF');
 });
 
+it('waits for a readiness expression before capturing', function () {
+    $html = <<<'HTML'
+    <html>
+    <body>
+        <h1 id="status">loading</h1>
+        <script>
+            setTimeout(() => {
+                document.getElementById('status').textContent = 'ready';
+                window.pdfReady = true;
+            }, 250);
+        </script>
+    </body>
+    </html>
+    HTML;
+
+    $options = new PdfOptions;
+    $options->waitForReady = 'window.pdfReady === true';
+    $options->waitForReadyTimeout = 10000;
+
+    $result = $this->driver->generatePdf($html, null, null, $options);
+
+    expect($result)->toStartWith('%PDF');
+});
+
 it('saves a pdf to disk', function () {
     $path = getTempPath('gotenberg-save-test.pdf');
     $this->driver->savePdf('<h1>Hello</h1>', null, null, new PdfOptions, $path);
