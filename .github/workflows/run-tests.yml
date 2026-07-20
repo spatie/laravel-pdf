@@ -82,7 +82,7 @@ jobs:
       - name: Install ghostscript
         run: sudo apt-get -y install ghostscript
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
           cache: pip
