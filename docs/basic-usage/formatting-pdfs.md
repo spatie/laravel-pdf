@@ -65,6 +65,51 @@ It supports absolute and relative paths
 @inlinedImage('https://some-url/assets/some-logo.png')
 ```
 
+### Header and footer caveats
+
+Headers and footers are rendered by Chromium in a separate, isolated document. This applies to the Chrome, Browsershot, Gotenberg, and Cloudflare drivers, and it has a few consequences worth knowing about.
+
+**Set a font size explicitly.** The isolated document uses a tiny default font size (roughly 1px), so text will be nearly invisible unless you set your own. Always define a `font-size` in your header and footer CSS.
+
+```html
+<style>
+    html {
+        font-size: 16px;
+    }
+</style>
+```
+
+**The header and footer span the full page width.** The left and right page margins you set with `margins()` apply to the main content, not to the header and footer. To line them up with your content, add matching horizontal padding yourself. If your left and right margins are `0.39in`, use:
+
+```html
+<style>
+    body {
+        margin: 0;
+        padding: 0 0.39in;
+    }
+</style>
+```
+
+**Avoid `width: 100%`.** Because the header and footer already span the full paper width, `width: 100%` overflows the page even with `box-sizing: border-box`. Rely on the body padding above instead of setting an explicit width, or subtract your horizontal margins from the width:
+
+```css
+.header {
+    width: calc(100% - 0.78in); /* left margin plus right margin */
+}
+```
+
+**Make room for the header and footer with your top and bottom margins.** Chromium draws the header inside the top margin and the footer inside the bottom margin. It does not enlarge those margins to fit their content, so if a margin is smaller than the rendered header or footer, it will overlap your main content. Increase `marginTop` and `marginBottom` until there is enough room.
+
+```php
+use Spatie\LaravelPdf\Enums\Unit;
+
+Pdf::view('pdf.invoice', $data)
+    ->margins(0.9, 0.39, 0.6, 0.39, Unit::Inch)
+    ->headerView('pdf.header', $data)
+    ->footerView('pdf.footer', $data)
+    ->save('/some/directory/invoice.pdf');
+```
+
 ## Page orientation
 
 By default, all PDFs are created in portrait mode. You can change this by calling the `landscape` method.
