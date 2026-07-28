@@ -92,3 +92,9 @@ $this->app->singleton(PdfDriver::class, function () {
     return new WeasyPrintDriver(config('laravel-pdf.weasyprint', []));
 });
 ```
+
+## Community drivers
+
+The following custom drivers are maintained by the community and are not officially supported by Spatie:
+
+- [`bladepdf/spatie-laravel-pdf-driver`](https://github.com/bladepdf/spatie-laravel-pdf-driver) — renders PDFs using BladePDF's managed Chromium API. A BladePDF account and API key are required.
