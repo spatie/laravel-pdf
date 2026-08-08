@@ -53,7 +53,7 @@ Pdf::view('pdfs.invoice', ['invoice' => $invoice])
     ->then(fn (string $path, ?string $diskName) => Mail::to($user)->send(new InvoiceMail($path)));
 ```
 
-You can use also test your PDFs:
+You can also test your PDFs:
 
 ```php
 use Spatie\LaravelPdf\Facades\Pdf;
