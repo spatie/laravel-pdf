@@ -53,30 +53,87 @@ class PdfMetadataWriter
 
     protected static function parseTrailer(string $pdfContent, int $startxrefOffset): array
     {
-        // Read a chunk around and after the xref area to find /Size and /Root
-        $chunkStart = max(0, $startxrefOffset - 512);
-        $chunk = substr($pdfContent, $chunkStart, 2048);
+        $dictionary = self::extractTrailerDictionary($pdfContent, $startxrefOffset);
 
-        if (preg_match('/\/Size\s+(\d+)/', $chunk, $sizeMatch)
-            && preg_match('/\/Root\s+(\d+\s+\d+\s+R)/', $chunk, $rootMatch)) {
-            return [
-                'size' => (int) $sizeMatch[1],
-                'root' => $rootMatch[1],
-            ];
+        if ($dictionary === null
+            || ! preg_match('/\/Size\s+(\d+)/', $dictionary, $sizeMatch)
+            || ! preg_match('/\/Root\s+(\d+\s+\d+\s+R)/', $dictionary, $rootMatch)) {
+            throw new RuntimeException('Could not parse PDF trailer to find /Size and /Root.');
         }
 
-        // For xref streams, the object at startxrefOffset contains /Size and /Root
-        $streamChunk = substr($pdfContent, $startxrefOffset, 2048);
+        return [
+            'size' => (int) $sizeMatch[1],
+            'root' => $rootMatch[1],
+        ];
+    }
 
-        if (preg_match('/\/Size\s+(\d+)/', $streamChunk, $sizeMatch)
-            && preg_match('/\/Root\s+(\d+\s+\d+\s+R)/', $streamChunk, $rootMatch)) {
-            return [
-                'size' => (int) $sizeMatch[1],
-                'root' => $rootMatch[1],
-            ];
+    /**
+     * The bytes at the startxref offset are either the `xref` keyword of a classic
+     * cross-reference table, or the `N G obj` header of a cross-reference stream
+     * (PDF 1.5+). Both eventually lead to a dictionary holding /Size and /Root.
+     */
+    protected static function extractTrailerDictionary(string $pdfContent, int $startxrefOffset): ?string
+    {
+        if (substr($pdfContent, $startxrefOffset, 4) !== 'xref') {
+            // Cross-reference stream: /Size and /Root live in the stream object's dictionary.
+            return self::extractDictionary($pdfContent, $startxrefOffset);
         }
 
-        throw new RuntimeException('Could not parse PDF trailer to find /Size and /Root.');
+        // Classic cross-reference table. Its entries only ever contain digits, spaces
+        // and the letters `n` and `f`, so the first `trailer` keyword after the table
+        // starts is always the trailer we are looking for, no matter how many
+        // subsections or entries the table has.
+        $trailerPosition = strpos($pdfContent, 'trailer', $startxrefOffset);
+
+        if ($trailerPosition === false) {
+            return null;
+        }
+
+        return self::extractDictionary($pdfContent, $trailerPosition);
+    }
+
+    /**
+     * Return the dictionary that starts at the first `<<` at or after the given
+     * position, tracking nesting so we stop at the matching `>>` instead of at a
+     * fixed byte count.
+     */
+    protected static function extractDictionary(string $pdfContent, int $searchFrom): ?string
+    {
+        $start = strpos($pdfContent, '<<', $searchFrom);
+
+        if ($start === false) {
+            return null;
+        }
+
+        $depth = 0;
+        $position = $start;
+        $length = strlen($pdfContent);
+
+        while ($position < $length - 1) {
+            $token = substr($pdfContent, $position, 2);
+
+            if ($token === '<<') {
+                $depth++;
+                $position += 2;
+
+                continue;
+            }
+
+            if ($token === '>>') {
+                $depth--;
+                $position += 2;
+
+                if ($depth === 0) {
+                    return substr($pdfContent, $start, $position - $start);
+                }
+
+                continue;
+            }
+
+            $position++;
+        }
+
+        return null;
     }
 
     protected static function buildInfoObject(int $objectNumber, PdfMetadata $metadata): string
