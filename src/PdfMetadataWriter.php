@@ -68,69 +68,32 @@ class PdfMetadataWriter
     }
 
     /**
-     * The bytes at the startxref offset are either the `xref` keyword of a classic
-     * cross-reference table, or the `N G obj` header of a cross-reference stream
-     * (PDF 1.5+). Both eventually lead to a dictionary holding /Size and /Root.
+     * `startxref` points at either a classic cross-reference table or at the object
+     * header of a cross-reference stream (PDF 1.5+). Table entries only ever contain
+     * digits, spaces and the letters `n` and `f`, so in both layouts the first `<<`
+     * that follows opens the dictionary holding /Size and /Root. Nesting is tracked so
+     * that dictionary ends at its matching `>>` instead of at a fixed byte count.
      */
     protected static function extractTrailerDictionary(string $pdfContent, int $startxrefOffset): ?string
     {
-        if (substr($pdfContent, $startxrefOffset, 4) !== 'xref') {
-            // Cross-reference stream: /Size and /Root live in the stream object's dictionary.
-            return self::extractDictionary($pdfContent, $startxrefOffset);
-        }
-
-        // Classic cross-reference table. Its entries only ever contain digits, spaces
-        // and the letters `n` and `f`, so the first `trailer` keyword after the table
-        // starts is always the trailer we are looking for, no matter how many
-        // subsections or entries the table has.
-        $trailerPosition = strpos($pdfContent, 'trailer', $startxrefOffset);
-
-        if ($trailerPosition === false) {
-            return null;
-        }
-
-        return self::extractDictionary($pdfContent, $trailerPosition);
-    }
-
-    /**
-     * Return the dictionary that starts at the first `<<` at or after the given
-     * position, tracking nesting so we stop at the matching `>>` instead of at a
-     * fixed byte count.
-     */
-    protected static function extractDictionary(string $pdfContent, int $searchFrom): ?string
-    {
-        $start = strpos($pdfContent, '<<', $searchFrom);
+        $start = strpos($pdfContent, '<<', $startxrefOffset);
 
         if ($start === false) {
             return null;
         }
 
         $depth = 0;
-        $position = $start;
-        $length = strlen($pdfContent);
+        $offset = $start;
 
-        while ($position < $length - 1) {
-            $token = substr($pdfContent, $position, 2);
+        while (preg_match('/<<|>>/', $pdfContent, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            [$token, $position] = $matches[0];
 
-            if ($token === '<<') {
-                $depth++;
-                $position += 2;
+            $depth += $token === '<<' ? 1 : -1;
+            $offset = $position + 2;
 
-                continue;
+            if ($depth === 0) {
+                return substr($pdfContent, $start, $offset - $start);
             }
-
-            if ($token === '>>') {
-                $depth--;
-                $position += 2;
-
-                if ($depth === 0) {
-                    return substr($pdfContent, $start, $position - $start);
-                }
-
-                continue;
-            }
-
-            $position++;
         }
 
         return null;

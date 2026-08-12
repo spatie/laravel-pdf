@@ -209,3 +209,92 @@ it('reports isEmpty correctly', function () {
 
     expect(new PdfMetadata(title: 'Hi'))->isEmpty()->toBeFalse();
 });
+
+it('writes metadata to a pdf whose xref table pushes the trailer past 2 KB', function () {
+    $pdf = buildPdfWithClassicXrefTable(objectCount: 300);
+
+    $result = PdfMetadataWriter::write($pdf, new PdfMetadata(title: 'My title'));
+
+    expect($result)
+        ->toStartWith($pdf)
+        ->toContain('/Title (My title)')
+        ->toContain('300 0 obj')
+        ->toContain('/Size 301')
+        ->toContain('/Root 1 0 R')
+        ->toContain('/Info 300 0 R');
+});
+
+it('writes metadata to a pdf that uses a cross reference stream', function (int $indexPairCount) {
+    $pdf = buildPdfWithCrossReferenceStream($indexPairCount);
+
+    $result = PdfMetadataWriter::write($pdf, new PdfMetadata(title: 'My title'));
+
+    expect($result)
+        ->toStartWith($pdf)
+        ->toContain('/Title (My title)')
+        ->toContain('42 0 obj')
+        ->toContain('/Size 43')
+        ->toContain('/Root 1 0 R')
+        ->toContain('/Info 42 0 R');
+})->with([
+    'short index' => 10,
+    'index longer than 2 KB, as emitted by Chromium 147+' => 350,
+]);
+
+it('throws when the trailer cannot be located', function () {
+    $pdf = "%PDF-1.7\n1 0 obj\n<< /Type /Filler >>\nendobj\nstartxref\n9\n%%EOF\n";
+
+    PdfMetadataWriter::write($pdf, new PdfMetadata(title: 'My title'));
+})->throws(RuntimeException::class, 'Could not parse PDF trailer to find /Size and /Root.');
+
+function buildPdfWithClassicXrefTable(int $objectCount): string
+{
+    $pdf = "%PDF-1.4\n";
+    $offsets = [];
+
+    for ($objectNumber = 1; $objectNumber < $objectCount; $objectNumber++) {
+        $offsets[$objectNumber] = strlen($pdf);
+        $pdf .= "{$objectNumber} 0 obj\n<< /Type /Filler >>\nendobj\n";
+    }
+
+    $xrefOffset = strlen($pdf);
+
+    $pdf .= "xref\n0 {$objectCount}\n";
+    $pdf .= "0000000000 65535 f \n";
+
+    foreach ($offsets as $offset) {
+        $pdf .= sprintf("%010d 00000 n \n", $offset);
+    }
+
+    $pdf .= "trailer\n<< /Size {$objectCount} /Root 1 0 R >>\n";
+    $pdf .= "startxref\n{$xrefOffset}\n%%EOF\n";
+
+    return $pdf;
+}
+
+function buildPdfWithCrossReferenceStream(int $indexPairCount): string
+{
+    $pdf = "%PDF-1.7\n";
+
+    for ($objectNumber = 1; $objectNumber < 41; $objectNumber++) {
+        $pdf .= "{$objectNumber} 0 obj\n<< /Type /Filler >>\nendobj\n";
+    }
+
+    $xrefOffset = strlen($pdf);
+
+    $index = implode(' ', array_map(
+        fn (int $objectNumber): string => "{$objectNumber} 1",
+        range(0, $indexPairCount - 1),
+    ));
+
+    $streamData = str_repeat("\x01\x00\x00\x00", 60);
+
+    $pdf .= "41 0 obj\n";
+    $pdf .= "<< /Type /XRef /W [1 4 2] /Index [{$index}]"
+        .' /DecodeParms << /Predictor 12 /Columns 5 >>'
+        .' /Length '.strlen($streamData)." /Size 42 /Root 1 0 R >>\n";
+    $pdf .= "stream\n{$streamData}\nendstream\nendobj\n";
+    $pdf .= "startxref\n{$xrefOffset}\n%%EOF\n";
+
+    return $pdf;
+}
