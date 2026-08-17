@@ -96,4 +96,4 @@ Pdf::view('pdfs.invoice', ['invoice' => $invoice])
 - The Chrome driver requires both the `chrome-php/chrome` package and a local Chrome or Chromium executable. It does not download or bundle a browser for you.
 - In Docker or other locked-down environments, you may need to enable `no_sandbox`.
 - This driver only documents and exposes the options supported by Laravel PDF. If you need deeper Chromium customization, use the Browsershot driver instead.
-- The `tagged()`, `withBrowsershot()` and `onLambda()` methods have no effect when using the Chrome driver.
+- The `tagged()`, `documentOutline()`, `withBrowsershot()` and `onLambda()` methods have no effect when using the Chrome driver.

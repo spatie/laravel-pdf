@@ -240,6 +240,20 @@ Pdf::view('pdf.invoice', ['invoice' => $invoice])
 
 > Tagged PDFs are supported by the Browsershot and Cloudflare drivers. The DOMPDF driver does not support this option.
 
+## Document outline
+
+You can generate a document outline (bookmarks) using the `documentOutline` method. The outline is built from the headings in your view, and lets readers jump to a section from the sidebar of their PDF viewer.
+
+```php
+use Spatie\LaravelPdf\Facades\Pdf;
+
+Pdf::view('pdf.report', ['report' => $report])
+    ->documentOutline()
+    ->save('/some/directory/report.pdf');
+```
+
+> Document outlines are supported by the Browsershot, Cloudflare and Gotenberg drivers. The DOMPDF, Chrome and WeasyPrint drivers do not support this option.
+
 ## PDF metadata
 
 You can set PDF document metadata such as title, author, subject, and keywords using the `meta` method. This metadata is displayed in PDF viewers — for example, the title is shown in the browser tab when viewing a PDF inline.

@@ -239,6 +239,26 @@ it('sends tagged option to cloudflare', function () {
     });
 });
 
+it('sends document outline option to cloudflare', function () {
+    Http::fake([
+        'api.cloudflare.com/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new CloudflareDriver([
+        'api_token' => 'test-token',
+        'account_id' => 'test-account',
+    ]);
+
+    $options = new PdfOptions;
+    $options->documentOutline = true;
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return $request['pdfOptions']['outline'] === true;
+    });
+});
+
 it('does not send scale or page ranges when not set', function () {
     Http::fake([
         'api.cloudflare.com/*' => Http::response('fake-pdf', 200),

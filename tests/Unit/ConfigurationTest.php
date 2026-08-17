@@ -133,6 +133,17 @@ it('applies tagged pdf option to browsershot', function () {
     expect(invade($browsershot)->taggedPdf)->toBeTrue();
 });
 
+it('applies document outline option to browsershot', function () {
+    $driver = new BrowsershotDriver;
+
+    $options = new PdfOptions;
+    $options->documentOutline = true;
+
+    $browsershot = invade($driver)->buildBrowsershot('test', null, null, $options);
+
+    expect(getBrowsershotOption($browsershot, 'outline'))->toBeTrue();
+});
+
 function getBrowsershotOption(object $browsershot, string $key): mixed
 {
     $options = invade($browsershot)->additionalOptions;

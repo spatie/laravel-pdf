@@ -274,6 +274,16 @@ it('can determine that tagged was set on a saved pdf', function () {
     });
 });
 
+it('can determine that a document outline was set on a saved pdf', function () {
+    Pdf::view('test')
+        ->documentOutline()
+        ->save('outline.pdf');
+
+    Pdf::assertSaved(function (PdfBuilder $pdf) {
+        return $pdf->documentOutline === true;
+    });
+});
+
 it('can determine that metadata was set on a pdf response', function () {
     Route::get('pdf', function () {
         return pdf('test')

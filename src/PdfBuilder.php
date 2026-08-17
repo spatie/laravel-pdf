@@ -69,6 +69,8 @@ class PdfBuilder implements Attachable, Responsable
 
     public bool $tagged = false;
 
+    public bool $documentOutline = false;
+
     public ?string $waitForReady = null;
 
     public ?int $waitForReadyTimeout = null;
@@ -332,6 +334,13 @@ class PdfBuilder implements Attachable, Responsable
         return $this;
     }
 
+    public function documentOutline(): self
+    {
+        $this->documentOutline = true;
+
+        return $this;
+    }
+
     public function waitUntilReady(?string $expression = null, ?int $timeout = null): self
     {
         $this->waitForReady = $expression ?? 'window.pdfReady === true';
@@ -577,6 +586,7 @@ class PdfBuilder implements Attachable, Responsable
         $options->scale = $this->scale;
         $options->pageRanges = $this->pageRanges;
         $options->tagged = $this->tagged;
+        $options->documentOutline = $this->documentOutline;
         $options->encryption = $this->encryption;
         $options->waitForReady = $this->waitForReady;
         $options->waitForReadyTimeout = $this->waitForReadyTimeout;

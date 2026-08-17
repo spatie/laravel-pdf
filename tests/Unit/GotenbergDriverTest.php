@@ -186,6 +186,25 @@ it('sends page ranges option to gotenberg', function () {
     });
 });
 
+it('sends document outline option to gotenberg', function () {
+    Http::fake([
+        'localhost:3000/*' => Http::response('fake-pdf', 200),
+    ]);
+
+    $driver = new GotenbergDriver(['url' => 'http://localhost:3000']);
+
+    $options = new PdfOptions;
+    $options->documentOutline = true;
+
+    $driver->generatePdf('<h1>Hello</h1>', null, null, $options);
+
+    Http::assertSent(function ($request) {
+        return collect($request->data())->contains(
+            fn ($part) => ($part['name'] ?? null) === 'generateDocumentOutline' && $part['contents'] === 'true'
+        );
+    });
+});
+
 it('sends tagged option to gotenberg', function () {
     Http::fake([
         'localhost:3000/*' => Http::response('fake-pdf', 200),
