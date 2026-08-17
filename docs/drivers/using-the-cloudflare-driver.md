@@ -41,6 +41,8 @@ The Cloudflare driver supports the following PDF options:
 - `format()` — Paper format (a4, letter, etc.)
 - `paperSize()` — Custom paper dimensions
 - `margins()` — Page margins
+- `tagged()` — Generate tagged (accessible) PDF
+- `documentOutline()` — Generate a document outline (bookmarks)
 - `landscape()` / `orientation()` — Page orientation
 - `headerView()` / `headerHtml()` — Page headers
 - `footerView()` / `footerHtml()` — Page footers

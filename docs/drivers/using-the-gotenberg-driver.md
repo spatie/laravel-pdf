@@ -53,6 +53,7 @@ The Gotenberg driver supports the following PDF options:
 - `scale()` — Page rendering scale
 - `pageRanges()` — Specific pages to include
 - `tagged()` — Generate tagged (accessible) PDF
+- `documentOutline()` — Generate a document outline (bookmarks)
 - `headerView()` / `headerHtml()` — Page headers (repeated on every page)
 - `footerView()` / `footerHtml()` — Page footers (repeated on every page)
 - `waitUntilReady()` — Wait for a JavaScript readiness signal before capturing (see [Waiting for readiness](/docs/laravel-pdf/v2/advanced-usage/waiting-for-readiness))

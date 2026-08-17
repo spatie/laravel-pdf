@@ -94,6 +94,10 @@ class CloudflareDriver implements PdfDriver
             $pdfOptions['tagged'] = true;
         }
 
+        if ($options->documentOutline) {
+            $pdfOptions['outline'] = true;
+        }
+
         if ($headerHtml || $footerHtml) {
             $pdfOptions['displayHeaderFooter'] = true;
 

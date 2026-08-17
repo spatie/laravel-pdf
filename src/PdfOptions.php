@@ -25,4 +25,6 @@ class PdfOptions
     public ?string $waitForReady = null;
 
     public ?int $waitForReadyTimeout = null;
+
+    public bool $documentOutline = false;
 }

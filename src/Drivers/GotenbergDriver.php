@@ -144,6 +144,10 @@ class GotenbergDriver implements PdfDriver, SupportsReadiness
             $fields['waitForExpression'] = $options->waitForReady;
         }
 
+        if ($options->documentOutline === true) {
+            $fields['generateDocumentOutline'] = $options->documentOutline;
+        }
+
         return $fields;
     }
 }

@@ -116,6 +116,10 @@ class BrowsershotDriver implements PdfDriver, SupportsReadiness
             $browsershot->waitForFunction($options->waitForReady, null, $options->waitForReadyTimeout ?? 30000);
         }
 
+        if ($options->documentOutline === true) {
+            $browsershot->setOption('outline', true);
+        }
+
         $this->applyConfigurationDefaults($browsershot);
 
         if ($this->customizeBrowsershot) {
