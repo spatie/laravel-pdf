@@ -16,6 +16,9 @@ function samplePdf(string $body = '<h1>Hello</h1><p>Visit <a href="https://spati
     return $dompdf->output();
 }
 
+// The /P entry is a signed 32 bit mask whose top bits are reserved, and releases of
+// tc-lib-pdf-encrypt disagree about how they are written: 2.5 leaves the sign bit clear and
+// 2.11 sets it. Compare one encryption against another rather than against a literal.
 function permissionValue(string $pdf): int
 {
     expect(preg_match('/\/Filter \/Standard.*?\/P\s+(-?\d+)/s', $pdf, $matches))->toBe(1);
@@ -69,9 +72,14 @@ it('throws when decrypting with the wrong password', function () {
 })->throws(CouldNotDecryptPdf::class);
 
 it('grants every permission by default', function () {
-    $encrypted = (new DefaultPdfEncrypter)->encrypt(samplePdf(), new PdfEncryption('secret'));
+    $default = (new DefaultPdfEncrypter)->encrypt(samplePdf(), new PdfEncryption('secret'));
 
-    expect(permissionValue($encrypted))->toBe(2147422012);
+    $everyPermission = (new DefaultPdfEncrypter)->encrypt(
+        samplePdf(),
+        new PdfEncryption('secret', permissions: Permission::cases()),
+    );
+
+    expect(permissionValue($default))->toBe(permissionValue($everyPermission));
 });
 
 it('only grants the permissions that are passed', function () {
@@ -80,10 +88,10 @@ it('only grants the permissions that are passed', function () {
         new PdfEncryption('secret', permissions: [Permission::Print]),
     );
 
-    $allGranted = 2147422012;
+    $allGranted = permissionValue((new DefaultPdfEncrypter)->encrypt(samplePdf(), new PdfEncryption('secret')));
 
     expect(permissionValue($encrypted))
-        ->toBeLessThan($allGranted)
+        ->not->toBe($allGranted)
         ->and(permissionValue($encrypted) & 4)->toBe(4);
 });
 
