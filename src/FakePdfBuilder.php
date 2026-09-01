@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use PHPUnit\Framework\Assert;
 use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Support\DummyPdf;
 
 class FakePdfBuilder extends PdfBuilder
 {
@@ -18,6 +19,9 @@ class FakePdfBuilder extends PdfBuilder
 
     /** @var array<int, array{pdf: PdfBuilder, path: string}> */
     protected array $queuedPdfs = [];
+
+    /** @var array<int, PdfBuilder> */
+    protected array $generatedPdfs = [];
 
     public function save(string $path): self
     {
@@ -38,10 +42,19 @@ class FakePdfBuilder extends PdfBuilder
         return new Response;
     }
 
+    public function generatePdfContent(): string
+    {
+        $this->getHtml();
+
+        $this->generatedPdfs[] = clone $this;
+
+        return DummyPdf::content();
+    }
+
     public function assertViewIs(string $viewName): void
     {
-        foreach ($this->savedPdfs as $savedPdf) {
-            if ($savedPdf['pdf']->viewName === $viewName) {
+        foreach ($this->recordedPdfs() as $recordedPdf) {
+            if ($recordedPdf->viewName === $viewName) {
                 $this->markAssertionPassed();
 
                 return;
@@ -54,8 +67,8 @@ class FakePdfBuilder extends PdfBuilder
     public function assertViewHas(string $key, $value = null): void
     {
         if ($value === null) {
-            foreach ($this->savedPdfs as $savedPdf) {
-                if (array_key_exists($key, $savedPdf['pdf']->viewData)) {
+            foreach ($this->recordedPdfs() as $recordedPdf) {
+                if (array_key_exists($key, $recordedPdf->viewData)) {
                     $this->markAssertionPassed();
 
                     return;
@@ -65,12 +78,12 @@ class FakePdfBuilder extends PdfBuilder
             Assert::fail("Did not save a PDF that has view data `{$key}`");
         }
 
-        foreach ($this->savedPdfs as $savedPdf) {
-            if (! array_key_exists($key, $savedPdf['pdf']->viewData)) {
+        foreach ($this->recordedPdfs() as $recordedPdf) {
+            if (! array_key_exists($key, $recordedPdf->viewData)) {
                 continue;
             }
 
-            if ($savedPdf['pdf']->viewData[$key] === $value) {
+            if ($recordedPdf->viewData[$key] === $value) {
                 $this->markAssertionPassed();
 
                 return;
@@ -110,26 +123,30 @@ class FakePdfBuilder extends PdfBuilder
 
     public function assertSee(string|array $text): void
     {
-        Assert::assertNotEmpty($this->savedPdfs, 'No PDF was generated and saved');
+        $recordedPdfs = $this->recordedPdfs();
+
+        Assert::assertNotEmpty($recordedPdfs, 'No PDF was generated and saved');
 
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
-            foreach ($this->savedPdfs as $savedPdf) {
-                Assert::assertStringContainsString((string) $string, $savedPdf['pdf']->html);
+            foreach ($recordedPdfs as $recordedPdf) {
+                Assert::assertStringContainsString((string) $string, $recordedPdf->html);
             }
         }
     }
 
     public function assertDontSee(string|array $text): void
     {
-        Assert::assertNotEmpty($this->savedPdfs, 'No PDF was generated and saved');
+        $recordedPdfs = $this->recordedPdfs();
+
+        Assert::assertNotEmpty($recordedPdfs, 'No PDF was generated and saved');
 
         $strings = Arr::wrap($text);
 
         foreach ($strings as $string) {
-            foreach ($this->savedPdfs as $savedPdf) {
-                Assert::assertStringNotContainsString((string) $string, $savedPdf['pdf']->html);
+            foreach ($recordedPdfs as $recordedPdf) {
+                Assert::assertStringNotContainsString((string) $string, $recordedPdf->html);
             }
         }
     }
@@ -137,7 +154,7 @@ class FakePdfBuilder extends PdfBuilder
     public function assertBrowsershot(Closure $expectations): void
     {
         $recordedPdfs = [
-            ...array_column($this->savedPdfs, 'pdf'),
+            ...$this->recordedPdfs(),
             ...$this->respondedWithPdf,
         ];
 
@@ -249,6 +266,15 @@ class FakePdfBuilder extends PdfBuilder
         }
 
         $this->markAssertionPassed();
+    }
+
+    /** @return array<int, PdfBuilder> */
+    protected function recordedPdfs(): array
+    {
+        return [
+            ...array_column($this->savedPdfs, 'pdf'),
+            ...$this->generatedPdfs,
+        ];
     }
 
     protected function markAssertionPassed(): void

@@ -1,8 +1,11 @@
 <?php
 
+use Closure;
 use Illuminate\Support\Facades\Route;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\LaravelPdf\PdfBuilder;
+use Spatie\LaravelPdf\Tests\TestSupport\FakeDriver;
 
 use function Spatie\LaravelPdf\Support\pdf;
 
@@ -297,4 +300,61 @@ it('can determine that metadata was set on a pdf response', function () {
         return $pdf->metadata->title === 'Response PDF'
             && $pdf->metadata->subject === 'Testing';
     });
+});
+
+it('returns a dummy pdf when generating the pdf content', function () {
+    $pdfContent = Pdf::view('test')->generatePdfContent();
+
+    expect($pdfContent)
+        ->toStartWith('%PDF-')
+        ->toContain('/Type /Catalog')
+        ->toContain('trailer')
+        ->toEndWith("%%EOF\n");
+});
+
+it('does not use the driver when generating the pdf content', function () {
+    $driver = new FakeDriver;
+
+    app()->instance(PdfDriver::class, $driver);
+
+    Pdf::view('test')->generatePdfContent();
+
+    expect($driver->generateCount)->toBe(0);
+    expect($driver->saveCount)->toBe(0);
+});
+
+it('returns a dummy pdf when base64 encoding the pdf content', function () {
+    $driver = new FakeDriver;
+
+    app()->instance(PdfDriver::class, $driver);
+
+    $base64 = Pdf::view('test')->base64();
+
+    expect(base64_decode($base64))->toStartWith('%PDF-');
+    expect($driver->generateCount)->toBe(0);
+});
+
+it('records the pdf when generating the pdf content', function () {
+    Pdf::view('test', ['foo' => 'bar'])->generatePdfContent();
+
+    Pdf::assertViewIs('test');
+    Pdf::assertViewHas('foo', 'bar');
+    Pdf::assertSee('test');
+    Pdf::assertDontSee('this-string-does-not-exist');
+});
+
+it('returns a dummy pdf for a mail attachment', function () {
+    $driver = new FakeDriver;
+
+    app()->instance(PdfDriver::class, $driver);
+
+    $attachment = Pdf::view('test')->name('invoice.pdf')->toMailAttachment();
+
+    $pdfContent = $attachment->attachWith(
+        fn () => null,
+        fn (Closure $data) => $data(),
+    );
+
+    expect($pdfContent)->toStartWith('%PDF-');
+    expect($driver->generateCount)->toBe(0);
 });

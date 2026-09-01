@@ -66,3 +66,17 @@ it('uses the browsershot configuration from the default builder when faking', fu
         fn (Browsershot $browsershot) => browsershotUsesRemoteInstance($browsershot, 'http://127.0.0.1:9222'),
     );
 });
+
+it('can assert the browsershot configuration of a fake pdf whose content was generated', function () {
+    Pdf::fake();
+
+    Pdf::view('test')
+        ->withBrowsershot(function (Browsershot $browsershot) {
+            $browsershot->setRemoteInstance('127.0.0.1', 9222);
+        })
+        ->generatePdfContent();
+
+    Pdf::assertBrowsershot(
+        fn (Browsershot $browsershot) => browsershotUsesRemoteInstance($browsershot, 'http://127.0.0.1:9222'),
+    );
+});

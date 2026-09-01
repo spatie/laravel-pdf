@@ -15,6 +15,20 @@ beforeEach(function () {
 });
 ```
 
+## Faked PDF contents
+
+While faking, nothing is rendered: no Chrome is started, and no request is made to a remote PDF service. Methods that hand you the raw bytes of a PDF, such as `base64()` and `generatePdfContent()`, and mail attachments created with `toMailAttachment()`, return a tiny valid PDF with a single blank page. That way, code that writes those bytes to disk, encodes them, or hands them to a PDF parser keeps working in your tests.
+
+```php
+Pdf::fake();
+
+$content = Pdf::view('invoice')->generatePdfContent();
+
+// %PDF-1.7 ... a valid, blank, single page PDF
+```
+
+PDFs whose content you generate this way are recorded like any other faked PDF, so `assertViewIs`, `assertViewHas`, `assertSee`, `assertDontSee` and `assertBrowsershot` will take them into account.
+
 ## assertSaved
 
 You can use the `assertSaved` method to assert that a PDF was saved with specific properties. You should pass it a callable which will received an instance of `Spatie\LaravelPdf\PdfBuilder`. If the callable returns `true`, the assertion will pass.
