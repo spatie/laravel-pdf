@@ -16,16 +16,6 @@ function samplePdf(string $body = '<h1>Hello</h1><p>Visit <a href="https://spati
     return $dompdf->output();
 }
 
-// The /P entry is a signed 32 bit mask whose top bits are reserved, and releases of
-// tc-lib-pdf-encrypt disagree about how they are written: 2.5 leaves the sign bit clear and
-// 2.11 sets it. Compare one encryption against another rather than against a literal.
-function permissionValue(string $pdf): int
-{
-    expect(preg_match('/\/Filter \/Standard.*?\/P\s+(-?\d+)/s', $pdf, $matches))->toBe(1);
-
-    return (int) $matches[1];
-}
-
 it('adds a standard encryption dictionary to the pdf', function () {
     $encrypted = (new DefaultPdfEncrypter)->encrypt(samplePdf(), new PdfEncryption('secret'));
 
@@ -100,3 +90,10 @@ it('throws for pdfs that use compressed object streams', function () {
 
     (new DefaultPdfEncrypter)->encrypt($objectStreamPdf, new PdfEncryption('secret'));
 })->throws(CouldNotEncryptPdf::class);
+
+function permissionValue(string $pdf): int
+{
+    expect(preg_match('/\/Filter \/Standard.*?\/P\s+(-?\d+)/s', $pdf, $matches))->toBe(1);
+
+    return (int) $matches[1];
+}
