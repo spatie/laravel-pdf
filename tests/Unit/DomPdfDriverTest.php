@@ -123,3 +123,20 @@ it('respects chroot config', function () {
 
     expect($options->getChroot())->toContain('/custom/path');
 });
+
+it('respects font_dir config', function () {
+    $driver = new DomPdfDriver(['font_dir' => '/custom/fonts']);
+
+    $options = invade($driver)->buildOptions();
+
+    expect($options->getFontDir())->toBe('/custom/fonts');
+    expect($options->getFontCache())->toBe('/custom/fonts');
+});
+
+it('respects font_cache config', function () {
+    $driver = new DomPdfDriver(['font_dir' => '/custom/fonts', 'font_cache' => '/custom/cache']);
+
+    $options = invade($driver)->buildOptions();
+
+    expect($options->getFontCache())->toBe('/custom/cache');
+});

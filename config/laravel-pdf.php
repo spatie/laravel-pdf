@@ -112,6 +112,18 @@ return [
          * Defaults to DOMPDF's built-in chroot setting when null.
          */
         'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
+
+        /*
+         * The folder where DOMPDF stores fonts loaded via @font-face.
+         * Defaults to DOMPDF's lib/fonts folder inside vendor when null.
+         */
+        'font_dir' => env('LARAVEL_PDF_DOMPDF_FONT_DIR'),
+
+        /*
+         * The folder where DOMPDF caches font metrics.
+         * Defaults to font_dir when null.
+         */
+        'font_cache' => env('LARAVEL_PDF_DOMPDF_FONT_CACHE'),
     ],
 
     /*
