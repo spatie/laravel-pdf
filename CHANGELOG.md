@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-pdf` will be documented in this file.
 
+## 2.14.0 - 2026-10-05
+
+### What's Changed
+
+* docs: Update library name from 'health' to 'pdf' by @autorejecttop in https://github.com/spatie/laravel-pdf/pull/368
+* Add font_dir and font_cache options to the DOMPDF driver by @kachelle in https://github.com/spatie/laravel-pdf/pull/369
+
+### New Contributors
+
+* @autorejecttop made their first contribution in https://github.com/spatie/laravel-pdf/pull/368
+* @kachelle made their first contribution in https://github.com/spatie/laravel-pdf/pull/369
+
+**Full Changelog**: https://github.com/spatie/laravel-pdf/compare/2.13.1...2.14.0
+
 ## 2.13.1 - 2026-09-01
 
 ### What's Changed
