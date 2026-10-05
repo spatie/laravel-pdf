@@ -52,11 +52,15 @@ The DOMPDF driver accepts these configuration options in `config/laravel-pdf.php
 'dompdf' => [
     'is_remote_enabled' => env('LARAVEL_PDF_DOMPDF_REMOTE_ENABLED', false),
     'chroot' => env('LARAVEL_PDF_DOMPDF_CHROOT'),
+    'font_dir' => env('LARAVEL_PDF_DOMPDF_FONT_DIR'),
+    'font_cache' => env('LARAVEL_PDF_DOMPDF_FONT_CACHE'),
 ],
 ```
 
 - **is_remote_enabled**: Set to `true` if your HTML references external images or CSS files via URLs.
 - **chroot**: The base path for local file access. Defaults to DOMPDF's built-in setting.
+- **font_dir**: The folder where DOMPDF stores fonts loaded via `@font-face`. Defaults to DOMPDF's `lib/fonts` folder inside `vendor`. Point it outside `vendor`, for example to `storage_path('fonts')`, so DOMPDF never writes into your vendor folder at runtime. The folder must exist and be writable.
+- **font_cache**: The folder where DOMPDF caches font metrics. Defaults to `font_dir`.
 
 ## Using DOMPDF for specific PDFs only
 

@@ -61,6 +61,14 @@ class DomPdfDriver implements PdfDriver
             $options->setChroot($chroot);
         }
 
+        if ($fontDir = ($this->config['font_dir'] ?? null)) {
+            $options->setFontDir($fontDir);
+        }
+
+        if ($fontCache = ($this->config['font_cache'] ?? $fontDir)) {
+            $options->setFontCache($fontCache);
+        }
+
         return $options;
     }
 
