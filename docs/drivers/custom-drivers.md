@@ -98,3 +98,4 @@ $this->app->singleton(PdfDriver::class, function () {
 The following custom drivers are maintained by the community and are not officially supported by Spatie:
 
 - [`bladepdf/spatie-laravel-pdf-driver`](https://github.com/bladepdf/spatie-laravel-pdf-driver): renders PDFs using BladePDF's managed Chromium API. A BladePDF account and API key are required.
+- [`nforst/fagus`](https://github.com/nforst/fagus): renders PDFs with a native engine written in Rust, without a browser. Install it with `composer require nforst/fagus`, then set `LARAVEL_PDF_DRIVER=fagus` or call `driver('fagus')`. Requires PHP 8.3 and Laravel 13. See [its laravel-pdf docs](https://github.com/nforst/fagus/blob/main/docs/laravel.md#use-fagus-with-spatielaravel-pdf).
